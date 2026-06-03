@@ -1,0 +1,123 @@
+[project]
+name = "runware"
+version = "1.0.0"
+description = "Async Python SDK for the Runware platform — image, video, audio, text, and 3D generation, plus upscaling, background removal, and more, over REST or WebSocket with typed parameters and runtime validation."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Runware", email = "support@runware.ai" }]
+keywords = [
+    "runware",
+    "ai",
+    "sdk",
+    "image-generation",
+    "video-generation",
+    "audio-generation",
+    "text-generation",
+    "inference",
+    "generative-ai",
+    "stable-diffusion",
+    "flux",
+    "websocket",
+    "async",
+    "asyncio",
+    "llm",
+    "streaming",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Operating System :: OS Independent",
+    "Framework :: AsyncIO",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "aiohttp>=3.10",
+    "websockets>=13",
+    "fastjsonschema>=2.20",
+]
+
+[project.urls]
+Homepage = "https://runware.ai"
+Documentation = "https://runware.ai/docs"
+Repository = "https://github.com/Runware/python-sdk"
+Issues = "https://github.com/Runware/python-sdk/issues"
+Changelog = "https://github.com/Runware/python-sdk/releases"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.7",
+    "pyright>=1.1.380",
+    "aioresponses>=0.7",
+]
+
+[build-system]
+requires = ["uv_build>=0.5,<0.12"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "runware"
+module-root = ""
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F",
+    "I",
+    "B",
+    "UP",
+    "ASYNC",
+    "C4",
+    "SIM",
+    "RUF",
+    "N",
+]
+ignore = [
+    "E501",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = ["B", "SIM"]
+"examples/**/*" = ["T201"]
+
+[tool.pyright]
+include = ["runware", "tests", "scripts"]
+exclude = ["**/__pycache__"]
+pythonVersion = "3.11"
+strict = ["runware"]
+reportMissingImports = "error"
+reportMissingTypeStubs = "warning"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning:websockets.*",
+    # aiohttp leaves SSL transports unclosed for a tick after session shutdown
+    # under asyncio's selector loop; cosmetic, not a real leak.
+    "ignore::ResourceWarning",
+    "ignore:.*unclosed transport.*:pytest.PytestUnraisableExceptionWarning",
+    "ignore:.*Exception ignored while finalizing socket.*:pytest.PytestUnraisableExceptionWarning",
+]

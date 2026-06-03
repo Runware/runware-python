@@ -1,0 +1,87 @@
+name: Publish to PyPI
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Where to publish"
+        required: true
+        default: "testpypi"
+        type: choice
+        options:
+          - testpypi
+          - pypi
+
+permissions:
+  contents: read
+  id-token: write   # Trusted publishing — no API token needed
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - run: uv sync
+      - run: uv run ruff check .
+      - run: uv run pyright runware
+      - run: uv run pytest tests/ --ignore=tests/integration
+      - run: uv build
+
+      - name: Verify generated task_map is up to date
+        # If the committed task_map differs from what the pinned schemas
+        # version would produce, fail — refusing to ship out-of-sync types.
+        run: |
+          cp runware/types/task_map.py /tmp/committed_task_map.py
+          uv run python scripts/generate_types.py
+          if ! diff -q /tmp/committed_task_map.py runware/types/task_map.py; then
+            echo "::error::Generated task_map.py is out of sync with the pinned schemas version."
+            echo "Run \`uv run python scripts/generate_types.py\` locally and commit the result."
+            diff /tmp/committed_task_map.py runware/types/task_map.py | head -40
+            exit 1
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish-testpypi:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'testpypi'
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/runware
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-pypi:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'pypi')
+    environment:
+      name: pypi
+      url: https://pypi.org/p/runware
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
