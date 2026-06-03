@@ -23,7 +23,7 @@ import asyncio
 import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
-from typing import Any, cast
+from typing import cast
 
 import aiohttp
 
@@ -85,7 +85,7 @@ class Registry:
         self._cache: _CacheEntry | None = None
         self._initial_fetch_attempted = False
         self._in_flight_fetch: asyncio.Task[tuple[RegistryData, str | None] | None] | None = None
-        self._background_tasks: set[asyncio.Task[Any]] = set()
+        self._background_tasks: set[asyncio.Task[object]] = set()
         # Slug → AIR index, lazily built from fallback + current cache.
         self._slug_to_air: dict[str, str] | None = None
         self._slug_index_source: RegistryData | None = None
@@ -212,10 +212,8 @@ class Registry:
                 attempt(), timeout=self._initial_fetch_timeout_seconds
             )
         except TimeoutError:
-            self._log.warn(
-                f"Registry fetch timed out after "
-                f"{int(self._initial_fetch_timeout_seconds * 1000)}ms, using fallback"
-            )
+            timeout_ms = int(self._initial_fetch_timeout_seconds * 1000)
+            self._log.warn(f"Registry fetch timed out after {timeout_ms}ms, using fallback")
             return
 
         if result is not None:
@@ -281,7 +279,7 @@ class Registry:
                         {"url": self._url},
                     )
                     return None
-                payload = cast(dict[str, Any], await response.json())
+                payload = cast(dict[str, object], await response.json())
                 etag = response.headers.get("ETag")
                 data = _parse_registry(payload)
                 self._log.info(f"Registry refreshed (version {data.version})")
@@ -309,16 +307,16 @@ class Registry:
         self._slug_index_source = None
 
 
-def _parse_registry(payload: dict[str, Any]) -> RegistryData:
-    models_raw = cast(dict[str, Any], payload.get("models") or {})
-    arch_raw = cast(dict[str, Any], payload.get("architectureTaskTypes") or {})
-    modality_raw = cast(dict[str, Any], payload.get("modalityTaskTypes") or {})
+def _parse_registry(payload: dict[str, object]) -> RegistryData:
+    models_raw = cast(dict[str, object], payload.get("models") or {})
+    arch_raw = cast(dict[str, object], payload.get("architectureTaskTypes") or {})
+    modality_raw = cast(dict[str, object], payload.get("modalityTaskTypes") or {})
 
     models: dict[str, RegistryModelEntry] = {}
     for air, entry in models_raw.items():
         if not isinstance(entry, dict):
             continue
-        entry_dict = cast(dict[str, Any], entry)
+        entry_dict = cast(dict[str, object], entry)
         task_type = entry_dict.get("taskType")
         ident = entry_dict.get("id")
         if isinstance(task_type, str) and isinstance(ident, str):

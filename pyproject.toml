@@ -65,6 +65,7 @@ dev = [
     "ruff>=0.7",
     "pyright>=1.1.380",
     "aioresponses>=0.7",
+    "basedpyright>=1.39.6",
 ]
 
 [build-system]
@@ -106,6 +107,29 @@ pythonVersion = "3.11"
 strict = ["runware"]
 reportMissingImports = "error"
 reportMissingTypeStubs = "warning"
+
+# Tests use unittest.mock which produces Any cascades by design (every
+# MagicMock attribute is Any), and they legitimately reach into the SDK's
+# `_private` members. Scripts parse arbitrary JSON Schema where Any is honest.
+# Production code under `strict = ["runware"]` still enforces these.
+#
+# `reportAny` and `reportExplicitAny` are basedpyright-only rules. Vanilla
+# pyright emits a stderr line per occurrence ("unrecognized setting") but the
+# type check itself still completes cleanly (the trailing
+# "0 errors, 0 warnings, 0 informations" is the real result). We can't split
+# the configs: basedpyright refuses to load if both `[tool.pyright]` and
+# `[tool.basedpyright]` exist, and current basedpyright won't pick up a
+# `basedpyrightconfig.json` when pyproject.toml is also present.
+[[tool.pyright.executionEnvironments]]
+root = "tests"
+reportAny = "none"
+reportExplicitAny = "none"
+reportPrivateUsage = "none"
+
+[[tool.pyright.executionEnvironments]]
+root = "scripts"
+reportAny = "none"
+reportExplicitAny = "none"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

@@ -16,36 +16,29 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Callable
-from typing import Any, cast
+from typing import cast
 
 import aiohttp
 import fastjsonschema  # pyright: ignore[reportMissingTypeStubs]
 
+from ._docs_cache import clear_docs_url_cache, set_docs_url_for_model
 from .constants import SCHEMAS_BASE_URL
 from .errors import create_runware_error
 from .logger import Logger
 
-Validator = Callable[[dict[str, Any]], Any]
-_JsonSchemaException: type[Exception] = (
-    fastjsonschema.JsonSchemaException  # pyright: ignore[reportUnknownMemberType]
-)
+Validator = Callable[[dict[str, object]], object]
+_JsonSchemaException: type[Exception] = fastjsonschema.JsonSchemaException
 
 _validator_cache: dict[str, asyncio.Future[Validator | None]] = {}
-_docs_url_cache: dict[str, str | None] = {}
-
-
-def get_docs_url_for_model(model: str) -> str | None:
-    """Cached documentation URL base for a model. Populated by `/resolve` calls."""
-    return _docs_url_cache.get(model)
 
 
 def clear_validator_cache() -> None:
     """Reset the in-process compiled-validator cache."""
     _validator_cache.clear()
-    _docs_url_cache.clear()
+    clear_docs_url_cache()
 
 
-def strip_inner_ids(schema: Any) -> Any:
+def strip_inner_ids(schema: object) -> object:
     """
     Drop `$id` from every non-root subschema.
 
@@ -54,13 +47,13 @@ def strip_inner_ids(schema: Any) -> Any:
     compile time. Mirrors the SDK-side defense in the TS validate.ts.
     """
 
-    def walk(node: Any, is_root: bool) -> Any:
+    def walk(node: object, is_root: bool) -> object:
         if isinstance(node, list):
-            node_list = cast(list[Any], node)
+            node_list = cast(list[object], node)
             return [walk(item, False) for item in node_list]
         if isinstance(node, dict):
-            node_dict = cast(dict[str, Any], node)
-            out: dict[str, Any] = {}
+            node_dict = cast(dict[str, object], node)
+            out: dict[str, object] = {}
             for key, value in node_dict.items():
                 if key == "$id" and not is_root:
                     continue
@@ -72,7 +65,7 @@ def strip_inner_ids(schema: Any) -> Any:
 
 
 async def validate_tasks(
-    tasks: list[dict[str, Any]],
+    tasks: list[dict[str, object]],
     *,
     log: Logger,
     session: aiohttp.ClientSession,
@@ -135,7 +128,7 @@ async def _fetch_model_schema(
     *,
     log: Logger,
     session: aiohttp.ClientSession,
-) -> dict[str, Any] | None:
+) -> dict[str, object] | None:
     url = f"{SCHEMAS_BASE_URL}/resolve/{model}"
     try:
         async with session.get(url) as response:
@@ -147,29 +140,29 @@ async def _fetch_model_schema(
                     {"url": url},
                 )
                 return None
-            payload = cast(dict[str, Any], await response.json())
+            payload = cast(dict[str, object], await response.json())
     except aiohttp.ClientError as exc:
         log.warn(f"Schema resolve error for {model}: {exc}", {"url": url})
         return None
 
     documentation = payload.get("documentation")
     if isinstance(documentation, str):
-        _docs_url_cache[model] = documentation
+        set_docs_url_for_model(model, documentation)
 
     request_schema = payload.get("requestSchema")
     if isinstance(request_schema, dict):
-        return cast(dict[str, Any], request_schema)
+        return cast(dict[str, object], request_schema)
     return None
 
 
-def _build_validation_error(task: dict[str, Any], exc: Exception) -> Exception:
+def _build_validation_error(task: dict[str, object], exc: Exception) -> Exception:
     # fastjsonschema's JsonSchemaException carries `message`, `path`, `rule`,
     # and `rule_definition` attributes but the library is untyped, so we
     # access them defensively via getattr.
     message = cast(str, getattr(exc, "message", str(exc)))
     raw_path_any = cast(object, getattr(exc, "path", None))
-    raw_path: list[Any] = (
-        cast(list[Any], raw_path_any) if isinstance(raw_path_any, list) else []
+    raw_path: list[object] = (
+        cast(list[object], raw_path_any) if isinstance(raw_path_any, list) else []
     )
     parameter: str | None = None
     if len(raw_path) > 1:
@@ -177,13 +170,16 @@ def _build_validation_error(task: dict[str, Any], exc: Exception) -> Exception:
         parts = [str(p) for p in raw_path[1:]]
         parameter = ".".join(parts) or None
 
+    task_type = task.get("taskType")
+    task_uuid = task.get("taskUUID")
+    model = task.get("model")
     return create_runware_error(
         "validationFailed",
-        f"Validation failed for {task.get('taskType')}: {message}",
+        f"Validation failed for {task_type}: {message}",
         parameter=parameter,
-        task_type=task.get("taskType"),
-        task_uuid=task.get("taskUUID"),
-        model=task.get("model"),
+        task_type=task_type if isinstance(task_type, str) else None,
+        task_uuid=task_uuid if isinstance(task_uuid, str) else None,
+        model=model if isinstance(model, str) else None,
         validation_errors=[
             {
                 "message": message,

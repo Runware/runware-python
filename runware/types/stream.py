@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
 
 
 @dataclass
@@ -13,7 +12,7 @@ class TextStreamChunk:
     text: str | None = None
     reasoning_content: str | None = None
     finish_reason: str | None = None
-    usage: dict[str, Any] | None = None
+    usage: dict[str, object] | None = None
     cost: float | None = None
     result_index: int | None = None
     task_uuid: str | None = None
@@ -26,7 +25,7 @@ class TextStreamResult:
     text: str = ""
     reasoning_content: str = ""
     finish_reason: str | None = None
-    usage: dict[str, Any] | None = None
+    usage: dict[str, object] | None = None
     cost: float | None = None
     task_uuid: str | None = None
     raw_chunks: list[TextStreamChunk] = field(

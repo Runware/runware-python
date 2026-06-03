@@ -6,7 +6,7 @@ import asyncio
 import contextlib
 import time
 import uuid
-from typing import Any, Self, cast
+from typing import Any, Self, cast, overload
 
 import aiohttp
 
@@ -17,7 +17,53 @@ from .registry import Registry, RegistryData, create_registry
 from .stream import TextStream, create_text_stream
 from .transport.rest import RestTransport
 from .transport.websocket import WebSocketTransport
-from .types.sdk import RunOptions, SDKConfig, StreamOptions
+from .types.sdk import LoosePayload, RunOptions, SDKConfig, StreamOptions
+from .types.task_map import (
+    AccountManagementParams,
+    AccountManagementResult,
+    AudioInferenceParams,
+    AudioInferenceResult,
+    CaptionImageParams,
+    CaptionParams,
+    CaptionResult,
+    CaptionVideoParams,
+    ControlnetPreprocessParams,
+    ControlNetPreprocessResult,
+    GetResponseParams,
+    GetResponseResult,
+    GetTaskDetailsParams,
+    GetTaskDetailsResult,
+    ImageInferenceParams,
+    ImageInferenceResult,
+    ImageMaskingResult,
+    ImageUploadParams,
+    ImageUploadResult,
+    MaskingParams,
+    ModelSearchParams,
+    ModelSearchResult,
+    ModelUploadParams,
+    ModelUploadResult,
+    PromptEnhanceParams,
+    PromptEnhanceResult,
+    RemoveBackgroundImageParams,
+    RemoveBackgroundParams,
+    RemoveBackgroundResult,
+    RemoveBackgroundVideoParams,
+    TextInferenceParams,
+    TextInferenceResult,
+    ThreeDInferenceParams,
+    ThreeDInferenceResult,
+    TrainingParams,
+    TrainingResult,
+    UpscaleImageParams,
+    UpscaleParams,
+    UpscaleResult,
+    UpscaleVideoParams,
+    VectorizeParams,
+    VectorizeResult,
+    VideoInferenceParams,
+    VideoInferenceResult,
+)
 from .types.task_map import (
     architecture_task_types as _bundled_arch_task_types,
 )
@@ -30,14 +76,14 @@ from .types.task_map import (
 from .types.task_map import (
     operation_task_types as _bundled_operation_task_types,
 )
-from .types.transport import RequestOptions
+from .types.transport import RequestOptions, WireFrame
 from .validate import validate_tasks
 
 
 class Runware:
     """Async Runware client. Use as a context manager or call `close()` manually."""
 
-    def __init__(self, *, api_key: str | None = None, **config_overrides: Any) -> None:
+    def __init__(self, *, api_key: str | None = None, **config_overrides: object) -> None:
         self._config: SDKConfig = create_config(api_key=api_key, **config_overrides)
         injected_session = (
             self._config.dependencies.session if self._config.dependencies else None
@@ -117,11 +163,89 @@ class Runware:
 
     # ----------------------------------------------------------- run / stream
 
+    # ---- Overloads narrow the return type when params is annotated with one
+    # of the canonical TypedDicts. Untyped dicts fall through to the last
+    # overload and get the loose `list[LoosePayload]` return.
+
+    # Modalities (5)
+    @overload
+    async def run(
+        self, params: ImageInferenceParams, options: RunOptions | None = None,
+    ) -> list[ImageInferenceResult]: ...
+    @overload
+    async def run(
+        self, params: VideoInferenceParams, options: RunOptions | None = None,
+    ) -> list[VideoInferenceResult]: ...
+    @overload
+    async def run(
+        self, params: AudioInferenceParams, options: RunOptions | None = None,
+    ) -> list[AudioInferenceResult]: ...
+    @overload
+    async def run(
+        self, params: TextInferenceParams, options: RunOptions | None = None,
+    ) -> list[TextInferenceResult]: ...
+    @overload
+    async def run(
+        self, params: ThreeDInferenceParams, options: RunOptions | None = None,
+    ) -> list[ThreeDInferenceResult]: ...
+
+    # Operations — slug variants collapse to one canonical Result per taskType.
+    @overload
     async def run(
         self,
-        params: dict[str, Any],
+        params: CaptionParams | CaptionImageParams | CaptionVideoParams,
         options: RunOptions | None = None,
-    ) -> list[dict[str, Any]]:
+    ) -> list[CaptionResult]: ...
+    @overload
+    async def run(
+        self,
+        params: UpscaleParams | UpscaleImageParams | UpscaleVideoParams,
+        options: RunOptions | None = None,
+    ) -> list[UpscaleResult]: ...
+    @overload
+    async def run(
+        self,
+        params: (
+            RemoveBackgroundParams
+            | RemoveBackgroundImageParams
+            | RemoveBackgroundVideoParams
+        ),
+        options: RunOptions | None = None,
+    ) -> list[RemoveBackgroundResult]: ...
+    @overload
+    async def run(
+        self, params: MaskingParams, options: RunOptions | None = None,
+    ) -> list[ImageMaskingResult]: ...
+    @overload
+    async def run(
+        self, params: ControlnetPreprocessParams, options: RunOptions | None = None,
+    ) -> list[ControlNetPreprocessResult]: ...
+    @overload
+    async def run(
+        self, params: PromptEnhanceParams, options: RunOptions | None = None,
+    ) -> list[PromptEnhanceResult]: ...
+    @overload
+    async def run(
+        self, params: VectorizeParams, options: RunOptions | None = None,
+    ) -> list[VectorizeResult]: ...
+    @overload
+    async def run(
+        self, params: TrainingParams, options: RunOptions | None = None,
+    ) -> list[TrainingResult]: ...
+
+    # Fallback for untyped dicts.
+    @overload
+    async def run(
+        self,
+        params: dict[str, Any],  # pyright: ignore[reportExplicitAny]
+        options: RunOptions | None = None,
+    ) -> list[dict[str, Any]]: ...  # pyright: ignore[reportExplicitAny]
+
+    async def run(  # pyright: ignore[reportInconsistentOverload]
+        self,
+        params: dict[str, Any],  # pyright: ignore[reportExplicitAny]
+        options: RunOptions | None = None,
+    ) -> list[dict[str, Any]]:  # pyright: ignore[reportExplicitAny]
         """Run an inference task."""
         params = await self._normalize_model_param(params)
         task_type = await self._resolve_task_type(params)
@@ -132,8 +256,13 @@ class Runware:
         # (server holds the response open instead of ACK + polling).
         delivery_method = params.get("deliveryMethod") or "async"
 
-        wire_task: dict[str, Any] = {
-            k: v for k, v in params.items() if k not in ("taskType", "taskUUID")
+        # Pass-through of user-supplied params: values are inherently Any
+        # because the request shape is per-taskType. Server-side schemas
+        # and the optional `validate=True` path do the actual checking.
+        wire_task: LoosePayload = {
+            k: v
+            for k, v in params.items()  # pyright: ignore[reportAny]
+            if k not in ("taskType", "taskUUID")
         }
         wire_task["taskType"] = task_type
         wire_task["taskUUID"] = task_uuid
@@ -161,20 +290,25 @@ class Runware:
 
     async def stream(
         self,
-        params: dict[str, Any],
+        params: LoosePayload,
         options: StreamOptions | None = None,
     ) -> TextStream:
         """Stream LLM text via SSE. Forces the REST/SSE path regardless of transport."""
         if isinstance(params.get("numberResults"), int) and params["numberResults"] > 1:
             raise create_runware_error(
                 "notImplemented",
-                "stream() with numberResults > 1 is not supported "
-                "(the backend doesn't emit resultIndex on stream chunks).",
+                (
+                    "stream() with numberResults > 1 is not supported "
+                    "(the backend doesn't emit resultIndex on stream chunks)."
+                ),
             )
         params = await self._normalize_model_param(params)
         task_type = await self._resolve_task_type(params)
-        wire_task: dict[str, Any] = {
-            k: v for k, v in params.items() if k not in ("taskType",)
+        # User-supplied passthrough: values are Any by the same per-taskType reasoning.
+        wire_task: LoosePayload = {
+            k: v
+            for k, v in params.items()  # pyright: ignore[reportAny]
+            if k not in ("taskType",)
         }
         wire_task["taskType"] = task_type
         wire_task["deliveryMethod"] = "stream"
@@ -204,45 +338,68 @@ class Runware:
     # ----------------------------------------------------------- utility methods
 
     async def model_search(
-        self, params: dict[str, Any], options: RunOptions | None = None,
-    ) -> list[dict[str, Any]]:
-        return await self._utility("modelSearch", params, options)
+        self, params: ModelSearchParams, options: RunOptions | None = None,
+    ) -> list[ModelSearchResult]:
+        return cast(
+            list[ModelSearchResult],
+            await self._utility("modelSearch", dict(params), options),
+        )
 
     async def model_upload(
-        self, params: dict[str, Any], options: RunOptions | None = None,
-    ) -> list[dict[str, Any]]:
-        return await self._utility("modelUpload", params, options)
+        self, params: ModelUploadParams, options: RunOptions | None = None,
+    ) -> list[ModelUploadResult]:
+        return cast(
+            list[ModelUploadResult],
+            await self._utility("modelUpload", dict(params), options),
+        )
 
     async def image_upload(
-        self, params: dict[str, Any], options: RunOptions | None = None,
-    ) -> list[dict[str, Any]]:
-        return await self._utility("imageUpload", params, options)
+        self, params: ImageUploadParams, options: RunOptions | None = None,
+    ) -> list[ImageUploadResult]:
+        return cast(
+            list[ImageUploadResult],
+            await self._utility("imageUpload", dict(params), options),
+        )
 
     async def account_management(
-        self, params: dict[str, Any], options: RunOptions | None = None,
-    ) -> list[dict[str, Any]]:
-        return await self._utility("accountManagement", params, options)
+        self,
+        params: AccountManagementParams,
+        options: RunOptions | None = None,
+    ) -> list[AccountManagementResult]:
+        return cast(
+            list[AccountManagementResult],
+            await self._utility("accountManagement", dict(params), options),
+        )
 
     async def get_response(
-        self, params: dict[str, Any], options: RunOptions | None = None,
-    ) -> list[dict[str, Any]]:
-        return await self._utility("getResponse", params, options)
+        self, params: GetResponseParams, options: RunOptions | None = None,
+    ) -> list[GetResponseResult]:
+        return cast(
+            list[GetResponseResult],
+            await self._utility("getResponse", dict(params), options),
+        )
 
     async def get_task_details(
-        self, params: dict[str, Any], options: RunOptions | None = None,
-    ) -> list[dict[str, Any]]:
-        return await self._utility("getTaskDetails", params, options)
+        self, params: GetTaskDetailsParams, options: RunOptions | None = None,
+    ) -> list[GetTaskDetailsResult]:
+        return cast(
+            list[GetTaskDetailsResult],
+            await self._utility("getTaskDetails", dict(params), options),
+        )
 
     # ----------------------------------------------------------- internal
 
     async def _utility(
         self,
         task_type: str,
-        params: dict[str, Any],
+        params: LoosePayload,
         options: RunOptions | None = None,
-    ) -> list[dict[str, Any]]:
-        wire_task: dict[str, Any] = {
-            k: v for k, v in params.items() if k not in ("taskType", "taskUUID")
+    ) -> list[LoosePayload]:
+        # User-supplied passthrough: values are Any by the same per-taskType reasoning.
+        wire_task: LoosePayload = {
+            k: v
+            for k, v in params.items()  # pyright: ignore[reportAny]
+            if k not in ("taskType", "taskUUID")
         }
         wire_task["taskType"] = task_type
         wire_task["taskUUID"] = str(params.get("taskUUID") or uuid.uuid4())
@@ -271,7 +428,7 @@ class Runware:
         response = await self._rest_transport.send_request(wire_task, request_options)
         return _extract_items(response)
 
-    async def _resolve_task_type(self, params: dict[str, Any]) -> str:
+    async def _resolve_task_type(self, params: LoosePayload) -> str:
         explicit = params.get("taskType")
         if isinstance(explicit, str) and explicit:
             return explicit
@@ -289,7 +446,7 @@ class Runware:
             parameter="taskType",
         )
 
-    async def _normalize_model_param(self, params: dict[str, Any]) -> dict[str, Any]:
+    async def _normalize_model_param(self, params: LoosePayload) -> LoosePayload:
         """
         If the user passed a curated-model slug (e.g. ``flux-1-dev``) instead
         of an AIR (e.g. ``runware:101@1``), swap it for the canonical AIR
@@ -309,7 +466,7 @@ class Runware:
 
     async def _maybe_validate(
         self,
-        tasks: list[dict[str, Any]],
+        tasks: list[LoosePayload],
         options: RunOptions | StreamOptions | None,
     ) -> None:
         per_call = options.validate if options is not None else None
@@ -330,13 +487,13 @@ class Runware:
     async def _run_over_rest(
         self,
         *,
-        wire_task: dict[str, Any],
+        wire_task: LoosePayload,
         task_type: str,
         task_uuid: str,
         expected_count: int,
         delivery_method: str,
         options: RunOptions | None,
-    ) -> list[dict[str, Any]]:
+    ) -> list[LoosePayload]:
         assert self._rest_transport is not None
         request_options = RequestOptions(
             timeout=options.timeout if options else None,
@@ -371,9 +528,9 @@ class Runware:
         task_type: str,
         task_uuid: str,
         expected_count: int,
-        initial_response: Any,
+        initial_response: WireFrame,
         options: RunOptions | None,
-    ) -> list[dict[str, Any]]:
+    ) -> list[LoosePayload]:
         assert self._rest_transport is not None
         cancel_event = options.cancel_event if options else None
         poll_timeout_seconds = (
@@ -405,7 +562,7 @@ class Runware:
 
             await _interruptible_sleep(delay, cancel_event)
 
-            poll_payload: dict[str, Any] = {
+            poll_payload: LoosePayload = {
                 "taskType": "getResponse",
                 "taskUUID": task_uuid,
             }
@@ -435,28 +592,32 @@ class Runware:
     async def _run_over_ws(
         self,
         *,
-        wire_task: dict[str, Any],
+        wire_task: LoosePayload,
         expected_count: int,
         delivery_method: str,
         options: RunOptions | None,
-    ) -> list[dict[str, Any]]:
+    ) -> list[LoosePayload]:
         timeout_seconds = (
             (options.timeout if options else None) or self._config.timeout
         ) / 1000.0
+        # wire_task is LoosePayload so wire_task["taskUUID"] is Any. Narrow
+        # at the call boundary — callers above already populated taskUUID with
+        # a str, so this is sound.
+        task_uuid = cast(str, wire_task["taskUUID"])
         if delivery_method == "async":
             poll_timeout_seconds = (
                 (options.timeout if options else None) or self._config.poll_timeout
             ) / 1000.0
             return await self._ws_run_async(
                 wire_task=wire_task,
-                task_uuid=wire_task["taskUUID"],
+                task_uuid=task_uuid,
                 expected_count=expected_count,
                 poll_timeout_seconds=poll_timeout_seconds,
                 options=options,
             )
         return await self._ws_send_and_collect(
             wire_task=wire_task,
-            task_uuid=wire_task["taskUUID"],
+            task_uuid=task_uuid,
             expected_count=expected_count,
             timeout_seconds=timeout_seconds,
             options=options,
@@ -465,12 +626,12 @@ class Runware:
     async def _ws_run_async(
         self,
         *,
-        wire_task: dict[str, Any],
+        wire_task: LoosePayload,
         task_uuid: str,
         expected_count: int,
         poll_timeout_seconds: float,
         options: RunOptions | None,
-    ) -> list[dict[str, Any]]:
+    ) -> list[LoosePayload]:
         """
         Two-phase WS async: subscribe, send original task, wait for ACK, then
         poll getResponse over the same socket until each expected item arrives.
@@ -487,15 +648,15 @@ class Runware:
         loop = asyncio.get_running_loop()
 
         ack_future: asyncio.Future[None] = loop.create_future()
-        terminal_error: dict[str, Any] = {"err": None}
+        terminal_error: LoosePayload = {"err": None}
         poll_wake = asyncio.Event()
         collector = _AsyncCollector(expected_count, options)
 
-        def on_frame(response: dict[str, Any]) -> None:
+        def on_frame(response: WireFrame) -> None:
             errors_raw = response.get("error") or response.get("errors")
             if errors_raw:
-                err_list: list[Any] = (
-                    cast(list[Any], errors_raw)
+                err_list: list[object] = (
+                    cast(list[object], errors_raw)
                     if isinstance(errors_raw, list)
                     else [errors_raw]
                 )
@@ -514,8 +675,12 @@ class Runware:
                 return
 
             data = response.get("data")
-            items: list[dict[str, Any]] = (
-                [item for item in cast(list[Any], data) if isinstance(item, dict)]
+            items: list[LoosePayload] = (
+                [
+                    cast(LoosePayload, item)
+                    for item in cast(list[object], data)
+                    if isinstance(item, dict)
+                ]
                 if isinstance(data, list)
                 else []
             )
@@ -581,7 +746,7 @@ class Runware:
                 await _interruptible_sleep(delay, cancel_event)
                 poll_wake.clear()
 
-                poll_payload: dict[str, Any] = {
+                poll_payload: LoosePayload = {
                     "taskType": "getResponse",
                     "taskUUID": task_uuid,
                 }
@@ -612,33 +777,33 @@ class Runware:
     async def _ws_send_and_collect(
         self,
         *,
-        wire_task: dict[str, Any],
+        wire_task: LoosePayload,
         task_uuid: str,
         expected_count: int,
         timeout_seconds: float,
         options: RunOptions | None,
         any_item_is_terminal: bool = False,
-    ) -> list[dict[str, Any]]:
+    ) -> list[LoosePayload]:
         assert self._ws_transport is not None
         if not self._ws_transport.is_connected:
             await self._ws_transport.connect()
 
         loop = asyncio.get_running_loop()
-        future: asyncio.Future[list[dict[str, Any]]] = loop.create_future()
+        future: asyncio.Future[list[LoosePayload]] = loop.create_future()
         collector = _AsyncCollector(
             expected_count, options, any_item_is_terminal=any_item_is_terminal
         )
 
-        def on_frame(response: dict[str, Any]) -> None:
+        def on_frame(response: WireFrame) -> None:
             if future.done():
                 return
             errors = response.get("error") or response.get("errors")
             if errors:
-                err_list: list[Any] = (
-                    cast(list[Any], errors) if isinstance(errors, list) else [errors]
+                err_list: list[object] = (
+                    cast(list[object], errors) if isinstance(errors, list) else [errors]
                 )
-                first: dict[str, Any] = (
-                    cast(dict[str, Any], err_list[0])
+                first: LoosePayload = (
+                    cast(LoosePayload, err_list[0])
                     if err_list and isinstance(err_list[0], dict)
                     else {}
                 )
@@ -651,18 +816,19 @@ class Runware:
                     err.task_uuid = first.get("taskUUID") or task_uuid
                 future.set_exception(err)
                 return
-            items_raw: Any = response.get("data")
+            items_raw: object = response.get("data")
             if isinstance(items_raw, list):
-                collector.ingest(cast(list[dict[str, Any]], items_raw))
+                collector.ingest(cast(list[LoosePayload], items_raw))
                 # Per-item errors (`status: error`) terminate the call. Fire
                 # callbacks BEFORE rejecting so partial successes are visible.
                 item_errors = collector.take_errors()
                 if item_errors:
+                    flattened_errors: list[LoosePayload] = [
+                        {**(e.get("error") or {}), "taskUUID": e.get("taskUUID") or task_uuid}
+                        for e in item_errors
+                    ]
                     err = parse_api_error(
-                        {"errors": [
-                            {**(e.get("error") or {}), "taskUUID": e.get("taskUUID") or task_uuid}
-                            for e in item_errors
-                        ]},
+                        {"errors": flattened_errors},
                         task_type=cast(str | None, wire_task.get("taskType")),
                         model=cast(str | None, wire_task.get("model")),
                     )
@@ -722,35 +888,35 @@ class _AsyncCollector:
         self._expected = expected_count
         self._options = options
         self._any_item_is_terminal = any_item_is_terminal
-        self._results: dict[str | int, dict[str, Any]] = {}
+        self._results: dict[str | int, LoosePayload] = {}
         self._seen_progress: dict[str | int, float] = {}
         self._seen_terminal: set[str | int] = set()
         # Per-item errors accumulated across `ingest()` calls. Drained by the
         # caller via `take_errors()`. Mirrors TS executeRest/executeWebSocketAsync
         # — error items fire on_result first, then the call rejects.
-        self._errors: list[dict[str, Any]] = []
+        self._errors: list[LoosePayload] = []
         # Fallback counter for terminal items that don't carry any stable id
         # field — preserves ordering so the result list isn't shuffled.
         self._next_anon_slot: int = 0
 
-    def take_errors(self) -> list[dict[str, Any]]:
+    def take_errors(self) -> list[LoosePayload]:
         """Return and clear any per-item errors seen since the last call."""
         errs, self._errors = self._errors, []
         return errs
 
-    def _safe_on_result(self, item: dict[str, Any]) -> None:
+    def _safe_on_result(self, item: LoosePayload) -> None:
         if self._options is None or self._options.on_result is None:
             return
         with contextlib.suppress(Exception):  # user callback throws don't kill polling
             self._options.on_result(item)
 
-    def _safe_on_progress(self, item: dict[str, Any]) -> None:
+    def _safe_on_progress(self, item: LoosePayload) -> None:
         if self._options is None or self._options.on_progress is None:
             return
         with contextlib.suppress(Exception):
             self._options.on_progress(item)
 
-    def ingest(self, items: list[dict[str, Any]]) -> None:
+    def ingest(self, items: list[LoosePayload]) -> None:
         for item in items:
             # An error item (status='error') is terminal — fire on_result for
             # it so the user sees the partial outcome, record the error for the
@@ -794,7 +960,7 @@ class _AsyncCollector:
                 self._safe_on_progress(item)
 
     @classmethod
-    def _stable_id(cls, item: dict[str, Any]) -> str | int | None:
+    def _stable_id(cls, item: LoosePayload) -> str | int | None:
         raw_idx = item.get("resultIndex")
         if isinstance(raw_idx, int):
             return raw_idx
@@ -807,7 +973,7 @@ class _AsyncCollector:
     def done(self) -> bool:
         return len(self._seen_terminal) >= self._expected
 
-    def sorted_results(self) -> list[dict[str, Any]]:
+    def sorted_results(self) -> list[LoosePayload]:
         # When all keys are resultIndex ints, sort by them so the order
         # matches the server's intended ordering. Otherwise (UUID-keyed),
         # preserve insertion order — Python dicts have ordered insertion
@@ -834,9 +1000,9 @@ def _maybe_raise_item_errors(
         return
     # Each error item has the shape {status: 'error', error: {code, message, ...}, taskUUID?}.
     # parse_api_error accepts the standard {errors: [...]} envelope.
-    err_payloads: list[dict[str, Any]] = [
+    err_payloads: list[LoosePayload] = [
         {
-            **cast(dict[str, Any], item.get("error") or {}),
+            **cast(LoosePayload, item.get("error") or {}),
             "taskUUID": item.get("taskUUID") or task_uuid,
         }
         for item in errors
@@ -871,18 +1037,19 @@ def _build_registry_fallback() -> RegistryData:
     )
 
 
-def _progress_value(item: dict[str, Any]) -> float | None:
+def _progress_value(item: LoosePayload) -> float | None:
     raw = item.get("progress")
     if isinstance(raw, (int, float)):
         return float(raw)
     return None
 
 
-def _is_terminal(item: dict[str, Any]) -> bool:
+def _is_terminal(item: LoosePayload) -> bool:
     for key in ("imageURL", "videoURL", "audioURL", "modelURL", "text", "result"):
         if item.get(key) is not None:
             return True
-    return item.get("status") == "completed"
+    status: object = item.get("status")
+    return status == "completed"
 
 
 def _next_poll_delay(poll_number: int, current: float) -> float:
@@ -912,9 +1079,9 @@ async def _interruptible_sleep(seconds: float, cancel_event: asyncio.Event | Non
 
 
 async def _await_with_cancel(
-    future: asyncio.Future[list[dict[str, Any]]],
+    future: asyncio.Future[list[LoosePayload]],
     cancel_event: asyncio.Event | None,
-) -> list[dict[str, Any]]:
+) -> list[LoosePayload]:
     if cancel_event is None:
         return await future
     cancel_task = asyncio.create_task(cancel_event.wait())
@@ -932,17 +1099,17 @@ async def _await_with_cancel(
             cancel_task.cancel()
 
 
-def _extract_items(response: Any) -> list[dict[str, Any]]:
+def _extract_items(response: WireFrame | object) -> list[LoosePayload]:
     if isinstance(response, dict):
-        obj = cast(dict[str, Any], response)
+        obj = cast(dict[str, object], response)
         if "errors" in obj or "error" in obj:
             raise parse_api_error(obj)
         data = obj.get("data")
         if isinstance(data, list):
-            data_list = cast(list[Any], data)
-            return [cast(dict[str, Any], item) for item in data_list if isinstance(item, dict)]
+            data_list = cast(list[object], data)
+            return [cast(LoosePayload, item) for item in data_list if isinstance(item, dict)]
         return []
     if isinstance(response, list):
-        resp_list = cast(list[Any], response)
-        return [cast(dict[str, Any], item) for item in resp_list if isinstance(item, dict)]
+        resp_list = cast(list[object], response)
+        return [cast(LoosePayload, item) for item in resp_list if isinstance(item, dict)]
     return []

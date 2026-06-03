@@ -18,6 +18,16 @@ RetryStrategy = Literal["linear", "exponential"]
 
 WebSocketConnectFactory = Callable[[str], Awaitable["ClientConnection"]]
 
+# Loose wire-task / response-item shape: keys are arbitrary, values are
+# per-taskType (the schema-derived TypedDicts under types/task_map.py narrow
+# them at the public API boundary). Equivalent of TS's `Record<string, any>`
+# at request/response boundaries — the single point that opts out of the
+# explicit-Any rule, used as the alias everywhere a loose payload is plumbed.
+# Note: not declared with `TypeAlias` — that form is nominal in pyright and
+# breaks TypedDict-overload subtyping. The implicit alias form preserves the
+# structural `dict[str, Any]` shape the overloads need to be subtypes of.
+LoosePayload = dict[str, Any]  # pyright: ignore[reportExplicitAny]
+
 
 @dataclass
 class RuntimeDependencies:
@@ -72,8 +82,8 @@ class SDKConfig:
 class RunOptions:
     """Per-call options for `client.run()`."""
 
-    on_result: Callable[[dict[str, Any]], None] | None = None
-    on_progress: Callable[[dict[str, Any]], None] | None = None
+    on_result: Callable[[LoosePayload], None] | None = None
+    on_progress: Callable[[LoosePayload], None] | None = None
     timeout: int | None = None
     cancel_event: asyncio.Event | None = None
     validate: bool | None = None
@@ -94,8 +104,8 @@ class TaskPayload:
 
     task_type: str
     task_uuid: str
-    extra: dict[str, Any] = field(default_factory=lambda: dict[str, Any]())
+    extra: LoosePayload = field(default_factory=lambda: LoosePayload())
 
-    def to_wire(self) -> dict[str, Any]:
+    def to_wire(self) -> LoosePayload:
         """Serialize to the camelCase shape the API expects."""
         return {"taskType": self.task_type, "taskUUID": self.task_uuid, **self.extra}

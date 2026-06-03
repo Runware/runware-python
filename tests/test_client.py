@@ -288,6 +288,74 @@ class TestValidateOverride:
         await client.close()
 
 
+class TestOverloadNarrowing:
+    """The @overload signatures on run() and the utility methods should narrow
+    the result type when the user explicitly annotates the params dict.
+
+    These tests assert behavior (the cast is valid at runtime), not types —
+    pyright's type-narrowing is verified at static-check time, not pytest time.
+    """
+
+    @pytest.mark.asyncio
+    async def test_image_inference_overload_returns_dict_at_runtime(self) -> None:
+        """Even with the typed overload, the wire returns plain dicts. The
+        TypedDict is structural — it IS a dict, just with declared keys."""
+        from runware import ImageInferenceParams
+
+        client = Runware(api_key="sk-test", transport_type="rest")
+        sync_response: dict[str, Any] = {
+            "data": [
+                {
+                    "taskUUID": "u1",
+                    "imageURL": "https://x.jpg",
+                    "imageUUID": "i1",
+                }
+            ]
+        }
+        _patch_rest(client, sync_response)
+        params: ImageInferenceParams = {
+            "model": "runware:101@1",
+            "positivePrompt": "x",
+            "width": 1024,
+            "height": 1024,
+            "deliveryMethod": "sync",
+        }
+        # Pyright statically sees: list[ImageInferenceResult]. Runtime: list of dicts.
+        results = await client.run(params)
+        assert isinstance(results, list)
+        assert isinstance(results[0], dict)
+        assert results[0]["imageURL"] == "https://x.jpg"
+
+    @pytest.mark.asyncio
+    async def test_utility_method_return_type_is_callable(self) -> None:
+        """Smoke-check the utility-method overloads. Pyright sees specific
+        Result types; runtime returns the same dict payloads."""
+        from runware import ModelSearchParams
+
+        client = Runware(api_key="sk-test", transport_type="rest")
+        _patch_rest(client, {"data": [{"results": [{"air": "x"}]}]})
+        params: ModelSearchParams = {"search": "portrait"}
+        result = await client.model_search(params)
+        assert isinstance(result, list)
+
+    @pytest.mark.asyncio
+    async def test_untyped_dict_runs_fine_at_runtime(self) -> None:
+        """An untyped dict literal must still work at runtime, regardless of
+        which overload pyright picks for it statically."""
+        client = Runware(api_key="sk-test", transport_type="rest")
+        _patch_rest(
+            client,
+            {"data": [{"taskUUID": "u", "imageURL": "u.jpg", "imageUUID": "i"}]},
+        )
+        results = await client.run({
+            "model": "runware:101@1",
+            "positivePrompt": "x",
+            "width": 1024, "height": 1024,
+            "deliveryMethod": "sync",
+        })
+        assert results[0]["imageURL"] == "u.jpg"
+
+
 class TestConfigPropagation:
     def test_config_log_populated_by_create_config(self) -> None:
         client = Runware(api_key="sk-test", transport_type="rest", debug=True)

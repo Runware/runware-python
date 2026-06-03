@@ -9,6 +9,7 @@ import pytest
 
 from runware.logger import create_logger
 from runware.registry import (
+    Registry,
     RegistryData,
     RegistryModelEntry,
     create_registry,
@@ -39,7 +40,7 @@ def _as_aiohttp(session: MockSession) -> aiohttp.ClientSession:
     return cast(aiohttp.ClientSession, session)
 
 
-def _make_registry(session: MockSession, fallback: RegistryData | None = None) -> Any:
+def _make_registry(session: MockSession, fallback: RegistryData | None = None) -> Registry:
     return create_registry(
         url=URL,
         log=create_logger(False),
@@ -252,7 +253,7 @@ class TestVersion:
         try:
             await reg.get_model_task_type("runware:101@1")
             assert session.count("GET", URL) == 1
-            reg.notify_version(SAMPLE_REGISTRY["version"])
+            reg.notify_version(cast(str, SAMPLE_REGISTRY["version"]))
             # Wait one tick for any background work; none should have fired.
             import asyncio
             await asyncio.sleep(0.05)

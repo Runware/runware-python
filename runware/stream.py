@@ -14,12 +14,12 @@ import contextlib
 import json
 import uuid
 from collections.abc import AsyncIterator, Callable
-from typing import Any, cast
+from typing import cast
 
 import aiohttp
 
 from .errors import create_runware_error, parse_api_error
-from .types.sdk import SDKConfig
+from .types.sdk import LoosePayload, SDKConfig
 from .types.stream import TextStreamChunk, TextStreamResult
 
 _TERMINATE_SENTINEL = object()
@@ -40,7 +40,7 @@ def parse_sse_line(line: str) -> TextStreamChunk | None:
     if payload == "[DONE]":
         return None
     try:
-        data = json.loads(payload)
+        data: object = cast(object, json.loads(payload))
     except json.JSONDecodeError as exc:
         raise create_runware_error(
             "parseError", f"Failed to parse SSE data: {payload[:200]}"
@@ -48,14 +48,14 @@ def parse_sse_line(line: str) -> TextStreamChunk | None:
 
     if not isinstance(data, dict):
         return None
-    obj = cast(dict[str, Any], data)
+    obj = cast(LoosePayload, data)
 
     if isinstance(obj.get("errors"), list) or isinstance(obj.get("error"), dict):
         raise parse_api_error(obj)
 
     raw_delta = obj.get("delta")
-    delta_dict: dict[str, Any] = (
-        cast(dict[str, Any], raw_delta) if isinstance(raw_delta, dict) else {}
+    delta_dict: LoosePayload = (
+        cast(LoosePayload, raw_delta) if isinstance(raw_delta, dict) else {}
     )
 
     return TextStreamChunk(
@@ -68,10 +68,16 @@ def parse_sse_line(line: str) -> TextStreamChunk | None:
         finish_reason=(
             obj.get("finishReason") if isinstance(obj.get("finishReason"), str) else None
         ),
-        usage=cast(dict[str, Any], obj.get("usage")) if isinstance(obj.get("usage"), dict) else None,
-        cost=float(obj["cost"]) if isinstance(obj.get("cost"), (int, float)) else None,
+        usage=cast(LoosePayload, obj.get("usage")) if isinstance(obj.get("usage"), dict) else None,
+        cost=(
+            float(cast(float, obj["cost"]))
+            if isinstance(obj.get("cost"), (int, float))
+            else None
+        ),
         result_index=(
-            int(obj["resultIndex"]) if isinstance(obj.get("resultIndex"), int) else None
+            int(cast(int, obj["resultIndex"]))
+            if isinstance(obj.get("resultIndex"), int)
+            else None
         ),
         task_uuid=obj.get("taskUUID") if isinstance(obj.get("taskUUID"), str) else None,
     )
@@ -96,12 +102,12 @@ class TextStream:
         *,
         config: SDKConfig,
         session: aiohttp.ClientSession,
-        task: dict[str, Any],
+        task: LoosePayload,
         cancel_event: asyncio.Event | None = None,
         timeout_seconds: float | None = None,
     ) -> None:
-        self._text_queue: asyncio.Queue[Any] = asyncio.Queue()
-        self._reasoning_queue: asyncio.Queue[Any] = asyncio.Queue()
+        self._text_queue: asyncio.Queue[object] = asyncio.Queue()
+        self._reasoning_queue: asyncio.Queue[object] = asyncio.Queue()
         self._chunks: list[TextStreamChunk] = []
         self._final: TextStreamResult | None = None
         self._error: BaseException | None = None
@@ -116,17 +122,21 @@ class TextStream:
         # nothing. Spinning the HTTP request eagerly would charge credits and
         # run the model even if the user never iterates.
         self._pump_task: asyncio.Task[None] | None = None
-        self._pump_args: dict[str, Any] = {
-            "config": config,
-            "session": session,
-            "task": task,
-            "cancel_event": cancel_event,
-            "timeout_seconds": timeout_seconds,
-        }
+        self._pump_config = config
+        self._pump_session = session
+        self._pump_task_payload = task
+        self._pump_cancel_event = cancel_event
+        self._pump_timeout_seconds = timeout_seconds
 
     def _ensure_pump_started(self) -> None:
         if self._pump_task is None:
-            self._pump_task = asyncio.create_task(self._pump(**self._pump_args))
+            self._pump_task = asyncio.create_task(self._pump(
+                config=self._pump_config,
+                session=self._pump_session,
+                task=self._pump_task_payload,
+                cancel_event=self._pump_cancel_event,
+                timeout_seconds=self._pump_timeout_seconds,
+            ))
 
     def _signal_shutdown(self) -> None:
         """Owner-side signal that the parent client is closing."""
@@ -182,7 +192,7 @@ class TextStream:
         *,
         config: SDKConfig,
         session: aiohttp.ClientSession,
-        task: dict[str, Any],
+        task: LoosePayload,
         cancel_event: asyncio.Event | None,
         timeout_seconds: float | None,
     ) -> None:
@@ -204,9 +214,9 @@ class TextStream:
             ) as response:
                 if not response.ok:
                     body_text = await response.text()
-                    body: Any
+                    body: object | None
                     try:
-                        body = json.loads(body_text)
+                        body = cast(object, json.loads(body_text))
                     except json.JSONDecodeError:
                         body = None
                     if body:
@@ -280,7 +290,7 @@ class TextStream:
         self._finish()
 
 
-async def _queue_iter(queue: asyncio.Queue[Any]) -> AsyncIterator[str]:
+async def _queue_iter(queue: asyncio.Queue[object]) -> AsyncIterator[str]:
     while True:
         item = await queue.get()
         if item is _TERMINATE_SENTINEL:
@@ -311,7 +321,7 @@ def _accumulate(chunks: list[TextStreamChunk]) -> TextStreamResult:
 
 
 def _dump_chunk(chunk: TextStreamChunk) -> str:
-    payload: dict[str, Any] = {}
+    payload: LoosePayload = {}
     if chunk.text:
         payload["text"] = chunk.text
     if chunk.reasoning_content:
@@ -329,7 +339,7 @@ async def create_text_stream(
     *,
     config: SDKConfig,
     session: aiohttp.ClientSession,
-    params: dict[str, Any],
+    params: LoosePayload,
     cancel_event: asyncio.Event | None = None,
     timeout_seconds: float | None = None,
 ) -> TextStream:
@@ -343,12 +353,17 @@ async def create_text_stream(
     if isinstance(params.get("numberResults"), int) and params["numberResults"] > 1:
         raise create_runware_error(
             "notImplemented",
-            "stream() with numberResults > 1 is not supported "
-            "(the backend doesn't emit resultIndex on stream chunks).",
+            (
+                "stream() with numberResults > 1 is not supported "
+                "(the backend doesn't emit resultIndex on stream chunks)."
+            ),
         )
 
-    task_payload: dict[str, Any] = {
-        k: v for k, v in params.items() if k not in ("taskUUID",)
+    # User-supplied passthrough: values are Any by per-taskType design.
+    task_payload: LoosePayload = {
+        k: v
+        for k, v in params.items()  # pyright: ignore[reportAny]
+        if k not in ("taskUUID",)
     }
     task_payload.setdefault("taskUUID", str(uuid.uuid4()))
 

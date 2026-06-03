@@ -21,7 +21,7 @@ import contextlib
 import json
 import secrets
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Coroutine
 from typing import Any, cast
 
 import websockets
@@ -29,9 +29,10 @@ from websockets.asyncio.client import ClientConnection
 from websockets.exceptions import ConnectionClosed
 
 from ..errors import create_runware_error
-from ..types.sdk import SDKConfig
+from ..types.sdk import LoosePayload, SDKConfig
+from ..types.transport import WireFrame
 
-WsResponse = dict[str, Any]
+WsResponse = WireFrame
 ResponseCallback = Callable[[WsResponse], None]
 
 _HEARTBEAT_INTERVAL_SECONDS = 30.0
@@ -91,7 +92,7 @@ class WebSocketTransport:
 
     async def send_request(
         self,
-        data: dict[str, Any] | list[dict[str, Any]],
+        data: LoosePayload | list[LoosePayload],
     ) -> None:
         if not self._connected or self._ws is None:
             raise create_runware_error("notConnected", "Not connected to WebSocket server")
@@ -144,7 +145,7 @@ class WebSocketTransport:
         if self._ws is None:
             raise create_runware_error("notOpen", "WebSocket not open for authentication")
 
-        auth_message: dict[str, Any] = {
+        auth_message: LoosePayload = {
             "taskType": "authentication",
             "apiKey": self._config.api_key,
         }
@@ -165,7 +166,7 @@ class WebSocketTransport:
         # have to skim.
         timeout_seconds = self._config.auth_timeout / 1000.0
         deadline = asyncio.get_running_loop().time() + timeout_seconds
-        data: dict[str, Any] | None = None
+        data: LoosePayload | None = None
         while True:
             remaining = deadline - asyncio.get_running_loop().time()
             if remaining <= 0:
@@ -200,14 +201,14 @@ class WebSocketTransport:
 
             raw_errors = frame.get("errors") or frame.get("error")
             if raw_errors:
-                errs: list[Any] = (
-                    cast(list[Any], raw_errors)
+                errs: list[object] = (
+                    cast(list[object], raw_errors)
                     if isinstance(raw_errors, list)
                     else [raw_errors]
                 )
-                first_err: dict[str, Any] = {}
+                first_err: LoosePayload = {}
                 if errs and isinstance(errs[0], dict):
-                    first_err = cast(dict[str, Any], errs[0])
+                    first_err = cast(LoosePayload, errs[0])
                 raise create_runware_error(
                     "authFailed",
                     first_err.get("message")
@@ -215,8 +216,8 @@ class WebSocketTransport:
                 )
 
             items_raw = frame.get("data")
-            items: list[Any] = (
-                cast(list[Any], items_raw)
+            items: list[object] = (
+                cast(list[object], items_raw)
                 if isinstance(items_raw, list)
                 else []
             )
@@ -226,7 +227,7 @@ class WebSocketTransport:
             for item in items:
                 if not isinstance(item, dict):
                     continue
-                if cast(dict[str, Any], item).get("taskType") == "authentication":
+                if cast(LoosePayload, item).get("taskType") == "authentication":
                     data = frame
                     found = True
                     break
@@ -238,13 +239,13 @@ class WebSocketTransport:
         assert data is not None  # loop only exits when data is set
         items_raw = data.get("data")
         items = (
-            cast(list[Any], items_raw) if isinstance(items_raw, list) else []
+            cast(list[object], items_raw) if isinstance(items_raw, list) else []
         )
-        first: dict[str, Any] | None = None
+        first: LoosePayload | None = None
         for candidate in items:
             if not isinstance(candidate, dict):
                 continue
-            candidate_dict = cast(dict[str, Any], candidate)
+            candidate_dict = cast(LoosePayload, candidate)
             if candidate_dict.get("taskType") == "authentication":
                 first = candidate_dict
                 break
@@ -295,16 +296,16 @@ class WebSocketTransport:
         except Exception as exc:
             self._log.error(f"task callback raised in dispatch: {exc}")
 
-    def _dispatch(self, frame: dict[str, Any]) -> None:
+    def _dispatch(self, frame: LoosePayload) -> None:
         raw_errors = frame.get("errors") or frame.get("error")
         if raw_errors:
-            errors_list: list[dict[str, Any]] = (
-                cast(list[dict[str, Any]], raw_errors)
+            errors_list: list[LoosePayload] = (
+                cast(list[LoosePayload], raw_errors)
                 if isinstance(raw_errors, list)
-                else [cast(dict[str, Any], raw_errors)]
+                else [cast(LoosePayload, raw_errors)]
             )
-            by_task: dict[str, list[dict[str, Any]]] = {}
-            unrouted: list[dict[str, Any]] = []
+            by_task: dict[str, list[LoosePayload]] = {}
+            unrouted: list[LoosePayload] = []
             for err in errors_list:
                 task_uuid = err.get("taskUUID")
                 if isinstance(task_uuid, str):
@@ -327,11 +328,11 @@ class WebSocketTransport:
         if not isinstance(data, list):
             return
 
-        items_by_task: dict[str, list[dict[str, Any]]] = {}
-        for item in cast(list[Any], data):
+        items_by_task: dict[str, list[LoosePayload]] = {}
+        for item in cast(list[object], data):
             if not isinstance(item, dict):
                 continue
-            item_dict = cast(dict[str, Any], item)
+            item_dict = cast(LoosePayload, item)
             task_type = item_dict.get("taskType")
             if task_type == "ping" and item_dict.get("pong") is True:
                 continue
@@ -384,10 +385,8 @@ class WebSocketTransport:
             while self._should_reconnect:
                 self._reconnect_attempt += 1
                 if self._reconnect_attempt > self._config.max_reconnect_attempts:
-                    self._log.error(
-                        f"Reconnection failed after {self._reconnect_attempt - 1} "
-                        "attempts, giving up"
-                    )
+                    attempts = self._reconnect_attempt - 1
+                    self._log.error(f"Reconnection failed after {attempts} attempts, giving up")
                     error = create_runware_error(
                         "reconnectionFailed",
                         (
@@ -404,10 +403,14 @@ class WebSocketTransport:
                 # cap so a thundering herd at the ceiling still spreads out —
                 # otherwise once base ≥ cap, jitter gets squashed to zero and
                 # every client reconnects on the same millisecond.
-                base_ms = self._config.retry_delay * (2 ** (self._reconnect_attempt - 1))
-                capped_ms = min(base_ms, _RECONNECT_BACKOFF_CAP_MS)
-                jitter_ms = secrets.randbelow(_RECONNECT_JITTER_MAX_MS + 1)
-                delay_ms = capped_ms + jitter_ms
+                # pow(2, n) returns int for non-negative n; cast to silence the
+                # type stubs' int|float widening.
+                base_ms: int = self._config.retry_delay * cast(
+                    int, 2 ** (self._reconnect_attempt - 1),
+                )
+                capped_ms: int = min(base_ms, _RECONNECT_BACKOFF_CAP_MS)
+                jitter_ms: int = secrets.randbelow(_RECONNECT_JITTER_MAX_MS + 1)
+                delay_ms: int = capped_ms + jitter_ms
                 self._log.connection(
                     f"Reconnect attempt {self._reconnect_attempt} in {delay_ms}ms"
                 )
@@ -445,25 +448,28 @@ class WebSocketTransport:
                 await self._ws.close()
         self._ws = None
 
-    def _spawn_background(self, coro: Any) -> None:
+    def _spawn_background(
+        self,
+        coro: Coroutine[Any, Any, None],  # pyright: ignore[reportExplicitAny]
+    ) -> None:
         """Fire-and-forget an async coro while keeping a strong reference."""
         task = asyncio.create_task(coro)
         self._background_tasks.add(task)
         task.add_done_callback(self._background_tasks.discard)
 
 
-def _parse_frame(raw: str | bytes) -> dict[str, Any] | None:
+def _parse_frame(raw: str | bytes) -> LoosePayload | None:
     text = raw if isinstance(raw, str) else raw.decode("utf-8", errors="replace")
     try:
-        parsed = json.loads(text)
+        parsed: object = cast(object, json.loads(text))
     except json.JSONDecodeError:
         return None
     if isinstance(parsed, dict):
-        return cast(dict[str, Any], parsed)
+        return cast(LoosePayload, parsed)
     return None
 
 
-def _redact(payload: list[dict[str, Any]]) -> str:
+def _redact(payload: list[LoosePayload]) -> str:
     redacted = [
         {**task, "apiKey": "[redacted]"}
         if task.get("taskType") == "authentication" and "apiKey" in task

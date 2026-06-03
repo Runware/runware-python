@@ -14,7 +14,7 @@ import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from typing import Any, Literal
+from typing import Literal
 
 LogCategory = Literal[
     "connection",
@@ -37,13 +37,13 @@ class LogEntry:
     category: LogCategory
     message: str
     timestamp: str
-    data: Any = None
+    data: object = None
 
 
 LogSink = Callable[[LogEntry], None]
 
 
-def _format_data(data: Any) -> str:
+def _format_data(data: object) -> str:
     if data is None:
         return ""
     if isinstance(data, str):
@@ -77,7 +77,7 @@ class Logger:
     def enabled(self) -> bool:
         return self._enabled
 
-    def _emit(self, category: LogCategory, message: str, data: Any = None) -> None:
+    def _emit(self, category: LogCategory, message: str, data: object = None) -> None:
         if not self._enabled:
             return
         entry = LogEntry(
@@ -88,34 +88,34 @@ class Logger:
         )
         self._sink(entry)
 
-    def connection(self, message: str, data: Any = None) -> None:
+    def connection(self, message: str, data: object = None) -> None:
         self._emit("connection", message, data)
 
-    def auth(self, message: str, data: Any = None) -> None:
+    def auth(self, message: str, data: object = None) -> None:
         self._emit("auth", message, data)
 
-    def heartbeat(self, message: str, data: Any = None) -> None:
+    def heartbeat(self, message: str, data: object = None) -> None:
         self._emit("heartbeat", message, data)
 
-    def send(self, message: str, data: Any = None) -> None:
+    def send(self, message: str, data: object = None) -> None:
         self._emit("send", message, data)
 
-    def receive(self, message: str, data: Any = None) -> None:
+    def receive(self, message: str, data: object = None) -> None:
         self._emit("receive", message, data)
 
-    def request(self, message: str, data: Any = None) -> None:
+    def request(self, message: str, data: object = None) -> None:
         self._emit("request", message, data)
 
-    def retry(self, message: str, data: Any = None) -> None:
+    def retry(self, message: str, data: object = None) -> None:
         self._emit("retry", message, data)
 
-    def error(self, message: str, data: Any = None) -> None:
+    def error(self, message: str, data: object = None) -> None:
         self._emit("error", message, data)
 
-    def warn(self, message: str, data: Any = None) -> None:
+    def warn(self, message: str, data: object = None) -> None:
         self._emit("warn", message, data)
 
-    def info(self, message: str, data: Any = None) -> None:
+    def info(self, message: str, data: object = None) -> None:
         self._emit("info", message, data)
 
 

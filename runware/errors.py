@@ -9,8 +9,9 @@ users get `code` (a small enum), `parameter`, and `message`.
 
 from __future__ import annotations
 
-from typing import Any, Literal, TypeGuard, cast
+from typing import Literal, TypeGuard, cast
 
+from ._docs_cache import get_docs_url_for_model as _cached_docs
 from .types.task_map import ModelEntry
 from .types.task_map import models as _bundled_models
 
@@ -225,7 +226,7 @@ class RunwareError(Exception):
     task_uuid: str | None
     documentation: str | None
     status_code: int | None
-    validation_errors: list[Any] | None
+    validation_errors: list[object] | None
 
     def __init__(self, raw_code: str, message: str) -> None:
         super().__init__(message)
@@ -282,13 +283,11 @@ def build_documentation_url(
             return f"{base}{_param_anchor(parameter)}" if parameter else base
 
     if model:
-        # Auto-pickup of validator-cached docs for non-curated models. Lazy
-        # import breaks the errors↔validate cycle (validate.py imports from
-        # errors at module load).
+        # Auto-pickup of validator-cached docs for non-curated models. The
+        # cache lives in its own `_docs_cache` module so neither side of the
+        # erstwhile errors↔validate cycle imports the other.
         if cached_docs_for_model is None:
-            from .validate import get_docs_url_for_model
-
-            cached_docs_for_model = get_docs_url_for_model(model)
+            cached_docs_for_model = _cached_docs(model)
         if cached_docs_for_model:
             return (
                 f"{cached_docs_for_model}{_param_anchor(parameter)}"
@@ -317,7 +316,7 @@ def create_runware_error(
     task_type: str | None = None,
     task_uuid: str | None = None,
     status_code: int | None = None,
-    validation_errors: list[Any] | None = None,
+    validation_errors: list[object] | None = None,
     model: str | None = None,
     cached_docs_for_model: str | None = None,
 ) -> RunwareError:
@@ -348,7 +347,7 @@ def create_runware_error(
 
 
 def parse_api_error(
-    raw: Any,
+    raw: object,
     *,
     task_type: str | None = None,
     model: str | None = None,
@@ -363,22 +362,22 @@ def parse_api_error(
     if not isinstance(raw, (dict, list)):
         return create_runware_error("unknown", str(raw))
 
-    first: dict[str, Any] = {}
+    first: dict[str, object] = {}
 
     if isinstance(raw, list):
-        raw_list = cast(list[Any], raw)
+        raw_list = cast(list[object], raw)
         if raw_list and isinstance(raw_list[0], dict):
-            first = cast(dict[str, Any], raw_list[0])
+            first = cast(dict[str, object], raw_list[0])
     else:
-        obj = cast(dict[str, Any], raw)
+        obj = cast(dict[str, object], raw)
         errors_val = obj.get("errors")
         error_val = obj.get("error")
         if isinstance(errors_val, list):
-            errors_list = cast(list[Any], errors_val)
+            errors_list = cast(list[object], errors_val)
             if errors_list and isinstance(errors_list[0], dict):
-                first = cast(dict[str, Any], errors_list[0])
+                first = cast(dict[str, object], errors_list[0])
         elif isinstance(error_val, dict):
-            err = dict(cast(dict[str, Any], error_val))
+            err = dict(cast(dict[str, object], error_val))
             err.setdefault("taskUUID", obj.get("taskUUID"))
             err.setdefault("taskType", obj.get("taskType"))
             first = err
@@ -395,11 +394,11 @@ def parse_api_error(
     )
 
 
-def _str_or_none(value: Any) -> str | None:
+def _str_or_none(value: object) -> str | None:
     return value if isinstance(value, str) else None
 
 
-def _str_or_default(value: Any, default: str) -> str:
+def _str_or_default(value: object, default: str) -> str:
     return value if isinstance(value, str) else default
 
 

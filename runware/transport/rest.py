@@ -11,13 +11,13 @@ from __future__ import annotations
 
 import asyncio
 import json
-from typing import Any, Self
+from typing import Self, cast
 
 import aiohttp
 
 from ..errors import create_runware_error, is_runware_error, parse_api_error
-from ..types.sdk import SDKConfig
-from ..types.transport import RequestOptions
+from ..types.sdk import LoosePayload, SDKConfig
+from ..types.transport import RequestOptions, WireFrame
 from ..utils.retry import with_retry
 
 _RETRYABLE_STATUS = {408, 429}
@@ -61,9 +61,9 @@ class RestTransport:
 
     async def send_request(
         self,
-        data: dict[str, Any] | list[dict[str, Any]],
+        data: LoosePayload | list[LoosePayload],
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> WireFrame:
         """
         POST a task or batch of tasks. Returns the parsed JSON response.
 
@@ -98,14 +98,14 @@ class RestTransport:
     async def _do_post(
         self,
         url: str,
-        payload: list[dict[str, Any]],
+        payload: list[LoosePayload],
         timeout_ms: int,
         cancel_event: asyncio.Event | None,
-    ) -> Any:
+    ) -> WireFrame:
         session = await self._ensure_session()
         timeout = aiohttp.ClientTimeout(total=timeout_ms / 1000.0)
 
-        async def do_request() -> Any:
+        async def do_request() -> WireFrame:
             self._config.log.send(json.dumps(payload, default=str))
             async with session.post(
                 url,
@@ -118,9 +118,9 @@ class RestTransport:
             ) as response:
                 if not response.ok:
                     body_text = await response.text()
-                    body: Any
+                    body: object | None
                     try:
-                        body = json.loads(body_text)
+                        body = cast(object, json.loads(body_text))
                     except json.JSONDecodeError:
                         body = None
 
@@ -157,7 +157,10 @@ class RestTransport:
                     )
 
                 try:
-                    body_json = await response.json()
+                    # aiohttp.json() is untyped (returns Any). Narrow at the
+                    # boundary; downstream code reads data/errors against the
+                    # WireFrame shape.
+                    body_json = cast(WireFrame, await response.json())
                 except (
                     aiohttp.ContentTypeError,
                     json.JSONDecodeError,
@@ -220,7 +223,7 @@ class RestTransport:
             reason = f"HTTP {error.status_code}"
         elif isinstance(error, aiohttp.ClientConnectionError):
             reason = "connection error"
+        max_retries = self._config.max_retries
         self._config.log.retry(
-            f"Retrying after {reason}, attempt {attempt}/{self._config.max_retries} "
-            f"in {delay_ms}ms"
+            f"Retrying after {reason}, attempt {attempt}/{max_retries} in {delay_ms}ms",
         )

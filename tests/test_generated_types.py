@@ -112,22 +112,30 @@ class TestTopLevelReExports:
     not just `runware.types.task_map`. Mirrors how the TS SDK re-exports a
     curated subset from index.ts."""
 
-    def test_modality_params_importable_from_runware(self) -> None:
+    def test_modality_params_and_results_importable_from_runware(self) -> None:
         import runware
 
         for name in (
+            # Params
             "ImageInferenceParams",
             "VideoInferenceParams",
             "AudioInferenceParams",
             "TextInferenceParams",
             "ThreeDInferenceParams",
+            # Canonical per-taskType Results (one per modality)
+            "ImageInferenceResult",
+            "VideoInferenceResult",
+            "AudioInferenceResult",
+            "TextInferenceResult",
+            "ThreeDInferenceResult",
         ):
             assert hasattr(runware, name), f"runware.{name} missing"
 
-    def test_operation_params_importable_from_runware(self) -> None:
+    def test_operation_params_and_results_importable_from_runware(self) -> None:
         import runware
 
         for name in (
+            # Params (slug-based; media variants distinct)
             "CaptionParams",
             "CaptionImageParams",
             "CaptionVideoParams",
@@ -142,6 +150,15 @@ class TestTopLevelReExports:
             "RemoveBackgroundVideoParams",
             "VectorizeParams",
             "TrainingParams",
+            # Canonical per-taskType Results
+            "CaptionResult",
+            "ImageMaskingResult",
+            "ControlNetPreprocessResult",
+            "PromptEnhanceResult",
+            "UpscaleResult",
+            "RemoveBackgroundResult",
+            "VectorizeResult",
+            "TrainingResult",
         ):
             assert hasattr(runware, name), f"runware.{name} missing"
 

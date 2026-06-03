@@ -2,19 +2,17 @@
 Generate `runware/types/task_map.py` from the schemas bundle.
 
 The schemas service publishes immutable per-release bundles at
-`https://schemas.runware.ai/releases/<version>/schema-map.json` (served from
-R2). This script reads that bundle and emits Python types: a TypedDict per
-curated model / architecture / utility, plus dictionaries of curated AIRs,
-architecture task types, and modality task types — equivalent of TS's
-generated `task-map.ts`.
+`https://schemas.runware.ai/releases/<version>/schema-map.json`. This script
+fetches that bundle and emits Python types: a TypedDict per curated model /
+architecture / utility, plus dictionaries of curated AIRs, architecture task
+types, and modality task types.
 
 Pin the version in `runware/_schemas_version.py`. Bump it whenever you want
 fresh types: edit the constant, re-run this script, commit the regenerated
 `task_map.py`.
 
-While the R2 endpoint hasn't been deployed yet, this script falls back to
-reading `repos/schemas/dist-worker/schema-map.json` locally. Set
-`RUNWARE_SCHEMA_MAP_PATH` to override.
+Set `RUNWARE_SCHEMA_MAP_PATH` to a local `schema-map.json` to override the
+fetch — useful for local development against unreleased schema changes.
 """
 
 from __future__ import annotations
@@ -42,6 +40,8 @@ SCHEMAS_VERSION = _match.group(1) if _match else "latest"
 
 OUTPUT_PATH = PROJECT_ROOT / "runware" / "types" / "task_map.py"
 REMOTE_URL = f"https://schemas.runware.ai/releases/{SCHEMAS_VERSION}/schema-map.json"
+# Optional local checkout fallback (paired-repo dev setup). Real usage hits
+# the remote URL; this is only for offline development.
 LOCAL_FALLBACK = (
     PROJECT_ROOT.parent / "schemas" / "dist-worker" / "schema-map.json"
 )
@@ -64,13 +64,13 @@ def load_schema_map() -> dict[str, Any]:
     except urllib.error.HTTPError as exc:
         print(
             f"Remote fetch failed ({exc.code} {exc.reason}). "
-            "Falling back to local dist-worker.",
+            "Falling back to local checkout.",
             file=sys.stderr,
         )
     except urllib.error.URLError as exc:
         print(
             f"Remote fetch failed ({exc.reason}). "
-            "Falling back to local dist-worker.",
+            "Falling back to local checkout.",
             file=sys.stderr,
         )
 
@@ -80,7 +80,7 @@ def load_schema_map() -> dict[str, Any]:
 
     raise SystemExit(
         f"Could not load schema-map. Tried {REMOTE_URL} and {LOCAL_FALLBACK}. "
-        "Set RUNWARE_SCHEMA_MAP_PATH to a local path or deploy the worker first."
+        "Set RUNWARE_SCHEMA_MAP_PATH to a local schema-map.json."
     )
 
 
@@ -138,11 +138,12 @@ def schema_to_py(schema: Any, *, owner_name: str, field_name: str | None = None)
     """
     Translate a single JSON Schema fragment to a Python type expression.
 
-    Complex / unknown shapes fall back to `Any` — the TypedDict still provides
-    autocomplete on the field name; the value type stops at the boundary.
+    Complex / unknown shapes fall back to `object` — Python's equivalent of
+    TypeScript's `unknown`. Mirrors the TS generator's `Record<string, unknown>`
+    / `unknown[]` posture: callers must narrow before use, no `Any` leak.
     """
     if not isinstance(schema, dict):
-        return "Any"
+        return "object"
 
     # const wins everything else (most specific).
     if "const" in schema:
@@ -178,8 +179,8 @@ def schema_to_py(schema: Any, *, owner_name: str, field_name: str | None = None)
     elif json_type == "object":
         # Inline object — fall back to a permissive dict. Generating a nested
         # TypedDict here would require coordinating names across the whole
-        # tree; the boundary at `dict[str, Any]` is the pragmatic call.
-        py = "dict[str, Any]"
+        # tree; `dict[str, object]` mirrors TS's `Record<string, unknown>`.
+        py = "dict[str, object]"
     elif isinstance(json_type, list):
         # Union of primitive types, e.g. ["string", "null"].
         union_parts: list[str] = []
@@ -195,11 +196,11 @@ def schema_to_py(schema: Any, *, owner_name: str, field_name: str | None = None)
                 for v in variants
             ]
             unique = list(dict.fromkeys(parts))
-            py = " | ".join(unique) if unique else "Any"
+            py = " | ".join(unique) if unique else "object"
         else:
-            py = "Any"
+            py = "object"
     else:
-        py = "Any"
+        py = "object"
 
     if nullable and "None" not in py:
         py = f"{py} | None"
@@ -297,6 +298,13 @@ def build(schema_map: dict[str, Any]) -> str:
     # by AIR — if two models share an AIR (data bug in the schemas, but it
     # does happen), keep the first occurrence to avoid emitting a
     # duplicate-key dict literal.
+    #
+    # Additionally, emit one canonical <TaskType>Result per unique inference
+    # task type (e.g. ImageInferenceResult, VideoInferenceResult). Picks the
+    # first response schema seen for each task type — these are
+    # interchangeable in practice since the server returns the same envelope
+    # shape for a given taskType. Mirrors what the TS generator emits.
+    seen_task_type_results: set[str] = set()
     for entry in inference:
         slug = entry.get("slug")
         air = entry.get("air")
@@ -322,6 +330,14 @@ def build(schema_map: dict[str, Any]) -> str:
                 response_schema,
                 f"Inference result for curated model `{air}` (slug: {slug}).",
             )
+            # One canonical <TaskType>Result per inference task type.
+            if task_type not in seen_task_type_results:
+                seen_task_type_results.add(task_type)
+                add_typed_dict(
+                    to_class_name(task_type, "Result"),
+                    response_schema,
+                    f"Canonical result shape for `{task_type}` tasks.",
+                )
         if air in seen_airs:
             print(f"warning: duplicate AIR {air!r} (skipping in models dict)", file=sys.stderr)
             continue
@@ -464,7 +480,7 @@ def build(schema_map: dict[str, Any]) -> str:
         from __future__ import annotations
 
         from dataclasses import dataclass
-        from typing import Any, Literal, NotRequired, TypedDict
+        from typing import Literal, NotRequired, TypedDict
 
         SCHEMAS_VERSION = "{SCHEMAS_VERSION}"
 

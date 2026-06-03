@@ -10,7 +10,6 @@ is responsible for populating `os.environ`.
 from __future__ import annotations
 
 import os
-from typing import Any
 
 from .errors import create_runware_error
 from .logger import create_logger
@@ -32,7 +31,7 @@ def _coalesce_api_key(passed: str | None) -> str:
 def create_config(
     *,
     api_key: str | None = None,
-    **overrides: Any,
+    **overrides: object,
 ) -> SDKConfig:
     """
     Build an SDKConfig from user-supplied values + environment fallback.
@@ -42,8 +41,11 @@ def create_config(
     """
     resolved_key = _coalesce_api_key(api_key)
 
+    # dataclasses stubs type Field as Any; safe to iterate but typed loosely.
     init_fields = {
-        name for name, f in SDKConfig.__dataclass_fields__.items() if f.init
+        name
+        for name, f in SDKConfig.__dataclass_fields__.items()  # pyright: ignore[reportAny]
+        if f.init  # pyright: ignore[reportAny]
     }
     unknown = set(overrides) - init_fields
     if unknown:
@@ -52,6 +54,8 @@ def create_config(
             f"Unknown SDKConfig field(s): {', '.join(sorted(unknown))}",
         )
 
-    config = SDKConfig(api_key=resolved_key, **overrides)
+    # Each override is typed `object` because **kwargs are inherently dynamic;
+    # SDKConfig's __init__ enforces per-field types at instantiation time.
+    config = SDKConfig(api_key=resolved_key, **overrides)  # pyright: ignore[reportArgumentType]
     config.log = create_logger(config.debug, sink=config.log_sink)
     return config

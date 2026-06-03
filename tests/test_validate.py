@@ -9,10 +9,10 @@ import aiohttp
 import pytest
 
 from runware import RunwareError, is_runware_error
+from runware._docs_cache import get_docs_url_for_model
 from runware.logger import create_logger
 from runware.validate import (
     clear_validator_cache,
-    get_docs_url_for_model,
     strip_inner_ids,
     validate_tasks,
 )

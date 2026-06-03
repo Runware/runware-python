@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 import random
 from collections.abc import Awaitable, Callable
-from typing import TypeVar
+from typing import TypeVar, cast
 
 from ..errors import create_runware_error
 from ..types.sdk import RetryStrategy
@@ -49,9 +49,13 @@ async def with_retry(
 
             attempt += 1
             if retry_strategy == "linear":
-                delay_ms = retry_delay_ms * attempt
+                delay_ms: int = retry_delay_ms * attempt
             else:
-                delay_ms = min(retry_delay_ms * (2 ** (attempt - 1)), 30_000)
+                # pow(2, n) for non-negative n returns int; cast to silence
+                # the int|float widening in the type stubs.
+                delay_ms = min(
+                    retry_delay_ms * cast(int, 2 ** (attempt - 1)), 30_000,
+                )
             delay_ms += random.randint(0, 1_000)
 
             if on_retry is not None:
