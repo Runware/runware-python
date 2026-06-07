@@ -1518,6 +1518,42 @@ class BytedanceSeedance20FastResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
+class PrunaaiPVideoReplaceParams(TypedDict, total=False):
+    """Inference params for curated model `prunaai:p-video@replace` (slug: prunaai-p-video-replace)."""
+
+    model: Literal['prunaai:p-video@replace']
+    inputs: dict[str, object]
+    positivePrompt: NotRequired[str]
+    resolution: NotRequired[Literal['720p', '1080p']]
+    fps: NotRequired[Literal[24, 48]]
+    seed: NotRequired[int]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class PrunaaiPVideoReplaceResult(TypedDict, total=False):
+    """Inference result for curated model `prunaai:p-video@replace` (slug: prunaai-p-video-replace)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
 class PrunaaiPImageEditParams(TypedDict, total=False):
     """Inference params for curated model `prunaai:2@1` (slug: prunaai-p-image-edit)."""
 
@@ -1557,7 +1593,6 @@ class PrunaaiPVideoAnimateParams(TypedDict, total=False):
     """Inference params for curated model `prunaai:p-video@animate` (slug: prunaai-p-video-animate)."""
 
     model: Literal['prunaai:p-video@animate']
-    safety: NotRequired[dict[str, object]]
     inputs: dict[str, object]
     positivePrompt: NotRequired[str]
     resolution: NotRequired[Literal['720p', '1080p']]
@@ -1575,6 +1610,7 @@ class PrunaaiPVideoAnimateParams(TypedDict, total=False):
     outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
 
 class PrunaaiPVideoAnimateResult(TypedDict, total=False):
     """Inference result for curated model `prunaai:p-video@animate` (slug: prunaai-p-video-animate)."""
@@ -2386,7 +2422,7 @@ class GoogleVeo3FastParams(TypedDict, total=False):
     positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
-    duration: NotRequired[Literal[8]]
+    duration: NotRequired[Literal[4, 6, 8]]
     seed: NotRequired[int]
     providerSettings: NotRequired[dict[str, object]]
     taskType: Literal['videoInference']
@@ -2490,7 +2526,7 @@ class GoogleVeo3Params(TypedDict, total=False):
     width: NotRequired[int]
     height: NotRequired[int]
     resolution: NotRequired[Literal['720p', '1080p']]
-    duration: NotRequired[Literal[8]]
+    duration: NotRequired[Literal[4, 6, 8]]
     seed: NotRequired[int]
     providerSettings: NotRequired[dict[str, object]]
     taskType: Literal['videoInference']
@@ -2593,7 +2629,7 @@ class GoogleVeo31Params(TypedDict, total=False):
     width: NotRequired[int]
     height: NotRequired[int]
     resolution: NotRequired[Literal['720p', '1080p', '4K']]
-    duration: NotRequired[Literal[7, 8]]
+    duration: NotRequired[Literal[4, 6, 7, 8]]
     seed: NotRequired[int]
     providerSettings: NotRequired[dict[str, object]]
     taskType: Literal['videoInference']
@@ -2842,7 +2878,7 @@ class GoogleVeo31FastParams(TypedDict, total=False):
     width: NotRequired[int]
     height: NotRequired[int]
     resolution: NotRequired[Literal['720p', '1080p', '4K']]
-    duration: NotRequired[Literal[7, 8]]
+    duration: NotRequired[Literal[4, 6, 7, 8]]
     seed: NotRequired[int]
     providerSettings: NotRequired[dict[str, object]]
     taskType: Literal['videoInference']
@@ -5089,6 +5125,42 @@ class SourcefulRiverflow2PreviewStandardResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
+class SourcefulRiverflow25FastParams(TypedDict, total=False):
+    """Inference params for curated model `sourceful:riverflow-2.5@fast` (slug: sourceful-riverflow-2-5-fast)."""
+
+    model: Literal['sourceful:riverflow-2.5@fast']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['1K', '2K']]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class SourcefulRiverflow25FastResult(TypedDict, total=False):
+    """Inference result for curated model `sourceful:riverflow-2.5@fast` (slug: sourceful-riverflow-2-5-fast)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
 class SourcefulRiverflow11Params(TypedDict, total=False):
     """Inference params for curated model `sourceful:1@1` (slug: sourceful-riverflow-1-1)."""
 
@@ -5157,14 +5229,51 @@ class SourcefulRiverflow11ProResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
+class SourcefulRiverflow25ProParams(TypedDict, total=False):
+    """Inference params for curated model `sourceful:riverflow-2.5@pro` (slug: sourceful-riverflow-2-5-pro)."""
+
+    model: Literal['sourceful:riverflow-2.5@pro']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['1K', '2K', '4K']]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class SourcefulRiverflow25ProResult(TypedDict, total=False):
+    """Inference result for curated model `sourceful:riverflow-2.5@pro` (slug: sourceful-riverflow-2-5-pro)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
 class SourcefulRiverflow20ProParams(TypedDict, total=False):
     """Inference params for curated model `sourceful:riverflow-2.0@pro` (slug: sourceful-riverflow-2-0-pro)."""
 
     model: Literal['sourceful:riverflow-2.0@pro']
     inputs: NotRequired[dict[str, object]]
     positivePrompt: str
-    width: int
-    height: int
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['1K', '2K', '4K']]
     taskType: Literal['imageInference']
     taskUUID: str
     webhookURL: NotRequired[str]
@@ -5197,8 +5306,9 @@ class SourcefulRiverflow20FastParams(TypedDict, total=False):
     model: Literal['sourceful:riverflow-2.0@fast']
     inputs: NotRequired[dict[str, object]]
     positivePrompt: str
-    width: int
-    height: int
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['1K', '2K']]
     taskType: Literal['imageInference']
     taskUUID: str
     webhookURL: NotRequired[str]
@@ -5392,6 +5502,42 @@ class MoonshotaiKimiK26Result(TypedDict, total=False):
     text: str
     finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
     usage: dict[str, object]
+
+class Krea2TurboParams(TypedDict, total=False):
+    """Inference params for curated model `krea:krea@2-turbo` (slug: krea-2-turbo)."""
+
+    model: Literal['krea:krea@2-turbo']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: int
+    height: int
+    seed: NotRequired[int]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class Krea2TurboResult(TypedDict, total=False):
+    """Inference result for curated model `krea:krea@2-turbo` (slug: krea-2-turbo)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
 
 class Krea2MediumParams(TypedDict, total=False):
     """Inference params for curated model `krea:krea@2-medium` (slug: krea-2-medium)."""
@@ -5836,6 +5982,7 @@ class Ideogram40Result(TypedDict, total=False):
     imageDataURI: NotRequired[str]
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
+    structuredPrompt: NotRequired[dict[str, object]]
 
 class Ideogram30ReplaceBackgroundParams(TypedDict, total=False):
     """Inference params for curated model `ideogram:4@5` (slug: ideogram-3-0-replace-background)."""
@@ -13436,6 +13583,7 @@ models: dict[str, ModelEntry] = {
     "klingai:kling@o1-standard": ModelEntry(task_type="videoInference", id="klingai-video-o1-standard"),
     "krea:krea@2-large": ModelEntry(task_type="imageInference", id="krea-2-large"),
     "krea:krea@2-medium": ModelEntry(task_type="imageInference", id="krea-2-medium"),
+    "krea:krea@2-turbo": ModelEntry(task_type="imageInference", id="krea-2-turbo"),
     "lightricks:2@0": ModelEntry(task_type="videoInference", id="lightricks-ltx-2-pro"),
     "lightricks:2@1": ModelEntry(task_type="videoInference", id="lightricks-ltx-2-fast"),
     "lightricks:3@1": ModelEntry(task_type="videoInference", id="lightricks-ltx-2-retake"),
@@ -13492,6 +13640,7 @@ models: dict[str, ModelEntry] = {
     "prunaai:p-video@0": ModelEntry(task_type="videoInference", id="prunaai-p-video"),
     "prunaai:p-video@animate": ModelEntry(task_type="videoInference", id="prunaai-p-video-animate"),
     "prunaai:p-video@avatar": ModelEntry(task_type="videoInference", id="prunaai-p-video-avatar"),
+    "prunaai:p-video@replace": ModelEntry(task_type="videoInference", id="prunaai-p-video-replace"),
     "recraft:1@1": ModelEntry(task_type="vectorize", id="recraft-vectorize"),
     "recraft:v4-pro@0": ModelEntry(task_type="imageInference", id="recraft-v4-pro"),
     "recraft:v4-pro@vector": ModelEntry(task_type="vectorize", id="recraft-v4-pro-vector"),
@@ -13609,6 +13758,8 @@ models: dict[str, ModelEntry] = {
     "sourceful:2@3": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-preview-max"),
     "sourceful:riverflow-2.0@fast": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-0-fast"),
     "sourceful:riverflow-2.0@pro": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-0-pro"),
+    "sourceful:riverflow-2.5@fast": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-5-fast"),
+    "sourceful:riverflow-2.5@pro": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-5-pro"),
     "sync:lipsync-2-pro@1": ModelEntry(task_type="videoInference", id="sync-lipsync-2-pro"),
     "sync:lipsync-2@1": ModelEntry(task_type="videoInference", id="sync-lipsync-2"),
     "sync:lipsync@3": ModelEntry(task_type="videoInference", id="sync-3"),
