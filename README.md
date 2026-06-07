@@ -30,7 +30,7 @@ from runware import Runware
 async def main() -> None:
     async with Runware(api_key=os.environ["RUNWARE_API_KEY"]) as client:
         results = await client.run({
-            "model": "runware:101@1",
+            "model": "runware:400@1",
             "positivePrompt": "A serene mountain landscape at sunset",
             "width": 1024,
             "height": 1024,
@@ -40,7 +40,7 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-The SDK resolves `runware:101@1` to the right task type automatically. `RUNWARE_API_KEY` is read from the environment if you don't pass `api_key=...` explicitly.
+The SDK resolves `runware:400@1` to the right task type automatically. `RUNWARE_API_KEY` is read from the environment if you don't pass `api_key=...` explicitly.
 
 More runnable patterns in [`examples/`](./examples/) — curated models, community fine-tunes, streaming, the WebSocket transport.
 
@@ -53,28 +53,29 @@ Every inference task goes through `.run()`. The SDK determines the task type fro
 ```python
 # Image generation
 images = await client.run({
-    "model": "runware:101@1",
+    "model": "runware:400@1",
     "positivePrompt": "Abstract digital art",
     "width": 1024, "height": 1024,
 })
 
 # Video generation
 videos = await client.run({
-    "model": "klingai:5@3",
+    "model": "google:3@3",
     "positivePrompt": "Ocean waves at sunset",
-    "duration": 10,
+    "duration": 8,
 })
 
 # Text inference (LLM)
 responses = await client.run({
-    "model": "openai:o1@0",
+    "model": "google:gemma@4-31b",
     "messages": [{"role": "user", "content": "Explain quantum computing"}],
 })
 
-# Audio generation
+# Audio generation (designs a voice from the prompt, then speaks the text)
 audio = await client.run({
-    "model": "alibaba:qwen@3-tts-1.7b-base",
-    "text": "Hello world",
+    "model": "alibaba:qwen@3-tts-1.7b-voicedesign",
+    "positivePrompt": "A calm, friendly young woman with a soft tone",
+    "speech": {"text": "Hello world", "voice": "design"},
 })
 ```
 
@@ -86,7 +87,7 @@ When you know the architecture, import its `Params` TypedDict from `runware.type
 from runware.types.task_map import SdxlParams
 
 params: SdxlParams = {
-    "model": "civitai:101055@128078",
+    "model": "civitai:133005@782002",
     "taskType": "imageInference",
     "positivePrompt": "A professional headshot portrait",
     "negativePrompt": "blurry, distorted",
@@ -122,12 +123,12 @@ Validation (when enabled) automatically picks the right schema for the AIR — n
 
 ### Curated-model slugs
 
-The registry indexes every curated model under both its AIR (`runware:101@1`) and its slug (`flux-1-dev`). You can pass either:
+The registry indexes every curated model under both its AIR (`runware:400@1`) and its slug (`bfl-flux-2-dev`). You can pass either:
 
 ```python
 # Both call the same model.
-await client.run({"model": "runware:101@1", "positivePrompt": "..."})
-await client.run({"model": "flux-1-dev",   "positivePrompt": "..."})
+await client.run({"model": "runware:400@1", "positivePrompt": "..."})
+await client.run({"model": "bfl-flux-2-dev", "positivePrompt": "..."})
 ```
 
 The SDK rewrites slugs to canonical AIRs before sending. Non-curated identifiers (custom fine-tunes, unknown strings) pass through unchanged.
@@ -138,7 +139,7 @@ For text models, `.stream()` delivers tokens as they're generated:
 
 ```python
 stream = await client.stream({
-    "model": "minimax:m2.7@0",
+    "model": "google:gemma@4-31b",
     "messages": [{"role": "user", "content": "Tell me a story about a robot"}],
 })
 
@@ -150,7 +151,7 @@ async for word in stream.text_stream:
 
 ```python
 stream = await client.stream({
-    "model": "minimax:m2.7@0",
+    "model": "google:gemma@4-31b",
     "messages": [{"role": "user", "content": "Explain gravity"}],
 })
 
@@ -183,8 +184,8 @@ Best when you make multiple requests or want real-time feedback:
 
 ```python
 async with Runware(transport_type="websocket") as client:
-    images = await client.run({"model": "runware:101@1", "positivePrompt": "..."})
-    videos = await client.run({"model": "klingai:5@3", "positivePrompt": "..."})
+    images = await client.run({"model": "runware:400@1", "positivePrompt": "..."})
+    videos = await client.run({"model": "google:3@3", "positivePrompt": "..."})
 ```
 
 WebSocket connections are automatically recovered on network interruptions. The SDK re-authenticates with the same session UUID and the server replays pending results.
@@ -196,7 +197,7 @@ Best for serverless functions or one-off requests:
 ```python
 async with Runware(transport_type="rest") as client:
     images = await client.run({
-        "model": "runware:101@1",
+        "model": "runware:400@1",
         "positivePrompt": "A landscape painting",
         "width": 1024, "height": 1024,
     })
@@ -212,7 +213,7 @@ import asyncio
 async with Runware() as client:
     images, upscaled, caption = await asyncio.gather(
         client.run({
-            "model": "runware:101@1",
+            "model": "runware:400@1",
             "positivePrompt": "Abstract art",
             "numberResults": 3,
         }),
@@ -251,7 +252,7 @@ async def main() -> None:
 
         try:
             await client.run(
-                {"model": "runware:101@1", "positivePrompt": "A detailed scene"},
+                {"model": "runware:400@1", "positivePrompt": "A detailed scene"},
                 RunOptions(cancel_event=cancel),
             )
         except RunwareError as exc:
@@ -265,7 +266,7 @@ For streams, set the cancel event to end iteration:
 from runware import StreamOptions
 
 stream = await client.stream(
-    {"model": "minimax:m2.7@0", "messages": [{"role": "user", "content": "..."}]},
+    {"model": "google:gemma@4-31b", "messages": [{"role": "user", "content": "..."}]},
     StreamOptions(cancel_event=cancel),
 )
 async for word in stream.text_stream:
@@ -294,7 +295,7 @@ def progress(item: dict) -> None:
     print(f"{item.get('progress')}%")
 
 results = await client.run(
-    {"model": "klingai:5@3", "positivePrompt": "Ocean waves", "numberResults": 3},
+    {"model": "google:3@3", "positivePrompt": "Ocean waves", "numberResults": 3},
     RunOptions(on_result=watch, on_progress=progress),
 )
 ```
@@ -311,7 +312,7 @@ from runware import Runware, RunwareError
 async with Runware() as client:
     try:
         results = await client.run({
-            "model": "runware:101@1",
+            "model": "runware:400@1",
             "positivePrompt": "A detailed rendering",
         })
     except RunwareError as exc:
@@ -429,7 +430,7 @@ Or per-call via `RunOptions`:
 
 ```python
 videos = await client.run(
-    {"model": "klingai:5@3", "positivePrompt": "Ocean waves"},
+    {"model": "google:3@3", "positivePrompt": "Ocean waves"},
     RunOptions(timeout=600_000),
 )
 ```
@@ -440,7 +441,7 @@ For fast tasks (text inference, fast image gen, captioning) you can skip the pol
 
 ```python
 responses = await client.run({
-    "model": "openai:gpt-5@0",
+    "model": "google:gemma@4-31b",
     "messages": [{"role": "user", "content": "Hello"}],
     "deliveryMethod": "sync",
 })
@@ -459,7 +460,7 @@ The second argument to `client.run()` and `client.stream()` is a `RunOptions` / 
 from runware import RunOptions
 
 await client.run(
-    {"model": "runware:101@1", "positivePrompt": "A landscape"},
+    {"model": "runware:400@1", "positivePrompt": "A landscape"},
     RunOptions(
         timeout=600_000,         # ms — override config.poll_timeout for this call
         cancel_event=cancel,     # asyncio.Event — cancel this call
