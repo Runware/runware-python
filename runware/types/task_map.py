@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas vlatest — do not edit manually.
+AUTO-GENERATED from runware schemas v20260607152954 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "latest"
+SCHEMAS_VERSION = "20260607152954"
 
 TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
 

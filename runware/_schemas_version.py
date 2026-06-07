@@ -7,4 +7,4 @@ freeze the SDK against that exact bundle — useful for reproducible builds and
 release branches.
 """
 
-SCHEMAS_VERSION = "latest"
+SCHEMAS_VERSION = "20260607152954"
