@@ -482,7 +482,7 @@ async with Runware(validate=True) as client:
     await client.run({"model": "...", ...})  # raises RunwareError(code='validation') on bad params
 ```
 
-The schema for each model is fetched on first use from `https://schemas.runware.ai/resolve/<id>` and cached per-process. Works the same for curated models and community fine-tunes — pass nothing beyond `validate=True`.
+The schema for each model is fetched on first use and cached per-process. Works the same for curated models and community fine-tunes — pass nothing beyond `validate=True`.
 
 If the schema can't be fetched (network failure, model unknown to the registry), validation is silently skipped and the server still validates as the source of truth.
 
