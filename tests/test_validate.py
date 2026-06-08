@@ -1,4 +1,4 @@
-"""Tests for validate.py — fastjsonschema integration, dedupe, strip_inner_ids."""
+"""Tests for validate.py — fastjsonschema integration, dedupe."""
 
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ from runware._docs_cache import get_docs_url_for_model
 from runware.logger import create_logger
 from runware.validate import (
     clear_validator_cache,
-    strip_inner_ids,
     validate_tasks,
 )
 
@@ -220,47 +219,6 @@ class TestValidateTasks:
         assert session.count("GET", _resolve_url("civitai:concurrent@1")) == 1
 
     @pytest.mark.asyncio
-    async def test_compiles_schema_with_duplicate_inner_ids(self) -> None:
-        """Regression: AJV would fail on duplicate inner $ids; we strip them."""
-        voice_id = "https://schemas.runware.ai/test/voice.json"
-        schema_with_duplicate_inner_ids: dict[str, Any] = {
-            "type": "object",
-            "additionalProperties": False,
-            "required": ["taskType", "taskUUID", "model"],
-            "properties": {
-                "taskType": {"type": "string"},
-                "taskUUID": {"type": "string"},
-                "model": {"type": "string"},
-                "voice": {
-                    "$id": voice_id,
-                    "type": "object",
-                    "properties": {"id": {"type": "string"}},
-                },
-                "voices": {
-                    "type": "array",
-                    "items": {
-                        "$id": voice_id,
-                        "type": "object",
-                        "properties": {"id": {"type": "string"}},
-                    },
-                },
-            },
-        }
-        session = _session_with("civitai:dup@1", schema_with_duplicate_inner_ids)
-        await validate_tasks(
-            [
-                {
-                    "taskType": "audioInference",
-                    "taskUUID": "u-dup-id",
-                    "model": "civitai:dup@1",
-                    "voice": {"id": "a"},
-                }
-            ],
-            log=create_logger(False),
-            session=_as_aiohttp(session),
-        )
-
-    @pytest.mark.asyncio
     async def test_caches_docs_url_from_resolve(self) -> None:
         session = MockSession()
         session.add(
@@ -292,48 +250,6 @@ class TestValidateTasks:
             get_docs_url_for_model("civitai:docs@1")
             == "https://runware.ai/docs/models/civitai-docs"
         )
-
-
-class TestStripInnerIds:
-    def test_keeps_root_id(self) -> None:
-        out = strip_inner_ids({"$id": "root", "type": "object"})
-        assert out == {"$id": "root", "type": "object"}
-
-    def test_strips_nested_ids(self) -> None:
-        out = strip_inner_ids(
-            {
-                "$id": "root",
-                "properties": {"a": {"$id": "inner", "type": "string"}},
-            }
-        )
-        assert out == {
-            "$id": "root",
-            "properties": {"a": {"type": "string"}},
-        }
-
-    def test_strips_inside_arrays(self) -> None:
-        out = strip_inner_ids(
-            {
-                "$id": "root",
-                "items": [
-                    {"$id": "i1", "type": "string"},
-                    {"$id": "i2", "type": "number"},
-                ],
-            }
-        )
-        assert out == {
-            "$id": "root",
-            "items": [{"type": "string"}, {"type": "number"}],
-        }
-
-    def test_no_id_at_root_is_fine(self) -> None:
-        out = strip_inner_ids({"type": "object", "properties": {}})
-        assert out == {"type": "object", "properties": {}}
-
-    def test_primitive_passthrough(self) -> None:
-        assert strip_inner_ids("plain") == "plain"
-        assert strip_inner_ids(42) == 42
-        assert strip_inner_ids(None) is None
 
 
 class TestClearValidatorCache:

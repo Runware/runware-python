@@ -6,10 +6,6 @@ call. Schemas are fetched from `https://schemas.runware.ai/resolve/:id`,
 compiled by fastjsonschema, and cached per-model. Concurrent first-hits for
 the same model share an asyncio.Future to avoid double-compile (which would
 break fastjsonschema state in some edge cases).
-
-Inner `$id`s are stripped before compile — they're vestigial on a fully
-dereferenced schema and break compile with "reference resolves to more than
-one schema" when the same inner sub-schema appears at multiple paths.
 """
 
 from __future__ import annotations
@@ -36,32 +32,6 @@ def clear_validator_cache() -> None:
     """Reset the in-process compiled-validator cache."""
     _validator_cache.clear()
     clear_docs_url_cache()
-
-
-def strip_inner_ids(schema: object) -> object:
-    """
-    Drop `$id` from every non-root subschema.
-
-    After full dereferencing, inner `$id`s are vestigial — and a sub-schema
-    inlined at two paths carrying the same `$id` breaks fastjsonschema at
-    compile time. Mirrors the SDK-side defense in the TS validate.ts.
-    """
-
-    def walk(node: object, is_root: bool) -> object:
-        if isinstance(node, list):
-            node_list = cast(list[object], node)
-            return [walk(item, False) for item in node_list]
-        if isinstance(node, dict):
-            node_dict = cast(dict[str, object], node)
-            out: dict[str, object] = {}
-            for key, value in node_dict.items():
-                if key == "$id" and not is_root:
-                    continue
-                out[key] = walk(value, False)
-            return out
-        return node
-
-    return walk(schema, True)
 
 
 async def validate_tasks(
@@ -109,11 +79,10 @@ async def _get_validator(
         if schema is None:
             future.set_result(None)
             return None
-        sanitized = strip_inner_ids(schema)
         # fastjsonschema is untyped; compile() returns the validator function.
         validator = cast(
             Validator,
-            fastjsonschema.compile(sanitized),  # pyright: ignore[reportUnknownMemberType]
+            fastjsonschema.compile(schema),  # pyright: ignore[reportUnknownMemberType]
         )
         future.set_result(validator)
         return validator
