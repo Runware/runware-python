@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20260607152954 — do not edit manually.
+AUTO-GENERATED from runware schemas v20260608132636 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "20260607152954"
+SCHEMAS_VERSION = "20260608132636"
 
 TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
 
@@ -5503,6 +5503,59 @@ class MoonshotaiKimiK26Result(TypedDict, total=False):
     finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
     usage: dict[str, object]
 
+class KreaFlux1KreaDevParams(TypedDict, total=False):
+    """Inference params for curated model `runware:107@1` (slug: krea-flux-1-krea-dev)."""
+
+    model: Literal['runware:107@1']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    negativePrompt: NotRequired[str]
+    width: int
+    height: int
+    seed: NotRequired[int]
+    steps: NotRequired[int]
+    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler DiscreteScheduler', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
+    CFGScale: NotRequired[float]
+    strength: NotRequired[float]
+    maskMargin: NotRequired[int]
+    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
+    acceleratorOptions: NotRequired[dict[str, object]]
+    outpaint: NotRequired[dict[str, object]]
+    lora: NotRequired[list[dict[str, object]]]
+    controlNet: NotRequired[list[dict[str, object]]]
+    ipAdapters: NotRequired[list[dict[str, object]]]
+    acePlusPlus: NotRequired[dict[str, object]]
+    hiresFix: NotRequired[Literal[True] | dict[str, object]]
+    layerDiffuse: NotRequired[bool]
+    pulid: NotRequired[dict[str, object]]
+    trueCFGScale: NotRequired[float]
+    ultralytics: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class KreaFlux1KreaDevResult(TypedDict, total=False):
+    """Inference result for curated model `runware:107@1` (slug: krea-flux-1-krea-dev)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
 class Krea2TurboParams(TypedDict, total=False):
     """Inference params for curated model `krea:krea@2-turbo` (slug: krea-2-turbo)."""
 
@@ -8945,59 +8998,6 @@ class ImageMaskingResult(TypedDict, total=False):
     maskImageDataURI: NotRequired[str]
     detections: list[dict[str, object]]
     inputImageUUID: str
-
-class FluxKreaParams(TypedDict, total=False):
-    """Inference params for curated model `runware:107@1` (slug: flux-krea)."""
-
-    model: Literal['runware:107@1']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler DiscreteScheduler', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    strength: NotRequired[float]
-    maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    outpaint: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    controlNet: NotRequired[list[dict[str, object]]]
-    ipAdapters: NotRequired[list[dict[str, object]]]
-    acePlusPlus: NotRequired[dict[str, object]]
-    hiresFix: NotRequired[Literal[True] | dict[str, object]]
-    layerDiffuse: NotRequired[bool]
-    pulid: NotRequired[dict[str, object]]
-    trueCFGScale: NotRequired[float]
-    ultralytics: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class FluxKreaResult(TypedDict, total=False):
-    """Inference result for curated model `runware:107@1` (slug: flux-krea)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
 
 class MediapipeNoseEyesMeshParams(TypedDict, total=False):
     """Inference params for curated model `runware:35@11` (slug: mediapipe-nose-eyes-mesh)."""
@@ -13657,7 +13657,7 @@ models: dict[str, ModelEntry] = {
     "runware:100@1": ModelEntry(task_type="imageInference", id="bfl-flux-1-schnell"),
     "runware:101@1": ModelEntry(task_type="imageInference", id="bfl-flux-1-dev"),
     "runware:106@1": ModelEntry(task_type="imageInference", id="bfl-flux-1-kontext-dev"),
-    "runware:107@1": ModelEntry(task_type="imageInference", id="flux-krea"),
+    "runware:107@1": ModelEntry(task_type="imageInference", id="krea-flux-1-krea-dev"),
     "runware:108@1": ModelEntry(task_type="imageInference", id="alibaba-qwen-image"),
     "runware:108@20": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-edit"),
     "runware:108@22": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-edit-plus"),
