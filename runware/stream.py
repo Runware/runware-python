@@ -284,9 +284,14 @@ class TextStream:
                 )
             )
             return
-        except BaseException as exc:
+        except Exception as exc:
             self._finish(error=exc)
             return
+        except BaseException:
+            self._finish(
+                error=create_runware_error("aborted", "Stream aborted"),
+            )
+            raise
         self._finish()
 
 
