@@ -75,15 +75,15 @@ class Registry:
         initial_fetch_timeout_seconds: float = _DEFAULT_INITIAL_FETCH_TIMEOUT_SECONDS,
         session: aiohttp.ClientSession | None = None,
     ) -> None:
-        self._url = url
-        self._log = log
-        self._fallback = fallback if fallback is not None else RegistryData()
-        self._ttl_seconds = ttl_seconds
-        self._initial_fetch_timeout_seconds = initial_fetch_timeout_seconds
-        self._session = session
-        self._owned_session = session is None
+        self._url: str = url
+        self._log: Logger = log
+        self._fallback: RegistryData = fallback if fallback is not None else RegistryData()
+        self._ttl_seconds: float = ttl_seconds
+        self._initial_fetch_timeout_seconds: float = initial_fetch_timeout_seconds
+        self._session: aiohttp.ClientSession | None = session
+        self._owned_session: bool = session is None
         self._cache: _CacheEntry | None = None
-        self._initial_fetch_attempted = False
+        self._initial_fetch_attempted: bool = False
         self._in_flight_fetch: asyncio.Task[tuple[RegistryData, str | None] | None] | None = None
         self._background_tasks: set[asyncio.Task[object]] = set()
         # Slug → AIR index, lazily built from fallback + current cache.

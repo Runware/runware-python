@@ -891,9 +891,9 @@ class _AsyncCollector:
         *,
         any_item_is_terminal: bool = False,
     ) -> None:
-        self._expected = expected_count
-        self._options = options
-        self._any_item_is_terminal = any_item_is_terminal
+        self._expected: int = expected_count
+        self._options: RunOptions | None = options
+        self._any_item_is_terminal: bool = any_item_is_terminal
         self._results: dict[str | int, LoosePayload] = {}
         self._seen_progress: dict[str | int, float] = {}
         self._seen_terminal: set[str | int] = set()

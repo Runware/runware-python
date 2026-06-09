@@ -70,8 +70,8 @@ class Logger:
     """Pluggable-sink logger. Construct via `create_logger`."""
 
     def __init__(self, enabled: bool, sink: LogSink) -> None:
-        self._enabled = enabled
-        self._sink = sink
+        self._enabled: bool = enabled
+        self._sink: LogSink = sink
 
     @property
     def enabled(self) -> bool:

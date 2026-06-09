@@ -5,7 +5,7 @@ session ownership behavior.
 
 from __future__ import annotations
 
-from typing import cast
+from typing import Any, cast
 
 import aiohttp
 import pytest
@@ -104,10 +104,10 @@ class TestWebSocketLifecycle:
     def test_subscription_isolation(self) -> None:
         """Each task's subscriber only sees its own frames."""
         t = WebSocketTransport(_ws_config())
-        received_a: list[dict] = []
-        received_b: list[dict] = []
-        t.subscribe_to_task("A", received_a.append)
-        t.subscribe_to_task("B", received_b.append)
+        received_a: list[dict[str, Any]] = []
+        received_b: list[dict[str, Any]] = []
+        t.subscribe_to_task("A", lambda r: received_a.append(cast(dict[str, Any], cast(object, r))))
+        t.subscribe_to_task("B", lambda r: received_b.append(cast(dict[str, Any], cast(object, r))))
         t._dispatch({"data": [{"taskUUID": "A", "imageURL": "a"}]})
         t._dispatch({"data": [{"taskUUID": "B", "imageURL": "b"}]})
         assert len(received_a) == 1 and len(received_b) == 1
@@ -139,7 +139,7 @@ class TestMalformedJsonResponse:
             api_key="sk-test",
             transport_type="rest",
             dependencies=RuntimeDependencies(
-                session=cast(aiohttp.ClientSession, session)
+                session=cast(aiohttp.ClientSession, cast(object, session))
             ),
         )
         try:
@@ -183,7 +183,7 @@ class TestSessionOwnership:
             api_key="sk-test",
             transport_type="rest",
             dependencies=RuntimeDependencies(
-                session=cast(aiohttp.ClientSession, injected)
+                session=cast(aiohttp.ClientSession, cast(object, injected))
             ),
         )
         await client.close()

@@ -7,7 +7,7 @@ behavior is covered by integration tests against a real server.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
@@ -62,8 +62,8 @@ class TestDispatchDataFrames:
         t = _transport()
         received_u1: list[dict[str, Any]] = []
         received_u2: list[dict[str, Any]] = []
-        t.subscribe_to_task("u1", lambda r: received_u1.append(r))
-        t.subscribe_to_task("u2", lambda r: received_u2.append(r))
+        t.subscribe_to_task("u1", lambda r: received_u1.append(cast(dict[str, Any], cast(object, r))))
+        t.subscribe_to_task("u2", lambda r: received_u2.append(cast(dict[str, Any], cast(object, r))))
 
         t._dispatch({
             "data": [
@@ -82,7 +82,7 @@ class TestDispatchDataFrames:
     def test_ignores_ping_pong_frames(self) -> None:
         t = _transport()
         received: list[dict[str, Any]] = []
-        t.subscribe_to_task("u1", lambda r: received.append(r))
+        t.subscribe_to_task("u1", lambda r: received.append(cast(dict[str, Any], cast(object, r))))
         t._dispatch({
             "data": [
                 {"taskType": "ping", "pong": True},
@@ -117,8 +117,8 @@ class TestDispatchErrorFrames:
         t = _transport()
         received_u1: list[dict[str, Any]] = []
         received_u2: list[dict[str, Any]] = []
-        t.subscribe_to_task("u1", lambda r: received_u1.append(r))
-        t.subscribe_to_task("u2", lambda r: received_u2.append(r))
+        t.subscribe_to_task("u1", lambda r: received_u1.append(cast(dict[str, Any], cast(object, r))))
+        t.subscribe_to_task("u2", lambda r: received_u2.append(cast(dict[str, Any], cast(object, r))))
 
         t._dispatch({
             "errors": [
@@ -134,8 +134,8 @@ class TestDispatchErrorFrames:
         t = _transport()
         received_u1: list[dict[str, Any]] = []
         received_u2: list[dict[str, Any]] = []
-        t.subscribe_to_task("u1", lambda r: received_u1.append(r))
-        t.subscribe_to_task("u2", lambda r: received_u2.append(r))
+        t.subscribe_to_task("u1", lambda r: received_u1.append(cast(dict[str, Any], cast(object, r))))
+        t.subscribe_to_task("u2", lambda r: received_u2.append(cast(dict[str, Any], cast(object, r))))
 
         # Error with no taskUUID — broadcast to all so no waiter hangs forever.
         t._dispatch({"error": [{"code": "internalServerError", "message": "boom"}]})
@@ -179,7 +179,7 @@ class TestAuthFrameRobustness:
         from typing import cast as _cast
 
         from websockets.asyncio.client import ClientConnection
-        t._ws = _cast(ClientConnection, _FakeWS())
+        t._ws = _cast(ClientConnection, _cast(object, _FakeWS()))
 
         await t._authenticate()
         # Auth completed despite the stray frame.
@@ -275,7 +275,7 @@ class TestDispatchSingularErrorKey:
     def test_singular_error_key_is_normalized(self) -> None:
         t = _transport()
         received: list[dict[str, Any]] = []
-        t.subscribe_to_task("u1", lambda r: received.append(r))
+        t.subscribe_to_task("u1", lambda r: received.append(cast(dict[str, Any], cast(object, r))))
         # Server can send either `error` (singular) or `errors` (plural).
         t._dispatch({"error": {"taskUUID": "u1", "code": "invalidParam", "message": "x"}})
         assert len(received) == 1

@@ -29,6 +29,7 @@ from websockets.asyncio.client import ClientConnection
 from websockets.exceptions import ConnectionClosed
 
 from ..errors import create_runware_error
+from ..logger import Logger
 from ..types.sdk import LoosePayload, SDKConfig
 from ..types.transport import WireFrame
 
@@ -47,20 +48,20 @@ class WebSocketTransport:
     type: str = "websocket"
 
     def __init__(self, config: SDKConfig) -> None:
-        self._config = config
-        self._log = config.log
+        self._config: SDKConfig = config
+        self._log: Logger = config.log
         self._ws: ClientConnection | None = None
         self._receive_task: asyncio.Task[None] | None = None
         self._heartbeat_task: asyncio.Task[None] | None = None
         self._background_tasks: set[asyncio.Task[None]] = set()
         self._task_callbacks: dict[str, ResponseCallback] = {}
-        self._connected = False
-        self._should_reconnect = False
-        self._is_reconnecting = False
-        self._reconnect_attempt = 0
+        self._connected: bool = False
+        self._should_reconnect: bool = False
+        self._is_reconnecting: bool = False
+        self._reconnect_attempt: int = 0
         self._session_uuid: str | None = None
         self._last_activity_ms: float = time.monotonic() * 1000
-        self._connect_lock = asyncio.Lock()
+        self._connect_lock: asyncio.Lock = asyncio.Lock()
 
     @property
     def is_connected(self) -> bool:

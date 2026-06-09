@@ -111,22 +111,22 @@ class TextStream:
         self._chunks: list[TextStreamChunk] = []
         self._final: TextStreamResult | None = None
         self._error: BaseException | None = None
-        self._done = asyncio.Event()
+        self._done: asyncio.Event = asyncio.Event()
         # Owner-side shutdown signal. The client sets this from `close()` so
         # in-flight streams abort cleanly instead of surfacing an opaque
         # ClientConnectorError when the session is yanked from underneath.
-        self._shutdown_event = asyncio.Event()
+        self._shutdown_event: asyncio.Event = asyncio.Event()
         self._on_finish: Callable[[], None] | None = None
         # Pump is started lazily on first consumption (iter / text() / result())
         # to match TS behavior: a stream that's created but never read costs
         # nothing. Spinning the HTTP request eagerly would charge credits and
         # run the model even if the user never iterates.
         self._pump_task: asyncio.Task[None] | None = None
-        self._pump_config = config
-        self._pump_session = session
-        self._pump_task_payload = task
-        self._pump_cancel_event = cancel_event
-        self._pump_timeout_seconds = timeout_seconds
+        self._pump_config: SDKConfig = config
+        self._pump_session: aiohttp.ClientSession = session
+        self._pump_task_payload: LoosePayload = task
+        self._pump_cancel_event: asyncio.Event | None = cancel_event
+        self._pump_timeout_seconds: float | None = timeout_seconds
 
     def _ensure_pump_started(self) -> None:
         if self._pump_task is None:

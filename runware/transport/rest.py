@@ -36,7 +36,7 @@ class RestTransport:
     """
 
     def __init__(self, config: SDKConfig) -> None:
-        self._config = config
+        self._config: SDKConfig = config
         injected = config.dependencies.session if config.dependencies else None
         self._session: aiohttp.ClientSession | None = injected
         self._owned_session: bool = injected is None

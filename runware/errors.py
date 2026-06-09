@@ -11,6 +11,8 @@ from __future__ import annotations
 
 from typing import Literal, TypeGuard, cast
 
+from typing_extensions import override
+
 from ._docs_cache import get_docs_url_for_model as _cached_docs
 from .types.task_map import ModelEntry
 from .types.task_map import models as _bundled_models
@@ -244,6 +246,7 @@ class RunwareError(Exception):
         """The human-readable error message."""
         return self.args[0] if self.args else ""
 
+    @override
     def __repr__(self) -> str:
         bits = [f"code={self.code!r}"]
         if self.parameter:

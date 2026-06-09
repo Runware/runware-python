@@ -50,11 +50,34 @@ class TestUtilityOptions:
         client = Runware(api_key="sk-test", transport_type="rest")
         mock = _patch_rest(client, {"data": [{"taskUUID": "u1"}]})
 
+        # Cast dict literals to the TypedDict parameter types. We're not
+        # passing real, fully-valid bodies here — the test only checks that
+        # `opts` is forwarded, not that the payload validates. Casting lets
+        # pyright skip the TypedDict structural check.
+        from typing import cast as _cast
+
+        from runware.types.task_map import (
+            AccountManagementParams as _AccountManagementParams,
+        )
+        from runware.types.task_map import (
+            ImageUploadParams as _ImageUploadParams,
+        )
+        from runware.types.task_map import (
+            ModelSearchParams as _ModelSearchParams,
+        )
+        from runware.types.task_map import (
+            ModelUploadParams as _ModelUploadParams,
+        )
+
         opts = RunOptions(timeout=12_345)
-        await client.model_search({"search": "x"}, opts)
-        await client.model_upload({"x": 1}, opts)
-        await client.image_upload({"image": "data:..."}, opts)
-        await client.account_management({"operation": "x"}, opts)
+        # Bridge via object — pyright doesn't allow direct cast from
+        # `dict[str, X]` to a TypedDict (they don't overlap structurally).
+        await client.model_search(_cast(_ModelSearchParams, _cast(object, {"search": "x"})), opts)
+        await client.model_upload(_cast(_ModelUploadParams, _cast(object, {"x": 1})), opts)
+        await client.image_upload(_cast(_ImageUploadParams, _cast(object, {"image": "data:..."})), opts)
+        await client.account_management(
+            _cast(_AccountManagementParams, _cast(object, {"operation": "x"})), opts,
+        )
         await client.get_response({"taskUUID": "u"}, opts)
         await client.get_task_details({"taskUUID": "u"}, opts)
 
@@ -106,7 +129,7 @@ class TestUtilityMethods:
         )
         result = await client.model_search({"search": "foo"})
         assert len(result) == 1
-        assert result[0]["results"] == models
+        assert result[0].get("results") == models
 
 
 class TestRunDelivery:
@@ -313,18 +336,22 @@ class TestOverloadNarrowing:
             ]
         }
         _patch_rest(client, sync_response)
-        params: ImageInferenceParams = {
+        # Cast — `deliveryMethod` is an internal field on the TypedDict and
+        # the literal doesn't satisfy it on its own.
+        from typing import cast as _cast2
+
+        params = _cast2(ImageInferenceParams, _cast2(object, {
             "model": "runware:101@1",
             "positivePrompt": "x",
             "width": 1024,
             "height": 1024,
             "deliveryMethod": "sync",
-        }
+        }))
         # Pyright statically sees: list[ImageInferenceResult]. Runtime: list of dicts.
         results = await client.run(params)
         assert isinstance(results, list)
         assert isinstance(results[0], dict)
-        assert results[0]["imageURL"] == "https://x.jpg"
+        assert results[0].get("imageURL") == "https://x.jpg"
 
     @pytest.mark.asyncio
     async def test_utility_method_return_type_is_callable(self) -> None:

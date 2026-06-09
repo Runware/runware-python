@@ -121,10 +121,45 @@ reportMissingTypeStubs = "warning"
 # `[tool.basedpyright]` exist, and current basedpyright won't pick up a
 # `basedpyrightconfig.json` when pyproject.toml is also present.
 [[tool.pyright.executionEnvironments]]
+root = "runware"
+# The SDK deliberately fires off side-effectful awaits and Set/dict mutations
+# (asyncio.wait_for, set.discard, ctx-manager __aenter__, etc.) without
+# binding the return. Prefixing every such call with `_ =` would be noise;
+# leave the rule off here so meaningful warnings stand out.
+reportUnusedCallResult = "none"
+
+[[tool.pyright.executionEnvironments]]
 root = "tests"
 reportAny = "none"
 reportExplicitAny = "none"
 reportPrivateUsage = "none"
+# Tests deliberately discard the result of awaited helpers and frequently
+# import private symbols from the SDK to exercise internals — neither is a
+# defect in test code.
+reportUnusedCallResult = "none"
+reportPrivateLocalImportUsage = "none"
+# Test fixtures often define hooks (`__call__`, `__repr__`, etc.) on mock
+# objects without inheriting them — the override notation is unnecessary
+# ceremony for throwaway stand-ins.
+reportImplicitOverride = "none"
+# Unused parameters in test stubs and mock callbacks document the contract
+# without exercising the slot.
+reportUnusedParameter = "none"
+# Mock classes set instance attrs dynamically (`m.ok = True`) without a
+# `@final` decorator — the `: bool` annotation noise isn't useful in test
+# scaffolding.
+reportUnannotatedClassAttribute = "none"
+# `pytest.approx`, MagicMock attribute access, and dict literal types in
+# tests legitimately surface as "partially unknown" — these aren't real
+# defects in test code.
+reportUnknownVariableType = "none"
+reportUnknownMemberType = "none"
+reportUnknownArgumentType = "none"
+# Test helper modules (`tests._mocks`) don't ship a `py.typed` marker — they
+# live alongside the tests that consume them.
+reportMissingTypeStubs = "none"
+# Test helpers are sometimes defined upfront and exercised conditionally.
+reportUnusedFunction = "none"
 
 [[tool.pyright.executionEnvironments]]
 root = "scripts"

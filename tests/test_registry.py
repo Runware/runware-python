@@ -37,7 +37,10 @@ URL = "https://schemas.runware.ai/registry.json"
 
 
 def _as_aiohttp(session: MockSession) -> aiohttp.ClientSession:
-    return cast(aiohttp.ClientSession, session)
+    # Bridge via object — MockSession only emulates the .get() method
+    # we exercise; pyright (correctly) won't take it for the full
+    # ClientSession surface, so go through object first.
+    return cast(aiohttp.ClientSession, cast(object, session))
 
 
 def _make_registry(session: MockSession, fallback: RegistryData | None = None) -> Registry:

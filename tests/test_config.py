@@ -98,7 +98,12 @@ class TestDependencyInjection:
 
         cfg = create_config(
             api_key="sk-test",
-            dependencies=RuntimeDependencies(ws_connect=fake_connect),  # type: ignore[arg-type]
+            # fake_connect returns `object`, the protocol expects a
+            # WebSocketClientProtocol. The test only verifies that the SDK
+            # *stores* what's given; behavior under it is not exercised here.
+            dependencies=RuntimeDependencies(
+                ws_connect=fake_connect,  # pyright: ignore[reportArgumentType]
+            ),
         )
         assert cfg.dependencies is not None
         assert cfg.dependencies.ws_connect is fake_connect

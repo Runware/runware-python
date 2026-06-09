@@ -31,7 +31,6 @@ def _bare_stream() -> TextStream:
     s._on_finish = None
     # Pretend the pump has already started so the lazy-start guard is a no-op.
     s._pump_task = asyncio.create_task(asyncio.sleep(0))
-    s._pump_args = {}
     return s
 
 
@@ -197,7 +196,7 @@ class TestStreamCancellation:
         import aiohttp
         stream = TextStream(
             config=config,
-            session=cast(aiohttp.ClientSession, _FakeSession()),
+            session=cast(aiohttp.ClientSession, cast(object, _FakeSession())),
             task={"taskUUID": "u", "taskType": "textInference"},
             cancel_event=cancel,
         )
@@ -240,7 +239,7 @@ class TestLazyPump:
         config = SDKConfig(api_key="sk-test", transport_type="rest")
         stream = TextStream(
             config=config,
-            session=_cast(aiohttp.ClientSession, _FakeSession()),
+            session=_cast(aiohttp.ClientSession, _cast(object, _FakeSession())),
             task={"taskUUID": "u", "taskType": "textInference"},
         )
 

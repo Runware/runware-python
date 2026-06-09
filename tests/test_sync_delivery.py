@@ -39,7 +39,7 @@ def _client_with(session: MockSession) -> Runware:
         api_key="sk-test",
         transport_type="rest",
         dependencies=RuntimeDependencies(
-            session=cast(aiohttp.ClientSession, session)
+            session=cast(aiohttp.ClientSession, cast(object, session))
         ),
     )
 
