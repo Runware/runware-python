@@ -84,9 +84,9 @@ audio = await client.run({
 When you know the architecture, import its `Params` TypedDict from `runware.types.task_map` and annotate your call:
 
 ```python
-from runware.types.task_map import SdxlParams
+from runware.types.task_map import SdxlArchParams
 
-params: SdxlParams = {
+params: SdxlArchParams = {
     "model": "civitai:133005@782002",
     "taskType": "imageInference",
     "positivePrompt": "A professional headshot portrait",
