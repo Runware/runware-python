@@ -256,7 +256,10 @@ class Runware:
         params = await self._normalize_model_param(params)
         task_type = await self._resolve_task_type(params)
         task_uuid = str(params.get("taskUUID") or uuid.uuid4())
-        expected_count = max(int(params.get("numberResults") or 1), 1)
+        try:
+            expected_count = max(int(params.get("numberResults") or 1), 1)
+        except (ValueError, TypeError):
+            expected_count = 1
         # Default to 'async' on both transports, matching the TS SDK. Users
         # can opt into 'sync' explicitly for wire-level single-roundtrip delivery
         # (server holds the response open instead of ACK + polling).

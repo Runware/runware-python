@@ -132,6 +132,28 @@ class TestUtilityMethods:
         assert result[0].get("results") == models
 
 
+class TestRunNumberResultsCoercion:
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("bad", ["abc", "", {"x": 1}, [], None])
+    async def test_non_numeric_falls_back_to_1(self, bad: object) -> None:
+        client = Runware(api_key="sk-test", transport_type="rest")
+        _patch_rest(
+            client,
+            {"data": [{"taskUUID": "u1", "imageURL": "https://x.jpg", "imageUUID": "i1"}]},
+        )
+        result = await client.run({
+            "taskType": "imageInference",
+            "taskUUID": "u1",
+            "model": "runware:101@1",
+            "positivePrompt": "x",
+            "width": 1024,
+            "height": 1024,
+            "deliveryMethod": "sync",
+            "numberResults": bad,
+        })
+        assert len(result) == 1
+
+
 class TestRunDelivery:
     @pytest.mark.asyncio
     async def test_default_delivery_method_is_async(self) -> None:
