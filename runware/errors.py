@@ -147,7 +147,7 @@ def derive_code(raw: str) -> ErrorCode:
     """
     if raw == "aborted":
         return "aborted"
-    if raw in ("connectionFailed", "notConnected", "notOpen", "reconnectionFailed"):
+    if raw in ("connectionFailed", "notConnected", "notOpen", "reconnectionFailed", "disconnected"):
         return "connection"
 
     if (

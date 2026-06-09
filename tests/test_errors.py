@@ -22,6 +22,8 @@ class TestDeriveCode:
             ("connectionFailed", "connection"),
             ("notConnected", "connection"),
             ("notOpen", "connection"),
+            ("reconnectionFailed", "connection"),
+            ("disconnected", "connection"),
             ("insufficientCredits", "quota"),
             ("quotaExceeded", "quota"),
             ("paymentRequired", "quota"),
