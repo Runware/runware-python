@@ -12,6 +12,7 @@ import aiohttp
 
 from .config import create_config
 from .constants import SCHEMAS_BASE_URL
+from .content import ContentClient
 from .errors import create_runware_error, parse_api_error
 from .registry import Registry, RegistryData, create_registry
 from .stream import TextStream, create_text_stream
@@ -112,6 +113,11 @@ class Runware:
         # event is bound to the current event loop.
         self._active_streams: set[TextStream] = set()
         self._closed: bool = False
+
+        # Public read-only metadata about Runware's curated model catalog
+        # (listings, single model details, examples, pricing, capabilities,
+        # creators). Hits the content service, separate from the inference API.
+        self.content: ContentClient = ContentClient(self._ensure_validation_session)
 
     async def __aenter__(self) -> Self:
         await self.connect()

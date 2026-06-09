@@ -552,6 +552,44 @@ await client.model_upload({
 
 `get_task_details` vs `get_response`: use `get_task_details` for "look up something I ran before" — it queries the task archive. `get_response` is the polling mechanism the SDK uses internally during async `.run()`; you generally don't need to call it directly.
 
+## Content metadata
+
+`client.content.*` exposes Runware's curated model catalog as read-only metadata — names, AIRs, headlines, capabilities, pricing, examples. Public information, no extra cost.
+
+```python
+# List curated models, optionally filtered
+models = await client.content.list_models({
+    "capability": "io:text-to-image",
+    "category": "image",
+    "creator": "black-forest-labs",
+    "search": "flux",
+})
+
+# Single curated model by id
+model = await client.content.get_model("alibaba-z-image-turbo")
+
+# Sample input/output pairs the model can produce
+examples = await client.content.get_model_examples("flux-1-dev")
+
+# Pricing summary and per-configuration examples
+pricing = await client.content.get_model_pricing("flux-1-dev")
+
+# Discover the capability taxonomy (io:*, op:*, form:*)
+capabilities = await client.content.list_capabilities()
+
+# Collections (Runware-defined model groupings) with full model objects inlined
+collections = await client.content.list_collections({"category": "image"})
+
+# Creators with their curated models inlined
+creators = await client.content.list_creators()
+google = await client.content.get_creator("google")
+
+# Pagination — pass paginate=True to get {"total", "limit", "offset", "items"}
+page = await client.content.list_models({"paginate": True, "limit": 25, "offset": 0})
+```
+
+`creator`, `capabilities`, and `architecture` on each model are returned as id strings — resolve them against `list_creators`, `list_capabilities`, and the architecture id respectively when you need the human-readable label. Collections and creators are the only endpoints that resolve their inner `models` array to full objects.
+
 ## File helpers
 
 `file_to_data_uri` encodes a local file as a `data:` URI for passing as input:
