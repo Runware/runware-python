@@ -89,6 +89,9 @@ async def _get_validator(
     except Exception as exc:
         future.set_exception(exc)
         _validator_cache.pop(model, None)
+        # Mark the exception as retrieved so asyncio's GC doesn't log
+        # "Future exception was never retrieved" when there are no waiters.
+        _ = future.exception()
         raise
 
 
