@@ -125,15 +125,15 @@ class TestErrorPropagation:
         assert exc_info.value.code == "provider"
 
     @pytest.mark.asyncio
-    async def test_text_iterator_still_drains_then_ends_on_error(self) -> None:
+    async def test_text_iterator_drains_then_raises_on_error(self) -> None:
         s = _bare_stream()
         s._ingest(TextStreamChunk(text="partial"))
         s._finish(error=RunwareError("inferenceError", "boom"))
 
         received: list[str] = []
-        async for chunk in s.text_stream:
-            received.append(chunk)
-        # Matches TS: the iterator drains, then ends. The error surfaces via result().
+        with pytest.raises(RunwareError):
+            async for chunk in s.text_stream:
+                received.append(chunk)
         assert received == ["partial"]
         with pytest.raises(RunwareError):
             await s.result()

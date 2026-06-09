@@ -149,12 +149,20 @@ class TextStream:
     @property
     def text_stream(self) -> AsyncIterator[str]:
         self._ensure_pump_started()
-        return _queue_iter(self._text_queue)
+        return self._iter_with_error_check(self._text_queue)
 
     @property
     def reasoning_stream(self) -> AsyncIterator[str]:
         self._ensure_pump_started()
-        return _queue_iter(self._reasoning_queue)
+        return self._iter_with_error_check(self._reasoning_queue)
+
+    async def _iter_with_error_check(
+        self, queue: asyncio.Queue[object],
+    ) -> AsyncIterator[str]:
+        async for item in _queue_iter(queue):
+            yield item
+        if self._error is not None:
+            raise self._error
 
     async def result(self) -> TextStreamResult:
         self._ensure_pump_started()
