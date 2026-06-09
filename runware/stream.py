@@ -169,7 +169,8 @@ class TextStream:
         await self._done.wait()
         if self._error is not None:
             raise self._error
-        assert self._final is not None
+        if self._final is None:
+            raise RuntimeError("Stream finished without recording final state")
         return self._final
 
     async def text(self) -> str:

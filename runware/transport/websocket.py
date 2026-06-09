@@ -237,7 +237,8 @@ class WebSocketTransport:
             # Not the auth frame — keep waiting.
             self._log.warn("Skipping non-auth frame during authentication handshake")
 
-        assert data is not None  # loop only exits when data is set
+        if data is None:
+            raise RuntimeError("Authentication loop exited without receiving an auth frame")
         items_raw = data.get("data")
         items = (
             cast(list[object], items_raw) if isinstance(items_raw, list) else []

@@ -287,7 +287,8 @@ class Runware:
                 options=options,
             )
 
-        assert self._rest_transport is not None
+        if self._rest_transport is None:
+            raise RuntimeError("REST transport unavailable on a REST-selected code path")
         return await self._run_over_rest(
             wire_task=wire_task,
             task_type=task_type,
@@ -429,7 +430,8 @@ class Runware:
                 any_item_is_terminal=True,
             )
 
-        assert self._rest_transport is not None
+        if self._rest_transport is None:
+            raise RuntimeError("REST transport unavailable on a REST-selected code path")
         request_options = RequestOptions(
             timeout=options.timeout if options else None,
             cancel_event=options.cancel_event if options else None,
@@ -503,7 +505,8 @@ class Runware:
         delivery_method: str,
         options: RunOptions | None,
     ) -> list[LoosePayload]:
-        assert self._rest_transport is not None
+        if self._rest_transport is None:
+            raise RuntimeError("REST transport unavailable on a REST-selected code path")
         request_options = RequestOptions(
             timeout=options.timeout if options else None,
             cancel_event=options.cancel_event if options else None,
@@ -540,7 +543,8 @@ class Runware:
         initial_response: WireFrame,
         options: RunOptions | None,
     ) -> list[LoosePayload]:
-        assert self._rest_transport is not None
+        if self._rest_transport is None:
+            raise RuntimeError("REST transport unavailable on a REST-selected code path")
         cancel_event = options.cancel_event if options else None
         poll_timeout_seconds = (
             (options.timeout if options else None) or self._config.poll_timeout
@@ -649,7 +653,8 @@ class Runware:
         responses arrive on the same subscription (keyed by the original
         taskUUID, which getResponse echoes back).
         """
-        assert self._ws_transport is not None
+        if self._ws_transport is None:
+            raise RuntimeError("WebSocket transport unavailable on a WS-selected code path")
         if not self._ws_transport.is_connected:
             await self._ws_transport.connect()
 
@@ -793,7 +798,8 @@ class Runware:
         options: RunOptions | None,
         any_item_is_terminal: bool = False,
     ) -> list[LoosePayload]:
-        assert self._ws_transport is not None
+        if self._ws_transport is None:
+            raise RuntimeError("WebSocket transport unavailable on a WS-selected code path")
         if not self._ws_transport.is_connected:
             await self._ws_transport.connect()
 
