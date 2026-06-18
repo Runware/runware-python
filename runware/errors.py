@@ -38,11 +38,11 @@ _UTILITY_DOC_PATHS: dict[str, str] = {
     "modelSearch": "platform/model-search",
     "modelUpload": "platform/model-upload",
     "imageUpload": "platform/image-upload",
-    "getResponse": "platform/get-response",
+    "getResponse": "platform/task-polling",
     "accountManagement": "platform/account-management",
 }
 
-_SDK_ERROR_DOC_PATH = "getting-started/errors"
+_SDK_ERROR_DOC_PATH = "platform/errors"
 
 _SDK_ONLY_RAW_CODES: set[str] = {
     "aborted",

@@ -139,7 +139,7 @@ class TestCreateRunwareError:
 
     def test_documentation_url_for_sdk_only_raw_code(self) -> None:
         err = create_runware_error("noFetchImpl", "no fetch")
-        assert err.documentation == "https://runware.ai/docs/getting-started/errors"
+        assert err.documentation == "https://runware.ai/docs/platform/errors"
 
 
 class TestParseApiError:
