@@ -52,7 +52,7 @@ class SDKConfig:
     """SDK configuration. Construct via `create_config()`."""
 
     api_key: str
-    transport_type: TransportType = "websocket"
+    transport: TransportType = "websocket"
     ws_base_url: str = "wss://ws-api.runware.ai/v1"
     http_base_url: str = "https://api.runware.ai/v1"
 

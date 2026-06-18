@@ -21,7 +21,7 @@ from ._mocks import MockSession
 def _ws_config() -> SDKConfig:
     return SDKConfig(
         api_key="sk-test",
-        transport_type="websocket",
+        transport="websocket",
         timeout=5_000,
         poll_timeout=5_000,
         auth_timeout=1_000,
@@ -137,7 +137,7 @@ class TestMalformedJsonResponse:
         )
         client = Runware(
             api_key="sk-test",
-            transport_type="rest",
+            transport="rest",
             dependencies=RuntimeDependencies(
                 session=cast(aiohttp.ClientSession, cast(object, session))
             ),
@@ -181,7 +181,7 @@ class TestSessionOwnership:
         injected = MockSession()
         client = Runware(
             api_key="sk-test",
-            transport_type="rest",
+            transport="rest",
             dependencies=RuntimeDependencies(
                 session=cast(aiohttp.ClientSession, cast(object, injected))
             ),
@@ -193,7 +193,7 @@ class TestSessionOwnership:
     @pytest.mark.asyncio
     async def test_owned_session_is_closed(self) -> None:
         # No DI → SDK creates and owns the session.
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         await client.connect()  # opens REST transport, lazily creates session
         rest = client._rest_transport
         assert rest is not None

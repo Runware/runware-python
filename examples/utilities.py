@@ -8,7 +8,7 @@ from runware import Runware
 
 
 async def main() -> None:
-    async with Runware(transport_type="websocket") as client:
+    async with Runware(transport="websocket") as client:
         results = await client.model_search({
             "search": "juggernaut XL",
             "category": "checkpoint",

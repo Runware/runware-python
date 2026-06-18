@@ -37,7 +37,7 @@ async def client() -> Any:
     """A fresh REST-mode client with no real transport opened."""
     c = Runware(
         api_key="sk-test",
-        transport_type="rest",
+        transport="rest",
         timeout=5_000,
         poll_timeout=5_000,
     )

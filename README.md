@@ -183,7 +183,7 @@ print(result.cost)           # USD cost
 Best when you make multiple requests or want real-time feedback:
 
 ```python
-async with Runware(transport_type="websocket") as client:
+async with Runware(transport="websocket") as client:
     images = await client.run({"model": "runware:400@1", "positivePrompt": "..."})
     videos = await client.run({"model": "google:3@3", "positivePrompt": "..."})
 ```
@@ -195,7 +195,7 @@ WebSocket connections are automatically recovered on network interruptions. The 
 Best for serverless functions or one-off requests:
 
 ```python
-async with Runware(transport_type="rest") as client:
+async with Runware(transport="rest") as client:
     images = await client.run({
         "model": "runware:400@1",
         "positivePrompt": "A landscape painting",
@@ -373,7 +373,7 @@ The constructor derives `code` and `documentation` URL from the raw code + model
 | Field | Default | Notes |
 |---|---|---|
 | `api_key` | from `RUNWARE_API_KEY` | required |
-| `transport_type` | `"websocket"` | or `"rest"` |
+| `transport` | `"websocket"` | or `"rest"` |
 | `http_base_url` | `https://api.runware.ai/v1` | include the version path |
 | `ws_base_url` | `wss://ws-api.runware.ai/v1` | include the version path |
 | `timeout` | `1_200_000` (ms) | per-HTTP-call (one POST, one `getResponse` poll) |

@@ -102,7 +102,7 @@ class Runware:
 
         self._rest_transport: RestTransport | None = None
         self._ws_transport: WebSocketTransport | None = None
-        if self._config.transport_type == "websocket":
+        if self._config.transport == "websocket":
             self._ws_transport = WebSocketTransport(self._config)
         else:
             self._rest_transport = RestTransport(self._config)

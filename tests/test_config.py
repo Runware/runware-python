@@ -15,7 +15,7 @@ class TestDefaults:
     def test_minimal_config_with_explicit_key(self) -> None:
         cfg = create_config(api_key="sk-test")
         assert cfg.api_key == "sk-test"
-        assert cfg.transport_type == "websocket"
+        assert cfg.transport == "websocket"
         assert cfg.http_base_url == "https://api.runware.ai/v1"
         assert cfg.ws_base_url == "wss://ws-api.runware.ai/v1"
         assert cfg.timeout == 1_200_000
@@ -54,13 +54,13 @@ class TestOverrides:
     def test_user_supplied_fields_replace_defaults(self) -> None:
         cfg = create_config(
             api_key="sk-test",
-            transport_type="rest",
+            transport="rest",
             http_base_url="https://example.com/v2",
             timeout=5_000,
             max_retries=0,
             debug=True,
         )
-        assert cfg.transport_type == "rest"
+        assert cfg.transport == "rest"
         assert cfg.http_base_url == "https://example.com/v2"
         assert cfg.timeout == 5_000
         assert cfg.max_retries == 0

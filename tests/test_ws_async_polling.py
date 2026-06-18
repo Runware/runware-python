@@ -91,7 +91,7 @@ SAMPLE_PARAMS: dict[str, Any] = {
 class TestAsyncWsHappyPath:
     @pytest.mark.asyncio
     async def test_ack_then_terminal_in_first_poll(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="websocket")
+        client = Runware(api_key="sk-test", transport="websocket")
         _mock, state = _patch_ws(client)
 
         run_task = _run_in_background(client.run(SAMPLE_PARAMS))
@@ -128,7 +128,7 @@ class TestAsyncWsHappyPath:
     @pytest.mark.asyncio
     async def test_terminal_data_in_ack_frame_skips_polling(self) -> None:
         """If the server returns data on the first frame, no polls are needed."""
-        client = Runware(api_key="sk-test", transport_type="websocket")
+        client = Runware(api_key="sk-test", transport="websocket")
         _mock, state = _patch_ws(client)
 
         run_task = _run_in_background(client.run(SAMPLE_PARAMS))
@@ -157,7 +157,7 @@ class TestAsyncWsHappyPath:
 class TestAsyncWsErrors:
     @pytest.mark.asyncio
     async def test_error_during_ack_rejects(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="websocket")
+        client = Runware(api_key="sk-test", transport="websocket")
         _mock, state = _patch_ws(client)
 
         run_task = _run_in_background(client.run(SAMPLE_PARAMS))
@@ -173,7 +173,7 @@ class TestAsyncWsErrors:
 
     @pytest.mark.asyncio
     async def test_error_during_polling_rejects(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="websocket")
+        client = Runware(api_key="sk-test", transport="websocket")
         _mock, state = _patch_ws(client)
 
         run_task = _run_in_background(client.run(SAMPLE_PARAMS))
@@ -192,7 +192,7 @@ class TestAsyncWsErrors:
 
     @pytest.mark.asyncio
     async def test_unsubscribes_on_completion(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="websocket")
+        client = Runware(api_key="sk-test", transport="websocket")
         _mock, state = _patch_ws(client)
 
         run_task = _run_in_background(client.run(SAMPLE_PARAMS))
@@ -216,7 +216,7 @@ class TestAsyncWsErrors:
 
     @pytest.mark.asyncio
     async def test_unsubscribes_on_error(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="websocket")
+        client = Runware(api_key="sk-test", transport="websocket")
         _mock, state = _patch_ws(client)
 
         run_task = _run_in_background(client.run(SAMPLE_PARAMS))
@@ -235,7 +235,7 @@ class TestAsyncWsCancellation:
     async def test_cancel_event_during_polling_raises_aborted(self) -> None:
         from runware import RunOptions
 
-        client = Runware(api_key="sk-test", transport_type="websocket")
+        client = Runware(api_key="sk-test", transport="websocket")
         _mock, state = _patch_ws(client)
 
         cancel = asyncio.Event()

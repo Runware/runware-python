@@ -37,7 +37,7 @@ URL = "https://api.runware.ai/v1"
 def _client_with(session: MockSession) -> Runware:
     return Runware(
         api_key="sk-test",
-        transport_type="rest",
+        transport="rest",
         dependencies=RuntimeDependencies(
             session=cast(aiohttp.ClientSession, cast(object, session))
         ),

@@ -43,7 +43,7 @@ TEXT_PARAMS: dict[str, object] = {
 
 @pytest.mark.asyncio
 async def test_rest_async_one_image() -> None:
-    async with Runware(transport_type="rest") as client:
+    async with Runware(transport="rest") as client:
         images = await client.run(IMAGE_PARAMS)
         assert len(images) == 1
         assert isinstance(images[0].get("imageURL"), str)
@@ -51,7 +51,7 @@ async def test_rest_async_one_image() -> None:
 
 @pytest.mark.asyncio
 async def test_rest_async_two_images() -> None:
-    async with Runware(transport_type="rest") as client:
+    async with Runware(transport="rest") as client:
         images = await client.run({**IMAGE_PARAMS, "numberResults": 2})
         assert len(images) == 2
         for img in images:
@@ -62,7 +62,7 @@ async def test_rest_async_two_images() -> None:
 
 @pytest.mark.asyncio
 async def test_rest_sync_one_image() -> None:
-    async with Runware(transport_type="rest") as client:
+    async with Runware(transport="rest") as client:
         images = await client.run({**IMAGE_PARAMS, "deliveryMethod": "sync"})
         assert len(images) == 1
         assert isinstance(images[0].get("imageURL"), str)
@@ -72,7 +72,7 @@ async def test_rest_sync_one_image() -> None:
 
 @pytest.mark.asyncio
 async def test_ws_async_one_image() -> None:
-    async with Runware(transport_type="websocket") as client:
+    async with Runware(transport="websocket") as client:
         images = await client.run(IMAGE_PARAMS)
         assert len(images) == 1
         assert isinstance(images[0].get("imageURL"), str)
@@ -80,7 +80,7 @@ async def test_ws_async_one_image() -> None:
 
 @pytest.mark.asyncio
 async def test_ws_async_two_images() -> None:
-    async with Runware(transport_type="websocket") as client:
+    async with Runware(transport="websocket") as client:
         images = await client.run({**IMAGE_PARAMS, "numberResults": 2})
         assert len(images) == 2
         for img in images:
@@ -91,7 +91,7 @@ async def test_ws_async_two_images() -> None:
 
 @pytest.mark.asyncio
 async def test_ws_sync_one_image() -> None:
-    async with Runware(transport_type="websocket") as client:
+    async with Runware(transport="websocket") as client:
         images = await client.run({**IMAGE_PARAMS, "deliveryMethod": "sync"})
         assert len(images) == 1
         assert isinstance(images[0].get("imageURL"), str)
@@ -101,7 +101,7 @@ async def test_ws_sync_one_image() -> None:
 
 @pytest.mark.asyncio
 async def test_stream_text() -> None:
-    async with Runware(transport_type="rest") as client:
+    async with Runware(transport="rest") as client:
         stream = await client.stream(TEXT_PARAMS)
 
         streamed = ""
@@ -118,7 +118,7 @@ async def test_stream_text() -> None:
 
 @pytest.mark.asyncio
 async def test_model_search() -> None:
-    async with Runware(transport_type="websocket") as client:
+    async with Runware(transport="websocket") as client:
         results = await client.model_search({
             "search": "realistic",
             "category": "checkpoint",
@@ -129,7 +129,7 @@ async def test_model_search() -> None:
 
 @pytest.mark.asyncio
 async def test_invalid_params_raise_typed_error() -> None:
-    async with Runware(transport_type="websocket") as client:
+    async with Runware(transport="websocket") as client:
         with pytest.raises(RunwareError) as exc_info:
             await client.run({
                 "taskType": "imageInference",

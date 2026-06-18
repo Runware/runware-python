@@ -19,7 +19,7 @@ from runware.types.sdk import SDKConfig
 def _config() -> SDKConfig:
     return SDKConfig(
         api_key="sk-test",
-        transport_type="websocket",
+        transport="websocket",
         timeout=5_000,
         poll_timeout=5_000,
         auth_timeout=5_000,

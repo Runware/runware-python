@@ -10,7 +10,7 @@ from runware import Runware
 async def main() -> None:
     # REST transport — no connect()/disconnect() needed; each request is a
     # standalone HTTP call.
-    async with Runware(transport_type="rest") as client:
+    async with Runware(transport="rest") as client:
         # Curated model AIR → the SDK auto-resolves the taskType.
         # No taskType needed in params.
         images = await client.run({

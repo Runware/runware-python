@@ -8,7 +8,7 @@ from runware import Runware
 
 
 async def main() -> None:
-    async with Runware(transport_type="websocket") as client:
+    async with Runware(transport="websocket") as client:
         # Community / fine-tune models live outside the curated registry, so
         # the SDK can't auto-resolve the taskType from the model AIR. Pass
         # `taskType` explicitly.

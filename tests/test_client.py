@@ -31,12 +31,12 @@ def _patch_rest(client: Runware, response: Any) -> AsyncMock:
 
 class TestTransportSelection:
     def test_rest_transport_when_configured(self) -> None:
-        c = Runware(api_key="sk-test", transport_type="rest")
+        c = Runware(api_key="sk-test", transport="rest")
         assert c._rest_transport is not None
         assert c._ws_transport is None
 
     def test_ws_transport_when_configured(self) -> None:
-        c = Runware(api_key="sk-test", transport_type="websocket")
+        c = Runware(api_key="sk-test", transport="websocket")
         assert c._rest_transport is None
         assert c._ws_transport is not None
 
@@ -47,7 +47,7 @@ class TestUtilityOptions:
         """Each utility method takes an optional RunOptions argument."""
         from runware import RunOptions
 
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         mock = _patch_rest(client, {"data": [{"taskUUID": "u1"}]})
 
         # Cast dict literals to the TypedDict parameter types. We're not
@@ -106,7 +106,7 @@ class TestUtilityMethods:
     async def test_utility_sends_correct_task_type(
         self, method: str, task_type: str
     ) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         utility_response: dict[str, Any] = {
             "data": [{"taskUUID": "u-util", "results": []}]
         }
@@ -121,7 +121,7 @@ class TestUtilityMethods:
 
     @pytest.mark.asyncio
     async def test_utility_returns_data_array(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         models = [{"air": "x", "name": "x"}, {"air": "y", "name": "y"}]
         _patch_rest(
             client,
@@ -136,7 +136,7 @@ class TestRunNumberResultsCoercion:
     @pytest.mark.asyncio
     @pytest.mark.parametrize("bad", ["abc", "", {"x": 1}, [], None])
     async def test_non_numeric_falls_back_to_1(self, bad: object) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         _patch_rest(
             client,
             {"data": [{"taskUUID": "u1", "imageURL": "https://x.jpg", "imageUUID": "i1"}]},
@@ -157,7 +157,7 @@ class TestRunNumberResultsCoercion:
 class TestRunDelivery:
     @pytest.mark.asyncio
     async def test_default_delivery_method_is_async(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         # Sync response so the polling loop doesn't run.
         sync_response: dict[str, Any] = {
             "data": [{"taskUUID": "u1", "imageURL": "https://x.jpg", "imageUUID": "i1"}]
@@ -177,7 +177,7 @@ class TestRunDelivery:
 
     @pytest.mark.asyncio
     async def test_user_supplied_delivery_method_wins(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         sync_response: dict[str, Any] = {
             "data": [{"taskUUID": "u1", "imageURL": "https://x.jpg", "imageUUID": "i1"}]
         }
@@ -198,7 +198,7 @@ class TestRunDelivery:
 class TestTaskTypeResolution:
     @pytest.mark.asyncio
     async def test_explicit_task_type_wins(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         sync_response: dict[str, Any] = {
             "data": [{"taskUUID": "u1", "imageURL": "https://x.jpg", "imageUUID": "i1"}]
         }
@@ -217,7 +217,7 @@ class TestTaskTypeResolution:
 
     @pytest.mark.asyncio
     async def test_unknown_model_raises_runware_error(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         try:
             with pytest.raises(RunwareError) as exc_info:
                 await client.run({
@@ -234,19 +234,19 @@ class TestTaskTypeResolution:
 class TestConnectDisconnect:
     @pytest.mark.asyncio
     async def test_connect_is_noop_on_rest(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         await client.connect()
         await client.disconnect()
 
     @pytest.mark.asyncio
     async def test_is_connected_property_true_for_rest(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         assert client.is_connected is True
         await client.close()
 
     @pytest.mark.asyncio
     async def test_double_close_is_safe(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         await client.close()
         await client.close()
 
@@ -254,7 +254,7 @@ class TestConnectDisconnect:
 class TestModelNormalization:
     @pytest.mark.asyncio
     async def test_air_passes_through_unchanged(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         try:
             result = await client._normalize_model_param(
                 {"model": "runware:101@1", "positivePrompt": "x"}
@@ -265,7 +265,7 @@ class TestModelNormalization:
 
     @pytest.mark.asyncio
     async def test_no_model_passes_through_unchanged(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         try:
             result = await client._normalize_model_param(
                 {"taskType": "getResponse", "taskUUID": "u1"}
@@ -276,7 +276,7 @@ class TestModelNormalization:
 
     @pytest.mark.asyncio
     async def test_non_string_model_passes_through(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         try:
             result = await client._normalize_model_param(
                 {"model": 42, "positivePrompt": "x"}
@@ -290,7 +290,7 @@ class TestModelNormalization:
 class TestRefreshRegistry:
     @pytest.mark.asyncio
     async def test_refresh_registry_method_exists(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         try:
             # Just verify the method is wired up; the registry tests exercise
             # the actual refresh semantics. Using try/finally so a real network
@@ -308,7 +308,7 @@ class TestValidateOverride:
     async def test_per_call_validate_false_skips_validation(self) -> None:
         from runware import RunOptions
 
-        client = Runware(api_key="sk-test", transport_type="rest", validate=True)
+        client = Runware(api_key="sk-test", transport="rest", validate=True)
         sync_response: dict[str, Any] = {
             "data": [
                 {"taskUUID": "u1", "imageURL": "https://x.jpg", "imageUUID": "i1"}
@@ -347,7 +347,7 @@ class TestOverloadNarrowing:
         TypedDict is structural — it IS a dict, just with declared keys."""
         from runware import ImageInferenceParams
 
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         sync_response: dict[str, Any] = {
             "data": [
                 {
@@ -381,7 +381,7 @@ class TestOverloadNarrowing:
         Result types; runtime returns the same dict payloads."""
         from runware import ModelSearchParams
 
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         _patch_rest(client, {"data": [{"results": [{"air": "x"}]}]})
         params: ModelSearchParams = {"search": "portrait"}
         result = await client.model_search(params)
@@ -391,7 +391,7 @@ class TestOverloadNarrowing:
     async def test_untyped_dict_runs_fine_at_runtime(self) -> None:
         """An untyped dict literal must still work at runtime, regardless of
         which overload pyright picks for it statically."""
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         _patch_rest(
             client,
             {"data": [{"taskUUID": "u", "imageURL": "u.jpg", "imageUUID": "i"}]},
@@ -407,11 +407,11 @@ class TestOverloadNarrowing:
 
 class TestConfigPropagation:
     def test_config_log_populated_by_create_config(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest", debug=True)
+        client = Runware(api_key="sk-test", transport="rest", debug=True)
         # The transport should share the client's config.log instance.
         assert client._config.log is not None
         assert client._config.log.enabled is True
 
     def test_config_log_is_noop_when_debug_false(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         assert client._config.log.enabled is False

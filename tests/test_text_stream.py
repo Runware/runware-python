@@ -190,7 +190,7 @@ class TestStreamCancellation:
             def post(self, *args: object, **kwargs: object) -> _FakeResp:
                 return _FakeResp()
 
-        config = SDKConfig(api_key="sk-test", transport_type="rest")
+        config = SDKConfig(api_key="sk-test", transport="rest")
         from typing import cast
 
         import aiohttp
@@ -236,7 +236,7 @@ class TestLazyPump:
                 post_called[0] = True
                 raise AssertionError("HTTP call fired without consumption")
 
-        config = SDKConfig(api_key="sk-test", transport_type="rest")
+        config = SDKConfig(api_key="sk-test", transport="rest")
         stream = TextStream(
             config=config,
             session=_cast(aiohttp.ClientSession, _cast(object, _FakeSession())),
@@ -258,7 +258,7 @@ class TestCloseShutdownSignal:
     async def test_client_close_sets_stream_shutdown(self) -> None:
         from runware import Runware
 
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         s = _bare_stream()
         client._active_streams.add(s)
         assert not s._shutdown_event.is_set()
@@ -271,7 +271,7 @@ class TestCloseShutdownSignal:
         the parent's `_active_streams` so the set doesn't leak."""
         from runware import Runware
 
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         s = _bare_stream()
         client._active_streams.add(s)
         # Mirror what client.stream() does — register the cleanup callback.
@@ -287,7 +287,7 @@ class TestCloseShutdownSignal:
 class TestNumberResultsGuard:
     @pytest.mark.asyncio
     async def test_stream_rejects_number_results_gt_1(self) -> None:
-        client = Runware(api_key="sk-test", transport_type="rest")
+        client = Runware(api_key="sk-test", transport="rest")
         try:
             with pytest.raises(RunwareError) as exc_info:
                 await client.stream(
