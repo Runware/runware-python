@@ -2,7 +2,7 @@
 
 Async Python SDK for the Runware platform. A unified API for image, video, audio, text, and 3D generation — powered by the [Runware inference platform](https://runware.ai).
 
-[Documentation](https://runware.ai/docs) · [Report a bug](https://github.com/Runware/python-sdk/issues)
+[Documentation](https://runware.ai/docs) · [Report a bug](https://github.com/runware/runware-python/issues)
 
 - **One method for everything** — `.run()` handles every model type
 - **Schema-driven types** — generated from Runware's canonical JSON schemas
@@ -15,7 +15,7 @@ Async Python SDK for the Runware platform. A unified API for image, video, audio
 ## Installation
 
 ```bash
-pip install runware
+pip install runware-sdk
 ```
 
 ## Quick start

@@ -1,5 +1,5 @@
 [project]
-name = "runware"
+name = "runware-sdk"
 version = "1.2.0"
 description = "Async Python SDK for the Runware platform — image, video, audio, text, and 3D generation, plus upscaling, background removal, and more, over REST or WebSocket with typed parameters and runtime validation."
 readme = "README.md"
@@ -54,9 +54,9 @@ dependencies = [
 [project.urls]
 Homepage = "https://runware.ai"
 Documentation = "https://runware.ai/docs"
-Repository = "https://github.com/Runware/python-sdk"
-Issues = "https://github.com/Runware/python-sdk/issues"
-Changelog = "https://github.com/Runware/python-sdk/releases"
+Repository = "https://github.com/runware/runware-python"
+Issues = "https://github.com/runware/runware-python/issues"
+Changelog = "https://github.com/runware/runware-python/releases"
 
 [dependency-groups]
 dev = [
