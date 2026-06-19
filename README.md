@@ -62,6 +62,8 @@ images = await client.run({
 videos = await client.run({
     "model": "google:3@3",
     "positivePrompt": "Ocean waves at sunset",
+    "width": 1280,
+    "height": 720,
     "duration": 8,
 })
 
@@ -185,7 +187,7 @@ Best when you make multiple requests or want real-time feedback:
 ```python
 async with Runware(transport="websocket") as client:
     images = await client.run({"model": "runware:400@1", "positivePrompt": "..."})
-    videos = await client.run({"model": "google:3@3", "positivePrompt": "..."})
+    videos = await client.run({"model": "google:3@3", "positivePrompt": "...", "width": 1280, "height": 720})
 ```
 
 WebSocket connections are automatically recovered on network interruptions. The SDK re-authenticates with the same session UUID and the server replays pending results.
@@ -295,7 +297,7 @@ def progress(item: dict) -> None:
     print(f"{item.get('progress')}%")
 
 results = await client.run(
-    {"model": "google:3@3", "positivePrompt": "Ocean waves", "numberResults": 3},
+    {"model": "google:3@3", "positivePrompt": "Ocean waves", "width": 1280, "height": 720, "numberResults": 3},
     RunOptions(on_result=watch, on_progress=progress),
 )
 ```
@@ -430,7 +432,7 @@ Or per-call via `RunOptions`:
 
 ```python
 videos = await client.run(
-    {"model": "google:3@3", "positivePrompt": "Ocean waves"},
+    {"model": "google:3@3", "positivePrompt": "Ocean waves", "width": 1280, "height": 720},
     RunOptions(timeout=600_000),
 )
 ```
