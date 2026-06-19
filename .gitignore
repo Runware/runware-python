@@ -28,5 +28,3 @@ htmlcov/
 .vscode/
 .idea/
 *.swp
-
-uv.lock
