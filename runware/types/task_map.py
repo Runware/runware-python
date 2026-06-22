@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20260619230808 — do not edit manually.
+AUTO-GENERATED from runware schemas v20260622170117 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "20260619230808"
+SCHEMAS_VERSION = "20260622170117"
 
 TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "modelUpload", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
 
@@ -4090,6 +4090,43 @@ class AlibabaWan26ImageResult(TypedDict, total=False):
     imageURL: NotRequired[str]
     imageBase64Data: NotRequired[str]
     imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class AlibabaHappyhorse11Params(TypedDict, total=False):
+    """Inference params for curated model `alibaba:happyhorse@1.1` (slug: alibaba-happyhorse-1-1)."""
+
+    model: Literal['alibaba:happyhorse@1.1']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: NotRequired[str]
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['720p', '1080p']]
+    duration: NotRequired[int]
+    seed: NotRequired[int]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class AlibabaHappyhorse11Result(TypedDict, total=False):
+    """Inference result for curated model `alibaba:happyhorse@1.1` (slug: alibaba-happyhorse-1-1)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
@@ -8351,6 +8388,43 @@ class Ideogram20Result(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
+class Ideogram40RemixParams(TypedDict, total=False):
+    """Inference params for curated model `ideogram:4@remix` (slug: ideogram-4-0-remix)."""
+
+    model: Literal['ideogram:4@remix']
+    inputs: dict[str, object]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    strength: NotRequired[float]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class Ideogram40RemixResult(TypedDict, total=False):
+    """Inference result for curated model `ideogram:4@remix` (slug: ideogram-4-0-remix)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+    structuredPrompt: NotRequired[dict[str, object]]
+
 class Ideogram30RemixParams(TypedDict, total=False):
     """Inference params for curated model `ideogram:4@2` (slug: ideogram-3-0-remix)."""
 
@@ -9058,6 +9132,36 @@ class OpenaiClipVitL14Result(TypedDict, total=False):
     cost: NotRequired[float]
     text: str
 
+class OpenaiGpt5NanoParams(TypedDict, total=False):
+    """Inference params for curated model `openai:gpt@5-nano` (slug: openai-gpt-5-nano)."""
+
+    model: Literal['openai:gpt@5-nano']
+    outputFormat: NotRequired[Literal['TEXT', 'JSON']]
+    inputs: NotRequired[dict[str, object]]
+    seed: NotRequired[int]
+    settings: NotRequired[dict[str, object]]
+    jsonSchema: NotRequired[dict[str, object] | str]
+    messages: list[dict[str, object]]
+    toolChoice: NotRequired[dict[str, object]]
+    tools: NotRequired[list[dict[str, object]]]
+    taskType: Literal['textInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    deliveryMethod: NotRequired[str]
+    numberResults: NotRequired[int]
+    includeUsage: NotRequired[bool]
+
+class OpenaiGpt5NanoResult(TypedDict, total=False):
+    """Inference result for curated model `openai:gpt@5-nano` (slug: openai-gpt-5-nano)."""
+
+    taskType: Literal['textInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    text: str
+    finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
+    usage: dict[str, object]
+
 class OpenaiGptImage1Params(TypedDict, total=False):
     """Inference params for curated model `openai:1@1` (slug: openai-gpt-image-1)."""
 
@@ -9220,6 +9324,36 @@ class OpenaiGptImage2Result(TypedDict, total=False):
     imageDataURI: NotRequired[str]
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
+
+class OpenaiGpt5MiniParams(TypedDict, total=False):
+    """Inference params for curated model `openai:gpt@5-mini` (slug: openai-gpt-5-mini)."""
+
+    model: Literal['openai:gpt@5-mini']
+    outputFormat: NotRequired[Literal['TEXT', 'JSON']]
+    inputs: NotRequired[dict[str, object]]
+    seed: NotRequired[int]
+    settings: NotRequired[dict[str, object]]
+    jsonSchema: NotRequired[dict[str, object] | str]
+    messages: list[dict[str, object]]
+    toolChoice: NotRequired[dict[str, object]]
+    tools: NotRequired[list[dict[str, object]]]
+    taskType: Literal['textInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    deliveryMethod: NotRequired[str]
+    numberResults: NotRequired[int]
+    includeUsage: NotRequired[bool]
+
+class OpenaiGpt5MiniResult(TypedDict, total=False):
+    """Inference result for curated model `openai:gpt@5-mini` (slug: openai-gpt-5-mini)."""
+
+    taskType: Literal['textInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    text: str
+    finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
+    usage: dict[str, object]
 
 class OpenaiGptImage15Params(TypedDict, total=False):
     """Inference params for curated model `openai:4@1` (slug: openai-gpt-image-1-5)."""
@@ -13313,6 +13447,7 @@ class AuthenticationResult(TypedDict, total=False):
 
 models: dict[str, ModelEntry] = {
     "alibaba:happyhorse@1.0": ModelEntry(task_type="videoInference", id="alibaba-happyhorse-1-0"),
+    "alibaba:happyhorse@1.1": ModelEntry(task_type="videoInference", id="alibaba-happyhorse-1-1"),
     "alibaba:qwen-image@2.0": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-2-0"),
     "alibaba:qwen-image@2.0-pro": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-2-0-pro"),
     "alibaba:qwen-image@2512": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-2512"),
@@ -13420,6 +13555,7 @@ models: dict[str, ModelEntry] = {
     "ideogram:4@3": ModelEntry(task_type="imageInference", id="ideogram-3-0-edit"),
     "ideogram:4@4": ModelEntry(task_type="imageInference", id="ideogram-3-0-reframe"),
     "ideogram:4@5": ModelEntry(task_type="imageInference", id="ideogram-3-0-replace-background"),
+    "ideogram:4@remix": ModelEntry(task_type="imageInference", id="ideogram-4-0-remix"),
     "ideogram:layerize-text@0": ModelEntry(task_type="imageInference", id="ideogram-layerize-text"),
     "imagineart:1.5-pro@0": ModelEntry(task_type="imageInference", id="imagineart-1-5-pro"),
     "imagineart:1@5": ModelEntry(task_type="imageInference", id="imagineart-1-5"),
@@ -13494,6 +13630,8 @@ models: dict[str, ModelEntry] = {
     "openai:3@2": ModelEntry(task_type="videoInference", id="openai-sora-2-pro"),
     "openai:4@1": ModelEntry(task_type="imageInference", id="openai-gpt-image-1-5"),
     "openai:gpt-image@2": ModelEntry(task_type="imageInference", id="openai-gpt-image-2"),
+    "openai:gpt@5-mini": ModelEntry(task_type="textInference", id="openai-gpt-5-mini"),
+    "openai:gpt@5-nano": ModelEntry(task_type="textInference", id="openai-gpt-5-nano"),
     "openai:gpt@5.4": ModelEntry(task_type="textInference", id="openai-gpt-5-4"),
     "openai:gpt@5.4-mini": ModelEntry(task_type="textInference", id="openai-gpt-5-4-mini"),
     "openai:gpt@5.4-nano": ModelEntry(task_type="textInference", id="openai-gpt-5-4-nano"),
