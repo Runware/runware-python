@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20260622170117 — do not edit manually.
+AUTO-GENERATED from runware schemas v20260622171558 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "20260622170117"
+SCHEMAS_VERSION = "20260622171558"
 
 TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "modelUpload", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
 
@@ -10629,43 +10629,6 @@ class VeedFabric10Result(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
-class KlingaiVideoO3ProParams(TypedDict, total=False):
-    """Inference params for curated model `klingai:kling-video@o3-pro` (slug: klingai-video-o3-pro)."""
-
-    model: Literal['klingai:kling-video@o3-pro']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: NotRequired[str]
-    width: NotRequired[int]
-    height: NotRequired[int]
-    resolution: NotRequired[Literal['1080p']]
-    duration: NotRequired[int]
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class KlingaiVideoO3ProResult(TypedDict, total=False):
-    """Inference result for curated model `klingai:kling-video@o3-pro` (slug: klingai-video-o3-pro)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class Klingai16ProParams(TypedDict, total=False):
     """Inference params for curated model `klingai:3@2` (slug: klingai-1-6-pro)."""
 
@@ -10701,43 +10664,6 @@ class Klingai16ProResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
-class KlingaiVideoO34kParams(TypedDict, total=False):
-    """Inference params for curated model `klingai:kling-video@o3-4k` (slug: klingai-video-o3-4k)."""
-
-    model: Literal['klingai:kling-video@o3-4k']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: NotRequired[str]
-    width: NotRequired[int]
-    height: NotRequired[int]
-    resolution: NotRequired[Literal['4k']]
-    duration: NotRequired[int]
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class KlingaiVideoO34kResult(TypedDict, total=False):
-    """Inference result for curated model `klingai:kling-video@o3-4k` (slug: klingai-video-o3-4k)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class KlingaiVideo26StandardParams(TypedDict, total=False):
     """Inference params for curated model `klingai:kling-video@2.6-standard` (slug: klingai-video-2-6-standard)."""
 
@@ -10760,6 +10686,43 @@ class KlingaiVideo26StandardParams(TypedDict, total=False):
 
 class KlingaiVideo26StandardResult(TypedDict, total=False):
     """Inference result for curated model `klingai:kling-video@2.6-standard` (slug: klingai-video-2-6-standard)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class KlingaiVideo30OmniProParams(TypedDict, total=False):
+    """Inference params for curated model `klingai:kling-video@o3-pro` (slug: klingai-video-3-0-omni-pro)."""
+
+    model: Literal['klingai:kling-video@o3-pro']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: NotRequired[str]
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['1080p']]
+    duration: NotRequired[int]
+    providerSettings: NotRequired[dict[str, object]]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class KlingaiVideo30OmniProResult(TypedDict, total=False):
+    """Inference result for curated model `klingai:kling-video@o3-pro` (slug: klingai-video-3-0-omni-pro)."""
 
     taskType: Literal['videoInference']
     taskUUID: str
@@ -10948,6 +10911,43 @@ class Klingai20MasterResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
+class KlingaiVideo30Omni4kParams(TypedDict, total=False):
+    """Inference params for curated model `klingai:kling-video@o3-4k` (slug: klingai-video-3-0-omni-4k)."""
+
+    model: Literal['klingai:kling-video@o3-4k']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: NotRequired[str]
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['4k']]
+    duration: NotRequired[int]
+    providerSettings: NotRequired[dict[str, object]]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class KlingaiVideo30Omni4kResult(TypedDict, total=False):
+    """Inference result for curated model `klingai:kling-video@o3-4k` (slug: klingai-video-3-0-omni-4k)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
 class Klingai15StandardParams(TypedDict, total=False):
     """Inference params for curated model `klingai:2@1` (slug: klingai-1-5-standard)."""
 
@@ -11009,43 +11009,6 @@ class KlingaiVideo30ProParams(TypedDict, total=False):
 
 class KlingaiVideo30ProResult(TypedDict, total=False):
     """Inference result for curated model `klingai:kling-video@3-pro` (slug: klingai-video-3-0-pro)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class KlingaiVideoO3StandardParams(TypedDict, total=False):
-    """Inference params for curated model `klingai:kling-video@o3-standard` (slug: klingai-video-o3-standard)."""
-
-    model: Literal['klingai:kling-video@o3-standard']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: NotRequired[str]
-    width: NotRequired[int]
-    height: NotRequired[int]
-    resolution: NotRequired[Literal['720p']]
-    duration: NotRequired[int]
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class KlingaiVideoO3StandardResult(TypedDict, total=False):
-    """Inference result for curated model `klingai:kling-video@o3-standard` (slug: klingai-video-o3-standard)."""
 
     taskType: Literal['videoInference']
     taskUUID: str
@@ -11188,6 +11151,43 @@ class Klingai10StandardParams(TypedDict, total=False):
 
 class Klingai10StandardResult(TypedDict, total=False):
     """Inference result for curated model `klingai:1@1` (slug: klingai-1-0-standard)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class KlingaiVideo30OmniStandardParams(TypedDict, total=False):
+    """Inference params for curated model `klingai:kling-video@o3-standard` (slug: klingai-video-3-0-omni-standard)."""
+
+    model: Literal['klingai:kling-video@o3-standard']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: NotRequired[str]
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['720p']]
+    duration: NotRequired[int]
+    providerSettings: NotRequired[dict[str, object]]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class KlingaiVideo30OmniStandardResult(TypedDict, total=False):
+    """Inference result for curated model `klingai:kling-video@o3-standard` (slug: klingai-video-3-0-omni-standard)."""
 
     taskType: Literal['videoInference']
     taskUUID: str
@@ -13587,9 +13587,9 @@ models: dict[str, ModelEntry] = {
     "klingai:kling-video@3-pro": ModelEntry(task_type="videoInference", id="klingai-video-3-0-pro"),
     "klingai:kling-video@3-standard": ModelEntry(task_type="videoInference", id="klingai-video-3-0-standard"),
     "klingai:kling-video@3.0-turbo": ModelEntry(task_type="videoInference", id="klingai-video-3-0-turbo"),
-    "klingai:kling-video@o3-4k": ModelEntry(task_type="videoInference", id="klingai-video-o3-4k"),
-    "klingai:kling-video@o3-pro": ModelEntry(task_type="videoInference", id="klingai-video-o3-pro"),
-    "klingai:kling-video@o3-standard": ModelEntry(task_type="videoInference", id="klingai-video-o3-standard"),
+    "klingai:kling-video@o3-4k": ModelEntry(task_type="videoInference", id="klingai-video-3-0-omni-4k"),
+    "klingai:kling-video@o3-pro": ModelEntry(task_type="videoInference", id="klingai-video-3-0-omni-pro"),
+    "klingai:kling-video@o3-standard": ModelEntry(task_type="videoInference", id="klingai-video-3-0-omni-standard"),
     "klingai:kling@o1": ModelEntry(task_type="videoInference", id="klingai-video-o1-pro"),
     "klingai:kling@o1-standard": ModelEntry(task_type="videoInference", id="klingai-video-o1-standard"),
     "krea:krea@2-large": ModelEntry(task_type="imageInference", id="krea-2-large"),
