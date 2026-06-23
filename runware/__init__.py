@@ -48,6 +48,7 @@ Validation:
 
 Helpers:
     file_to_data_uri           — encode files/bytes as data URIs for inputs
+    file_to_base64             — encode files/bytes as raw base64 (no data: prefix)
 
 Schemas pin:
     SCHEMAS_VERSION            — the pinned schemas-bundle version
@@ -145,7 +146,7 @@ from .types.task_map import (
     models,
     operation_task_types,
 )
-from .utils.file import file_to_data_uri
+from .utils.file import file_to_base64, file_to_data_uri
 from .validate import clear_validator_cache
 
 __all__ = [
@@ -235,6 +236,7 @@ __all__ = [
     "create_logger",
     "create_registry",
     "create_runware_error",
+    "file_to_base64",
     "file_to_data_uri",
     "is_runware_error",
     "modality_task_types",

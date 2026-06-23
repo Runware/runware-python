@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20260623105208 — do not edit manually.
+AUTO-GENERATED from runware schemas v20260623192341 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,9 +10,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "20260623105208"
+SCHEMAS_VERSION = "20260623192341"
 
-TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "modelUpload", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
+TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
 
 
 @dataclass(frozen=True)
@@ -6724,6 +6724,8 @@ class BriaImageReplaceBackgroundParams(TypedDict, total=False):
     inputs: dict[str, object]
     positivePrompt: NotRequired[str]
     negativePrompt: NotRequired[str]
+    width: int
+    height: int
     seed: NotRequired[int]
     providerSettings: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
@@ -7485,7 +7487,7 @@ class ExactlyIllustrativeTrainingParams(TypedDict, total=False):
     model: Literal['exactly:illustrative@training']
     inputs: dict[str, object]
     importModel: dict[str, object]
-    taskType: Literal['modelUpload']
+    taskType: Literal['training']
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
@@ -13601,7 +13603,7 @@ models: dict[str, ModelEntry] = {
     "creatify:aurora@fast": ModelEntry(task_type="videoInference", id="creatify-aurora-v1-fast"),
     "deepseek:v4@flash": ModelEntry(task_type="textInference", id="deepseek-v4-flash"),
     "deepseek:v4@pro": ModelEntry(task_type="textInference", id="deepseek-v4-pro"),
-    "exactly:illustrative@training": ModelEntry(task_type="modelUpload", id="exactly-illustrative-training"),
+    "exactly:illustrative@training": ModelEntry(task_type="training", id="exactly-illustrative-training"),
     "exactly:photo@bright-pulse": ModelEntry(task_type="imageInference", id="exactly-photo-bright-pulse"),
     "exactly:photo@distant-reality": ModelEntry(task_type="imageInference", id="exactly-photo-distant-reality"),
     "exactly:photo@extreme-contrast": ModelEntry(task_type="imageInference", id="exactly-photo-extreme-contrast"),

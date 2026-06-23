@@ -608,6 +608,15 @@ await client.image_upload({"image": data_uri})
 
 Accepts both `Path` and `bytes` — `bytes` is useful when the file lives in memory (e.g. a freshly downloaded blob).
 
+`file_to_base64` does the same read but returns raw base64 with no `data:` prefix or MIME type (the server sniffs the real format from the bytes).
+
+You usually don't need either helper for inputs: `run()` and `image_upload` auto-encode local file paths. Any string value (recursively, including nested dicts and lists) that points to an existing file on disk is read and replaced with its base64 before the request is sent. URLs, UUIDs, data URIs, existing base64, and prompts pass through untouched.
+
+```python
+await client.run({"model": "...", "seedImage": "./photo.jpg"})
+await client.run({"model": "...", "referenceImages": ["./a.jpg", "./b.jpg"]})
+```
+
 ## Custom dependencies
 
 For testing, proxies, or custom auth flows, pass a `RuntimeDependencies`:

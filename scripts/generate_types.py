@@ -64,13 +64,13 @@ def load_schema_map() -> dict[str, Any]:
     except urllib.error.HTTPError as exc:
         print(
             f"Remote fetch failed ({exc.code} {exc.reason}). "
-            "Falling back to local checkout.",
+            + "Falling back to local checkout.",
             file=sys.stderr,
         )
     except urllib.error.URLError as exc:
         print(
             f"Remote fetch failed ({exc.reason}). "
-            "Falling back to local checkout.",
+            + "Falling back to local checkout.",
             file=sys.stderr,
         )
 
@@ -80,7 +80,7 @@ def load_schema_map() -> dict[str, Any]:
 
     raise SystemExit(
         f"Could not load schema-map. Tried {REMOTE_URL} and {LOCAL_FALLBACK}. "
-        "Set RUNWARE_SCHEMA_MAP_PATH to a local schema-map.json."
+        + "Set RUNWARE_SCHEMA_MAP_PATH to a local schema-map.json."
     )
 
 
@@ -217,8 +217,8 @@ def emit_typed_dict(
     description: str | None = None,
 ) -> str:
     """Emit a TypedDict declaration from an object schema."""
-    properties = schema.get("properties") if isinstance(schema, dict) else None
-    required = set(schema.get("required", []) or []) if isinstance(schema, dict) else set()
+    properties = schema.get("properties")
+    required = set(schema.get("required", []) or [])
 
     lines: list[str] = []
     if description:
@@ -297,14 +297,8 @@ def build(schema_map: dict[str, Any]) -> str:
     # Inference: one Params + one Result TypedDict per curated model. Dedupe
     # by AIR — if two models share an AIR (data bug in the schemas, but it
     # does happen), keep the first occurrence to avoid emitting a
-    # duplicate-key dict literal.
-    #
-    # Additionally, emit one canonical <TaskType>Result per unique inference
-    # task type (e.g. ImageInferenceResult, VideoInferenceResult). Picks the
-    # first response schema seen for each task type — these are
-    # interchangeable in practice since the server returns the same envelope
-    # shape for a given taskType. Mirrors what the TS generator emits.
-    seen_task_type_results: set[str] = set()
+    # duplicate-key dict literal. Canonical <TaskType>Result types are emitted
+    # in a separate pass below, over both inference and utility responses.
     for entry in inference:
         slug = entry.get("slug")
         air = entry.get("air")
@@ -319,25 +313,17 @@ def build(schema_map: dict[str, Any]) -> str:
         )
         if not isinstance(task_type, str) or not isinstance(air, str):
             continue
-        add_typed_dict(
+        _ = add_typed_dict(
             to_class_name(slug, "Params"),
             request_schema,
             f"Inference params for curated model `{air}` (slug: {slug}).",
         )
         if isinstance(response_schema, dict):
-            add_typed_dict(
+            _ = add_typed_dict(
                 to_class_name(slug, "Result"),
                 response_schema,
                 f"Inference result for curated model `{air}` (slug: {slug}).",
             )
-            # One canonical <TaskType>Result per inference task type.
-            if task_type not in seen_task_type_results:
-                seen_task_type_results.add(task_type)
-                add_typed_dict(
-                    to_class_name(task_type, "Result"),
-                    response_schema,
-                    f"Canonical result shape for `{task_type}` tasks.",
-                )
         if air in seen_airs:
             print(f"warning: duplicate AIR {air!r} (skipping in models dict)", file=sys.stderr)
             continue
@@ -348,7 +334,7 @@ def build(schema_map: dict[str, Any]) -> str:
     for arch_key, arch_schema in architectures.items():
         if not isinstance(arch_schema, dict):
             continue
-        add_typed_dict(
+        _ = add_typed_dict(
             to_class_name(arch_key, "ArchParams"),
             arch_schema,
             f"Inference params for architecture `{arch_key}`.",
@@ -361,7 +347,7 @@ def build(schema_map: dict[str, Any]) -> str:
         if not isinstance(modality_schema, dict):
             continue
         task_type = _extract_task_type(modality_schema) or f"{modality_key}Inference"
-        add_typed_dict(
+        _ = add_typed_dict(
             to_class_name(task_type, "Params"),
             modality_schema,
             f"Loose params for the `{task_type}` modality (slug: {modality_key}).",
@@ -374,7 +360,7 @@ def build(schema_map: dict[str, Any]) -> str:
     for op_key, op_schema in operations.items():
         if not isinstance(op_schema, dict):
             continue
-        add_typed_dict(
+        _ = add_typed_dict(
             to_class_name(op_key, "Params"),
             op_schema,
             f"Params for the `{op_key}` operation.",
@@ -389,16 +375,44 @@ def build(schema_map: dict[str, Any]) -> str:
         if not isinstance(slug, str) or not isinstance(request_schema, dict):
             continue
         utility_slugs.append(slug)
-        add_typed_dict(
+        _ = add_typed_dict(
             to_class_name(slug, "Params"),
             request_schema,
             f"Params for the `{slug}` utility task.",
         )
         if isinstance(response_schema, dict):
-            add_typed_dict(
+            _ = add_typed_dict(
                 to_class_name(slug, "Result"),
                 response_schema,
                 f"Result for the `{slug}` utility task.",
+            )
+
+    # Canonical <TaskType>Result per task type, keyed on the RESPONSE schema's
+    # taskType and scanned across inference + utility responses (mirrors the TS
+    # generator). This is what lets a task type whose model slug differs from
+    # the taskType — e.g. `training` (slug exactly-illustrative-training,
+    # taskType training) — still get an importable canonical result.
+    seen_task_type_results: set[str] = set()
+    for entries, skip in (
+        (inference, {"authentication", "getResponse", "ping"}),
+        (utilities, {"authentication", "ping"}),
+    ):
+        for entry in entries:
+            response_schema = entry.get("responseSchema")
+            if not isinstance(response_schema, dict):
+                continue
+            result_task_type = _extract_task_type(response_schema)
+            if (
+                not isinstance(result_task_type, str)
+                or result_task_type in seen_task_type_results
+                or result_task_type in skip
+            ):
+                continue
+            seen_task_type_results.add(result_task_type)
+            _ = add_typed_dict(
+                to_class_name(result_task_type, "Result"),
+                response_schema,
+                f"Canonical result shape for `{result_task_type}` tasks.",
             )
 
     # ----- registry dictionaries -----
@@ -497,14 +511,14 @@ def build(schema_map: dict[str, Any]) -> str:
 
     constants = (
         "\n# ----------------------------------------------------------- registry data\n\n"
-        "models: dict[str, ModelEntry] = {\n"
+        + "models: dict[str, ModelEntry] = {\n"
         + "\n".join(sorted(models_lines))
         + "\n}\n\n"
-        "architecture_task_types: dict[str, str] = {\n"
+        + "architecture_task_types: dict[str, str] = {\n"
         + "\n".join(sorted(arch_lines))
         + "\n}\n\n"
-        f"modality_task_types: dict[str, str] = {json.dumps(modality_task_types, indent=4, sort_keys=True)}\n\n"
-        f"operation_task_types: dict[str, str] = {json.dumps(operation_task_types, indent=4, sort_keys=True)}\n"
+        + f"modality_task_types: dict[str, str] = {json.dumps(modality_task_types, indent=4, sort_keys=True)}\n\n"
+        + f"operation_task_types: dict[str, str] = {json.dumps(operation_task_types, indent=4, sort_keys=True)}\n"
     )
 
     utility_slug_literal = (
@@ -520,7 +534,7 @@ def main() -> None:
     schema_map = load_schema_map()
     output = build(schema_map)
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(output)
+    _ = OUTPUT_PATH.write_text(output)
     print(f"Wrote {OUTPUT_PATH}", file=sys.stderr)
 
 
