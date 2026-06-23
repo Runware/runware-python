@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20260622171558 — do not edit manually.
+AUTO-GENERATED from runware schemas v20260623105208 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "20260622171558"
+SCHEMAS_VERSION = "20260623105208"
 
 TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "modelUpload", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
 
@@ -37,14 +37,6 @@ class Llama318bPromptEnhancerParams(TypedDict, total=False):
 
 class Llama318bPromptEnhancerResult(TypedDict, total=False):
     """Inference result for curated model `runware:llama-3-1-8b@prompt-enhancer` (slug: llama-3-1-8b-prompt-enhancer)."""
-
-    taskType: Literal['promptEnhance']
-    taskUUID: str
-    cost: NotRequired[float]
-    text: str
-
-class PromptEnhanceResult(TypedDict, total=False):
-    """Canonical result shape for `promptEnhance` tasks."""
 
     taskType: Literal['promptEnhance']
     taskUUID: str
@@ -85,18 +77,6 @@ class Dia22bResult(TypedDict, total=False):
     audioDataURI: NotRequired[str]
     seed: NotRequired[int]
 
-class AudioInferenceResult(TypedDict, total=False):
-    """Canonical result shape for `audioInference` tasks."""
-
-    taskType: Literal['audioInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    audioUUID: str
-    audioURL: NotRequired[str]
-    audioBase64Data: NotRequired[str]
-    audioDataURI: NotRequired[str]
-    seed: NotRequired[int]
-
 class BirefnetV1BaseCodParams(TypedDict, total=False):
     """Inference params for curated model `runware:112@2` (slug: birefnet-v1-base-cod)."""
 
@@ -124,17 +104,6 @@ class BirefnetV1BaseCodResult(TypedDict, total=False):
     imageBase64Data: NotRequired[str]
     imageDataURI: NotRequired[str]
 
-class RemoveBackgroundResult(TypedDict, total=False):
-    """Canonical result shape for `removeBackground` tasks."""
-
-    taskType: Literal['removeBackground']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-
 class ControlnetPreprocessLineartParams(TypedDict, total=False):
     """Inference params for curated model `runware:controlnet-preprocess@lineart` (slug: controlnet-preprocess-lineart)."""
 
@@ -152,18 +121,6 @@ class ControlnetPreprocessLineartParams(TypedDict, total=False):
 
 class ControlnetPreprocessLineartResult(TypedDict, total=False):
     """Inference result for curated model `runware:controlnet-preprocess@lineart` (slug: controlnet-preprocess-lineart)."""
-
-    taskType: Literal['controlNetPreprocess']
-    taskUUID: str
-    cost: NotRequired[float]
-    guideImageUUID: str
-    guideImageURL: NotRequired[str]
-    guideImageBase64Data: NotRequired[str]
-    guideImageDataURI: NotRequired[str]
-    inputImageUUID: str
-
-class ControlNetPreprocessResult(TypedDict, total=False):
-    """Canonical result shape for `controlNetPreprocess` tasks."""
 
     taskType: Literal['controlNetPreprocess']
     taskUUID: str
@@ -229,19 +186,6 @@ class Kandinsky50LiteParams(TypedDict, total=False):
 
 class Kandinsky50LiteResult(TypedDict, total=False):
     """Inference result for curated model `runware:210@1` (slug: kandinsky-5-0-lite)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class VideoInferenceResult(TypedDict, total=False):
-    """Canonical result shape for `videoInference` tasks."""
 
     taskType: Literal['videoInference']
     taskUUID: str
@@ -375,19 +319,6 @@ class Flux1DevSrpoResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
-class ImageInferenceResult(TypedDict, total=False):
-    """Canonical result shape for `imageInference` tasks."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class MediapipeFaceShortParams(TypedDict, total=False):
     """Inference params for curated model `runware:35@7` (slug: mediapipe-face-short)."""
 
@@ -406,19 +337,6 @@ class MediapipeFaceShortParams(TypedDict, total=False):
 
 class MediapipeFaceShortResult(TypedDict, total=False):
     """Inference result for curated model `runware:35@7` (slug: mediapipe-face-short)."""
-
-    taskType: Literal['imageMasking']
-    taskUUID: str
-    cost: NotRequired[float]
-    maskImageUUID: str
-    maskImageURL: NotRequired[str]
-    maskImageBase64Data: NotRequired[str]
-    maskImageDataURI: NotRequired[str]
-    detections: list[dict[str, object]]
-    inputImageUUID: str
-
-class ImageMaskingResult(TypedDict, total=False):
-    """Canonical result shape for `imageMasking` tasks."""
 
     taskType: Literal['imageMasking']
     taskUUID: str
@@ -472,14 +390,6 @@ class VitAgeClassifierParams(TypedDict, total=False):
 
 class VitAgeClassifierResult(TypedDict, total=False):
     """Inference result for curated model `runware:153@1` (slug: vit-age-classifier)."""
-
-    taskType: Literal['caption']
-    taskUUID: str
-    cost: NotRequired[float]
-    structuredData: dict[str, object]
-
-class CaptionResult(TypedDict, total=False):
-    """Canonical result shape for `caption` tasks."""
 
     taskType: Literal['caption']
     taskUUID: str
@@ -748,17 +658,6 @@ class RealEsrganParams(TypedDict, total=False):
 
 class RealEsrganResult(TypedDict, total=False):
     """Inference result for curated model `runware:504@1` (slug: real-esrgan)."""
-
-    taskType: Literal['upscale']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-
-class UpscaleResult(TypedDict, total=False):
-    """Canonical result shape for `upscale` tasks."""
 
     taskType: Literal['upscale']
     taskUUID: str
@@ -2046,16 +1945,6 @@ class MinimaxM27HighspeedResult(TypedDict, total=False):
     finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
     usage: dict[str, object]
 
-class TextInferenceResult(TypedDict, total=False):
-    """Canonical result shape for `textInference` tasks."""
-
-    taskType: Literal['textInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    text: str
-    finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
-    usage: dict[str, object]
-
 class MinimaxM27Params(TypedDict, total=False):
     """Inference params for curated model `minimax:m2.7@0` (slug: minimax-m2-7)."""
 
@@ -2558,8 +2447,8 @@ class PrunaaiPImageParams(TypedDict, total=False):
 
     model: Literal['prunaai:1@1']
     positivePrompt: str
-    width: NotRequired[int]
-    height: NotRequired[int]
+    width: int
+    height: int
     taskType: Literal['imageInference']
     taskUUID: str
     webhookURL: NotRequired[str]
@@ -3147,17 +3036,6 @@ class PicsartImageVectorizerResult(TypedDict, total=False):
     imageBase64Data: NotRequired[str]
     imageDataURI: NotRequired[str]
 
-class VectorizeResult(TypedDict, total=False):
-    """Canonical result shape for `vectorize` tasks."""
-
-    taskType: Literal['vectorize']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-
 class MetaLlava16Mistral7bParams(TypedDict, total=False):
     """Inference params for curated model `runware:150@2` (slug: meta-llava-1-6-mistral-7b)."""
 
@@ -3198,15 +3076,6 @@ class MetaSam3dObjectsParams(TypedDict, total=False):
 
 class MetaSam3dObjectsResult(TypedDict, total=False):
     """Inference result for curated model `meta:sam@3d` (slug: meta-sam-3d-objects)."""
-
-    taskType: Literal['3dInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    outputs: dict[str, object]
-    seed: NotRequired[int]
-
-class ThreeDInferenceResult(TypedDict, total=False):
-    """Canonical result shape for `3dInference` tasks."""
 
     taskType: Literal['3dInference']
     taskUUID: str
@@ -4255,8 +4124,8 @@ class AlibabaQwenImageEditPlusParams(TypedDict, total=False):
     inputs: dict[str, object]
     positivePrompt: str
     negativePrompt: NotRequired[str]
-    width: NotRequired[int]
-    height: NotRequired[int]
+    width: int
+    height: int
     seed: NotRequired[int]
     steps: NotRequired[int]
     scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
@@ -5651,6 +5520,7 @@ class TripoV31Params(TypedDict, total=False):
     """Inference params for curated model `tripo:v3.1@0` (slug: tripo-v3-1)."""
 
     model: Literal['tripo:v3.1@0']
+    outputFormat: NotRequired[Literal['GLB', 'FBX']]
     inputs: NotRequired[dict[str, object]]
     positivePrompt: NotRequired[str]
     negativePrompt: NotRequired[str]
@@ -5664,7 +5534,6 @@ class TripoV31Params(TypedDict, total=False):
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['GLB']]
     deliveryMethod: NotRequired[str]
 
 class TripoV31Result(TypedDict, total=False):
@@ -7629,14 +7498,6 @@ class ExactlyIllustrativeTrainingResult(TypedDict, total=False):
     cost: NotRequired[float]
     air: str
 
-class ModelUploadResult(TypedDict, total=False):
-    """Canonical result shape for `modelUpload` tasks."""
-
-    taskType: Literal['training']
-    taskUUID: str
-    cost: NotRequired[float]
-    air: str
-
 class ExactlyPhotoJourneyParams(TypedDict, total=False):
     """Inference params for curated model `exactly:photo@journey` (slug: exactly-photo-journey)."""
 
@@ -8021,7 +7882,7 @@ class BytedanceSeedance20Params(TypedDict, total=False):
     positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
-    resolution: NotRequired[Literal['480p', '720p', '1080p']]
+    resolution: NotRequired[Literal['480p', '720p', '1080p', '4k']]
     duration: NotRequired[int]
     settings: NotRequired[dict[str, object]]
     taskType: Literal['videoInference']
@@ -8082,6 +7943,43 @@ class BytedanceSeedream50LiteResult(TypedDict, total=False):
     imageURL: NotRequired[str]
     imageBase64Data: NotRequired[str]
     imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class BytedanceSeedance20MiniParams(TypedDict, total=False):
+    """Inference params for curated model `bytedance:seedance@2.0-mini` (slug: bytedance-seedance-2-0-mini)."""
+
+    model: Literal['bytedance:seedance@2.0-mini']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['480p', '720p']]
+    duration: NotRequired[int]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class BytedanceSeedance20MiniResult(TypedDict, total=False):
+    """Inference result for curated model `bytedance:seedance@2.0-mini` (slug: bytedance-seedance-2-0-mini)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
@@ -10375,6 +10273,7 @@ class GoogleNanoBananaParams(TypedDict, total=False):
     positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
+    settings: NotRequired[dict[str, object]]
     providerSettings: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
@@ -13338,7 +13237,7 @@ class ModelUploadParams(TypedDict, total=False):
     shortDescription: NotRequired[str]
     comment: NotRequired[str]
 
-class ModelUploadResult2(TypedDict, total=False):
+class ModelUploadResult(TypedDict, total=False):
     """Result for the `model-upload` utility task."""
 
     taskType: NotRequired[Literal['modelUpload']]
@@ -13442,6 +13341,198 @@ class AuthenticationResult(TypedDict, total=False):
     taskType: Literal['authentication']
     connectionSessionUUID: str
 
+class PromptEnhanceResult(TypedDict, total=False):
+    """Canonical result shape for `promptEnhance` tasks."""
+
+    taskType: Literal['promptEnhance']
+    taskUUID: str
+    cost: NotRequired[float]
+    text: str
+
+class AudioInferenceResult(TypedDict, total=False):
+    """Canonical result shape for `audioInference` tasks."""
+
+    taskType: Literal['audioInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    audioUUID: str
+    audioURL: NotRequired[str]
+    audioBase64Data: NotRequired[str]
+    audioDataURI: NotRequired[str]
+    seed: NotRequired[int]
+
+class RemoveBackgroundResult(TypedDict, total=False):
+    """Canonical result shape for `removeBackground` tasks."""
+
+    taskType: Literal['removeBackground']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+
+class ControlNetPreprocessResult(TypedDict, total=False):
+    """Canonical result shape for `controlNetPreprocess` tasks."""
+
+    taskType: Literal['controlNetPreprocess']
+    taskUUID: str
+    cost: NotRequired[float]
+    guideImageUUID: str
+    guideImageURL: NotRequired[str]
+    guideImageBase64Data: NotRequired[str]
+    guideImageDataURI: NotRequired[str]
+    inputImageUUID: str
+
+class VideoInferenceResult(TypedDict, total=False):
+    """Canonical result shape for `videoInference` tasks."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class ImageInferenceResult(TypedDict, total=False):
+    """Canonical result shape for `imageInference` tasks."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class ImageMaskingResult(TypedDict, total=False):
+    """Canonical result shape for `imageMasking` tasks."""
+
+    taskType: Literal['imageMasking']
+    taskUUID: str
+    cost: NotRequired[float]
+    maskImageUUID: str
+    maskImageURL: NotRequired[str]
+    maskImageBase64Data: NotRequired[str]
+    maskImageDataURI: NotRequired[str]
+    detections: list[dict[str, object]]
+    inputImageUUID: str
+
+class CaptionResult(TypedDict, total=False):
+    """Canonical result shape for `caption` tasks."""
+
+    taskType: Literal['caption']
+    taskUUID: str
+    cost: NotRequired[float]
+    structuredData: dict[str, object]
+
+class UpscaleResult(TypedDict, total=False):
+    """Canonical result shape for `upscale` tasks."""
+
+    taskType: Literal['upscale']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+
+class TextInferenceResult(TypedDict, total=False):
+    """Canonical result shape for `textInference` tasks."""
+
+    taskType: Literal['textInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    text: str
+    finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
+    usage: dict[str, object]
+
+class VectorizeResult(TypedDict, total=False):
+    """Canonical result shape for `vectorize` tasks."""
+
+    taskType: Literal['vectorize']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+
+class ThreeDInferenceResult(TypedDict, total=False):
+    """Canonical result shape for `3dInference` tasks."""
+
+    taskType: Literal['3dInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    outputs: dict[str, object]
+    seed: NotRequired[int]
+
+class TrainingResult(TypedDict, total=False):
+    """Canonical result shape for `training` tasks."""
+
+    taskType: Literal['training']
+    taskUUID: str
+    cost: NotRequired[float]
+    air: str
+
+class GetTaskDetailsResult2(TypedDict, total=False):
+    """Canonical result shape for `getTaskDetails` tasks."""
+
+    taskType: Literal['getTaskDetails']
+    taskUUID: str
+    request: list[dict[str, object]]
+    response: dict[str, object]
+
+class ModelUploadResult2(TypedDict, total=False):
+    """Canonical result shape for `modelUpload` tasks."""
+
+    taskType: NotRequired[Literal['modelUpload']]
+    taskUUID: str
+    status: Literal['validated', 'downloaded', 'optimized', 'stored', 'ready', 'failed']
+    message: str
+    air: NotRequired[str]
+
+class GetResponseResult2(TypedDict, total=False):
+    """Canonical result shape for `getResponse` tasks."""
+
+    taskType: Literal['getResponse']
+    taskUUID: str
+    status: Literal['processing', 'success', 'error']
+    progress: NotRequired[int]
+    error: NotRequired[dict[str, object]]
+
+class ImageUploadResult2(TypedDict, total=False):
+    """Canonical result shape for `imageUpload` tasks."""
+
+    taskType: Literal['imageUpload']
+    taskUUID: str
+    imageUUID: str
+
+class AccountManagementResult2(TypedDict, total=False):
+    """Canonical result shape for `accountManagement` tasks."""
+
+    taskType: Literal['accountManagement']
+    taskUUID: str
+    organizationName: str
+    organizationUUID: str
+    balance: dict[str, object]
+    team: list[dict[str, object]]
+    apiKeys: list[dict[str, object]]
+    usage: dict[str, object]
+
+class ModelSearchResult2(TypedDict, total=False):
+    """Canonical result shape for `modelSearch` tasks."""
+
+    taskType: Literal['modelSearch']
+    taskUUID: str
+    totalResults: int
+    results: list[dict[str, object]]
+
 
 # ----------------------------------------------------------- registry data
 
@@ -13502,6 +13593,7 @@ models: dict[str, ModelEntry] = {
     "bytedance:seedance@1.5-pro": ModelEntry(task_type="videoInference", id="bytedance-seedance-1-5-pro"),
     "bytedance:seedance@2.0": ModelEntry(task_type="videoInference", id="bytedance-seedance-2-0"),
     "bytedance:seedance@2.0-fast": ModelEntry(task_type="videoInference", id="bytedance-seedance-2-0-fast"),
+    "bytedance:seedance@2.0-mini": ModelEntry(task_type="videoInference", id="bytedance-seedance-2-0-mini"),
     "bytedance:seedream@4.5": ModelEntry(task_type="imageInference", id="bytedance-seedream-4-5"),
     "bytedance:seedream@5.0-lite": ModelEntry(task_type="imageInference", id="bytedance-seedream-5-0-lite"),
     "civitai:101055@128078": ModelEntry(task_type="imageInference", id="stabilityai-stable-diffusion-xl-v1-0-vae-fix"),
