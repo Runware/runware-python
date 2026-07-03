@@ -18,6 +18,7 @@ import aiohttp
 from ..errors import create_runware_error, is_runware_error, parse_api_error
 from ..types.sdk import LoosePayload, SDKConfig
 from ..types.transport import RequestOptions, WireFrame
+from ..user_agent import user_agent
 from ..utils.retry import with_retry
 
 _RETRYABLE_STATUS = {408, 429}
@@ -112,6 +113,7 @@ class RestTransport:
                 headers={
                     "Content-Type": "application/json",
                     "Authorization": f"Bearer {self._config.api_key}",
+                    "User-Agent": user_agent(self._config.user_agent_prefix),
                 },
                 json=payload,
                 timeout=timeout,

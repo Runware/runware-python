@@ -32,6 +32,7 @@ from ..errors import create_runware_error
 from ..logger import Logger
 from ..types.sdk import LoosePayload, SDKConfig
 from ..types.transport import WireFrame
+from ..user_agent import user_agent
 
 WsResponse = WireFrame
 ResponseCallback = Callable[[WsResponse], None]
@@ -114,16 +115,31 @@ class WebSocketTransport:
     def unsubscribe_from_task(self, task_uuid: str) -> None:
         self._task_callbacks.pop(task_uuid, None)
 
+    async def _default_connect(self, url: str) -> ClientConnection:
+        # Identify the client on the handshake. `additional_headers` is the
+        # modern websockets kwarg (asyncio client, >=14); older releases (13)
+        # spell it `extra_headers`, so fall back on the arg-name TypeError.
+        headers = {"User-Agent": user_agent(self._config.user_agent_prefix)}
+        try:
+            return await websockets.connect(url, additional_headers=headers)
+        except TypeError:
+            return await websockets.connect(url, extra_headers=headers)
+
     async def _open_once(self) -> None:
         await self._teardown_socket(close_socket=True)
 
-        connect_factory = (
+        custom_connect = (
             self._config.dependencies.ws_connect
             if self._config.dependencies and self._config.dependencies.ws_connect
-            else websockets.connect
+            else None
         )
         try:
-            self._ws = await connect_factory(self._config.ws_base_url)
+            # An injected `ws_connect` owns its own headers (see its docstring);
+            # the default connect carries the client identifier on the handshake.
+            if custom_connect is not None:
+                self._ws = await custom_connect(self._config.ws_base_url)
+            else:
+                self._ws = await self._default_connect(self._config.ws_base_url)
         except (OSError, websockets.InvalidURI, websockets.InvalidHandshake) as exc:
             raise create_runware_error(
                 "connectionFailed",

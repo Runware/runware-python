@@ -21,6 +21,7 @@ import aiohttp
 from .errors import create_runware_error, parse_api_error
 from .types.sdk import LoosePayload, SDKConfig
 from .types.stream import TextStreamChunk, TextStreamResult
+from .user_agent import user_agent
 
 _TERMINATE_SENTINEL = object()
 
@@ -217,6 +218,7 @@ class TextStream:
                     "Content-Type": "application/json",
                     "Authorization": f"Bearer {config.api_key}",
                     "Accept": "text/event-stream",
+                    "User-Agent": user_agent(config.user_agent_prefix),
                 },
                 json=[task],
                 timeout=request_timeout,

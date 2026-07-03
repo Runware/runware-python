@@ -70,6 +70,10 @@ class SDKConfig:
 
     dependencies: RuntimeDependencies | None = None
     log_sink: LogSink | None = None
+    # Prepended to the `User-Agent` sent on requests, so wrappers (servers,
+    # apps built on the SDK) identify themselves ahead of the SDK token — e.g.
+    # `runware-app/1.0.0 runware-python/1.4.1 (python/…) schemas/…`.
+    user_agent_prefix: str | None = None
     # Populated by create_config. Transports read it via `config.log`.
     # The default factory yields a noop logger so users who construct an
     # SDKConfig directly (tests, advanced setups) still get a working object.
