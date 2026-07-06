@@ -34,6 +34,22 @@ from .types.content import (
 SessionProvider = Callable[[], Awaitable[aiohttp.ClientSession]]
 
 
+# Models whose status marks them reachable only through the OpenAI-compatible
+# endpoint — not the native Runware API — are hidden from the SDK's model listing
+# by default, since the SDK can't run them. A caller can still surface them by
+# passing the matching ``status`` filter explicitly.
+NON_NATIVE_STATUSES = frozenset({"openai-compatible"})
+
+
+def _exclude_non_native(result: object) -> object:
+    if isinstance(result, list):
+        return [m for m in result if m.get("status") not in NON_NATIVE_STATUSES]
+    if isinstance(result, dict) and isinstance(result.get("items"), list):
+        items = [m for m in result["items"] if m.get("status") not in NON_NATIVE_STATUSES]
+        return {**result, "items": items}
+    return result
+
+
 class ContentClient:
     """Async client for the Runware content service."""
 
@@ -50,10 +66,17 @@ class ContentClient:
         """List curated models. Returns a flat array by default; pass
         ``{"paginate": True}`` to get a paginated envelope instead.
         """
-        params = self._build_query_params(options or {})
+        options = options or {}
+        params = self._build_query_params(options)
         query = f"?{urlencode(params)}" if params else ""
         url = f"{self._base_url}/models{query}"
         result = await self._fetch_json(url, treat_404_as_none=False)
+
+        # An explicit ``status`` filter is an intentional opt-in, so trust the
+        # service result. Otherwise hide non-native (OpenAI-only) models.
+        if "status" not in options and result is not None:
+            result = _exclude_non_native(result)
+
         return cast(
             "list[ModelMetadata] | PaginatedResponse[ModelMetadata]",
             result,
