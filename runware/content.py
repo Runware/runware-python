@@ -43,10 +43,16 @@ NON_NATIVE_STATUSES = frozenset({"openai-compatible"})
 
 def _exclude_non_native(result: object) -> object:
     if isinstance(result, list):
-        return [m for m in result if m.get("status") not in NON_NATIVE_STATUSES]
-    if isinstance(result, dict) and isinstance(result.get("items"), list):
-        items = [m for m in result["items"] if m.get("status") not in NON_NATIVE_STATUSES]
-        return {**result, "items": items}
+        models = cast("list[dict[str, object]]", result)
+        return [m for m in models if m.get("status") not in NON_NATIVE_STATUSES]
+    if isinstance(result, dict):
+        mapping = cast("dict[str, object]", result)
+        items = mapping.get("items")
+        if isinstance(items, list):
+            models = cast("list[dict[str, object]]", items)
+            kept = [m for m in models if m.get("status") not in NON_NATIVE_STATUSES]
+            return {**mapping, "items": kept}
+        return mapping
     return result
 
 
