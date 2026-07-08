@@ -390,7 +390,7 @@ def parse_api_error(
     return create_runware_error(
         _str_or_default(first.get("code"), "unknown"),
         _str_or_default(first.get("message"), "An unknown API error occurred"),
-        parameter=_str_or_none(first.get("parameter")),
+        parameter=_normalize_parameter(first.get("parameter")),
         task_type=_str_or_none(first.get("taskType")) or task_type,
         task_uuid=_str_or_none(first.get("taskUUID")),
         model=_str_or_none(first.get("model")) or model,
@@ -399,6 +399,20 @@ def parse_api_error(
 
 def _str_or_none(value: object) -> str | None:
     return value if isinstance(value, str) else None
+
+
+def _normalize_parameter(value: object) -> str | None:
+    """Normalize an API error's ``parameter`` field.
+
+    Cross-field constraint violations (e.g. product of width and height out
+    of range) surface with ``parameter`` as a list of the fields involved.
+    Take the first entry so downstream consumers still see a plain string.
+    """
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list) and value and isinstance(value[0], str):
+        return value[0]
+    return None
 
 
 def _str_or_default(value: object, default: str) -> str:
