@@ -529,7 +529,7 @@ models = await client.model_search({
     "limit": 10,
 })
 
-# Store media (image, video, or audio) for reuse as input. Returns a mediaUUID.
+# Store media (images, video, audio, 3D models) for reuse as input. Returns a mediaUUID.
 # Supersedes the deprecated, image-only image_upload.
 uploaded = await client.media_storage({
     "operation": "upload",
