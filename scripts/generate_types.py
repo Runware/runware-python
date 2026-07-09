@@ -401,7 +401,7 @@ def build(schema_map: dict[str, Any]) -> str:
             response_schema = entry.get("responseSchema")
             if not isinstance(response_schema, dict):
                 continue
-            result_task_type = _extract_task_type(response_schema)
+            result_task_type = _extract_task_type(response_schema) or _extract_task_type(entry.get("requestSchema") or {})
             if (
                 not isinstance(result_task_type, str)
                 or result_task_type in seen_task_type_results
