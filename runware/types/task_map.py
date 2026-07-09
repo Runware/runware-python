@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20260709125048 — do not edit manually.
+AUTO-GENERATED from runware schemas v20260709212957 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict, Union
 
-SCHEMAS_VERSION = "20260709125048"
+SCHEMAS_VERSION = "20260709212957"
 
 TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
 
@@ -12568,7 +12568,7 @@ class ModelUploadParams(TypedDict, total=False):
     """Params for the `model-upload` utility task."""
 
     taskType: Literal['modelUpload']
-    taskUUID: NotRequired[str]
+    taskUUID: str
     category: Literal['checkpoint', 'lora', 'lycoris', 'vae', 'embeddings']
     type: NotRequired[Literal['base', 'inpainting', 'positive', 'negative']]
     architecture: str
@@ -12587,6 +12587,7 @@ class ModelUploadParams(TypedDict, total=False):
     heroImageURL: NotRequired[str]
     tags: NotRequired[list[str]]
     positiveTriggerWords: NotRequired[str]
+    negativeTriggerWords: NotRequired[str]
     shortDescription: NotRequired[str]
     comment: NotRequired[str]
 
@@ -12608,7 +12609,7 @@ class GetResponseParams(TypedDict, total=False):
 class GetResponseResult(TypedDict, total=False):
     """Result for the `get-response` utility task."""
 
-    taskType: Literal['getResponse']
+    taskType: Literal['authentication', 'imageInference', 'videoInference', 'audioInference', 'textInference', 'modelSearch', 'modelUpload', 'accountManagement', 'imageUpload', 'mediaStorage', 'getResponse', 'caption', 'controlNetPreprocess', 'imageMasking', 'promptEnhance', 'removeBackground', 'upscale', 'vectorize', 'training', 'ping']
     taskUUID: str
     status: Literal['processing', 'success', 'error']
     progress: NotRequired[int]
@@ -12633,13 +12634,21 @@ class MediaStorageParams(TypedDict, total=False):
     operation: str
     media: str
 
-class MediaStorageResult(TypedDict, total=False):
-    """Result for the `media-storage` utility task."""
-
+class MediaStorageResultUpload(TypedDict, total=False):
     taskType: Literal['mediaStorage']
     taskUUID: str
+    operation: Literal['upload']
     mediaUUID: str
     mediaURL: str
+
+class MediaStorageResultDelete(TypedDict, total=False):
+    taskType: Literal['mediaStorage']
+    taskUUID: str
+    operation: Literal['delete']
+    mediaUUID: str
+
+# Result for the `media-storage` utility task.
+MediaStorageResult = Union[MediaStorageResultUpload, MediaStorageResultDelete]
 
 class ImageUploadParams(TypedDict, total=False):
     """Params for the `image-upload` utility task."""
@@ -12654,6 +12663,7 @@ class ImageUploadResult(TypedDict, total=False):
     taskType: Literal['imageUpload']
     taskUUID: str
     imageUUID: str
+    imageURL: str
 
 class AccountManagementParams(TypedDict, total=False):
     """Params for the `account-management` utility task."""
@@ -12687,16 +12697,16 @@ class ModelSearchParams(TypedDict, total=False):
     """Params for the `model-search` utility task."""
 
     taskType: Literal['modelSearch']
-    taskUUID: NotRequired[str]
+    taskUUID: str
     search: str
-    tags: NotRequired[list[str]]
+    source: NotRequired[Literal['featured', 'community']]
     category: NotRequired[Literal['checkpoint', 'lora', 'lycoris', 'vae', 'embeddings']]
-    type: NotRequired[Literal['base', 'inpainting', 'refiner']]
     architecture: NotRequired[str]
-    conditioning: NotRequired[Literal['blur', 'canny', 'depth', 'gray', 'hed', 'inpaint', 'inpaintdepth', 'lineart', 'lowquality', 'normal', 'openmlsd', 'openpose', 'outfit', 'pix2pix', 'qrcode', 'scribble', 'seg', 'shuffle', 'sketch', 'softedge', 'tile']]
-    visibility: NotRequired[Literal['public', 'private', 'all']]
+    capabilities: NotRequired[list[str]]
+    visibility: NotRequired[Literal['public', 'private', 'favorite', 'owned']]
     limit: NotRequired[int]
     offset: NotRequired[int]
+    sort: NotRequired[Literal['popularity', '-popularity', 'name', '-name', 'addedUnixTimestamp', '-addedUnixTimestamp', 'updatedDateUnixTimestamp', '-updatedDateUnixTimestamp']]
 
 class ModelSearchResult(TypedDict, total=False):
     """Result for the `model-search` utility task."""
@@ -12879,19 +12889,27 @@ class ModelUploadResult2(TypedDict, total=False):
 class GetResponseResult2(TypedDict, total=False):
     """Canonical result shape for `getResponse` tasks."""
 
-    taskType: Literal['getResponse']
+    taskType: Literal['authentication', 'imageInference', 'videoInference', 'audioInference', 'textInference', 'modelSearch', 'modelUpload', 'accountManagement', 'imageUpload', 'mediaStorage', 'getResponse', 'caption', 'controlNetPreprocess', 'imageMasking', 'promptEnhance', 'removeBackground', 'upscale', 'vectorize', 'training', 'ping']
     taskUUID: str
     status: Literal['processing', 'success', 'error']
     progress: NotRequired[int]
     error: NotRequired[dict[str, object]]
 
-class MediaStorageResult2(TypedDict, total=False):
-    """Canonical result shape for `mediaStorage` tasks."""
-
+class MediaStorageResult2Upload(TypedDict, total=False):
     taskType: Literal['mediaStorage']
     taskUUID: str
+    operation: Literal['upload']
     mediaUUID: str
     mediaURL: str
+
+class MediaStorageResult2Delete(TypedDict, total=False):
+    taskType: Literal['mediaStorage']
+    taskUUID: str
+    operation: Literal['delete']
+    mediaUUID: str
+
+# Canonical result shape for `mediaStorage` tasks.
+MediaStorageResult2 = Union[MediaStorageResult2Upload, MediaStorageResult2Delete]
 
 class ImageUploadResult2(TypedDict, total=False):
     """Canonical result shape for `imageUpload` tasks."""
@@ -12899,6 +12917,7 @@ class ImageUploadResult2(TypedDict, total=False):
     taskType: Literal['imageUpload']
     taskUUID: str
     imageUUID: str
+    imageURL: str
 
 class AccountManagementResult2(TypedDict, total=False):
     """Canonical result shape for `accountManagement` tasks."""
