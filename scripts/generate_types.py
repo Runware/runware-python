@@ -269,6 +269,21 @@ def _extract_task_type(schema: dict[str, Any]) -> str | None:
     return const if isinstance(const, str) else None
 
 
+def _variant_discriminator(variant: dict[str, Any]) -> str | None:
+    """The const value that distinguishes a oneOf variant (e.g. operation
+    `upload`/`delete`), used to name its TypedDict. Skips taskType/taskUUID,
+    which don't discriminate."""
+    properties = variant.get("properties")
+    if not isinstance(properties, dict):
+        return None
+    for name, sub in properties.items():
+        if name in ("taskType", "taskUUID"):
+            continue
+        if isinstance(sub, dict) and isinstance(sub.get("const"), str):
+            return sub["const"]
+    return None
+
+
 # --------------------------------------------------------------------------- driver
 
 
@@ -291,6 +306,21 @@ def build(schema_map: dict[str, Any]) -> str:
             candidate = f"{class_name}{suffix}"
             suffix += 1
         seen_class_names.add(candidate)
+        # Discriminated union (oneOf of closed variants): a TypedDict can't be a
+        # union, so emit one TypedDict per variant and alias the name to their
+        # Union. Variant classes are named by their discriminator const.
+        one_of = schema.get("oneOf") or schema.get("anyOf")
+        if isinstance(one_of, list) and one_of:
+            variant_names: list[str] = []
+            for i, variant in enumerate(one_of):
+                if not isinstance(variant, dict):
+                    continue
+                disc = _variant_discriminator(variant)
+                vclass = to_class_name(candidate, disc) if disc else f"{candidate}Variant{i + 1}"
+                variant_names.append(add_typed_dict(vclass, variant, ""))
+            alias = f"{candidate} = Union[{', '.join(variant_names)}]"
+            typed_dicts.append(f"# {description}\n{alias}" if description else alias)
+            return candidate
         typed_dicts.append(emit_typed_dict(candidate, schema, description=description))
         return candidate
 
@@ -494,7 +524,7 @@ def build(schema_map: dict[str, Any]) -> str:
         from __future__ import annotations
 
         from dataclasses import dataclass
-        from typing import Literal, NotRequired, TypedDict
+        from typing import Literal, NotRequired, TypedDict, Union
 
         SCHEMAS_VERSION = "{SCHEMAS_VERSION}"
 

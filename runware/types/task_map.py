@@ -8,7 +8,7 @@ Re-run `uv run python scripts/generate_types.py` after bumping
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal, NotRequired, TypedDict
+from typing import Literal, NotRequired, TypedDict, Union
 
 SCHEMAS_VERSION = "20260709125048"
 
@@ -3310,29 +3310,14 @@ class Vidu20Result(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
-class ViduQ3TurboParams(TypedDict, total=False):
-    """Inference params for curated model `vidu:4@2` (slug: vidu-q3-turbo)."""
+class ViduQ3TurboParamsVariant1(TypedDict, total=False):
+    pass
 
-    model: Literal['vidu:4@2']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: NotRequired[str]
-    width: int
-    height: int
-    duration: NotRequired[int]
-    seed: NotRequired[int]
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
+class ViduQ3TurboParamsVariant2(TypedDict, total=False):
+    inputs: object
+
+# Inference params for curated model `vidu:4@2` (slug: vidu-q3-turbo).
+ViduQ3TurboParams = Union[ViduQ3TurboParamsVariant1, ViduQ3TurboParamsVariant2]
 
 class ViduQ3TurboResult(TypedDict, total=False):
     """Inference result for curated model `vidu:4@2` (slug: vidu-q3-turbo)."""
