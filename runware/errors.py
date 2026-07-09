@@ -37,7 +37,8 @@ _DOCS_BASE = "https://runware.ai/docs"
 _UTILITY_DOC_PATHS: dict[str, str] = {
     "modelSearch": "platform/model-search",
     "modelUpload": "platform/model-upload",
-    "imageUpload": "platform/image-upload",
+    "imageUpload": "platform/media-storage",
+    "mediaStorage": "platform/media-storage",
     "getResponse": "platform/task-polling",
     "accountManagement": "platform/account-management",
 }

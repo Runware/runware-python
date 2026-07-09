@@ -40,6 +40,8 @@ from .types.task_map import (
     ImageUploadParams,
     ImageUploadResult,
     MaskingParams,
+    MediaStorageParams,
+    MediaStorageResult,
     ModelSearchParams,
     ModelSearchResult,
     ModelUploadParams,
@@ -368,10 +370,20 @@ class Runware:
     async def image_upload(
         self, params: ImageUploadParams, options: RunOptions | None = None,
     ) -> list[ImageUploadResult]:
+        """Deprecated: use :meth:`media_storage`, which handles any media type and supports deletion."""
         encoded = cast("dict[str, Any]", encode_local_files(dict(params)))  # pyright: ignore[reportExplicitAny]
         return cast(
             list[ImageUploadResult],
             await self._utility("imageUpload", encoded, options),
+        )
+
+    async def media_storage(
+        self, params: MediaStorageParams, options: RunOptions | None = None,
+    ) -> list[MediaStorageResult]:
+        encoded = cast("dict[str, Any]", encode_local_files(dict(params)))  # pyright: ignore[reportExplicitAny]
+        return cast(
+            list[MediaStorageResult],
+            await self._utility("mediaStorage", encoded, options),
         )
 
     async def account_management(

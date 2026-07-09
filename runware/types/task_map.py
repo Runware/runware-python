@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20260623192341 — do not edit manually.
+AUTO-GENERATED from runware schemas v20260709125048 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "20260623192341"
+SCHEMAS_VERSION = "20260709125048"
 
 TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
 
@@ -20,7 +20,7 @@ class ModelEntry:
     task_type: str
     id: str
 
-UtilitySlug = Literal["account-management", "authentication", "get-response", "get-task-details", "image-upload", "model-search", "model-upload", "ping"]
+UtilitySlug = Literal["account-management", "authentication", "get-response", "get-task-details", "image-upload", "media-storage", "model-search", "model-upload", "ping"]
 
 class Llama318bPromptEnhancerParams(TypedDict, total=False):
     """Inference params for curated model `runware:llama-3-1-8b@prompt-enhancer` (slug: llama-3-1-8b-prompt-enhancer)."""
@@ -158,45 +158,6 @@ class BirefnetPortraitResult(TypedDict, total=False):
     imageBase64Data: NotRequired[str]
     imageDataURI: NotRequired[str]
 
-class Kandinsky50LiteParams(TypedDict, total=False):
-    """Inference params for curated model `runware:210@1` (slug: kandinsky-5-0-lite)."""
-
-    model: Literal['runware:210@1']
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    duration: Literal[5, 10]
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class Kandinsky50LiteResult(TypedDict, total=False):
-    """Inference result for curated model `runware:210@1` (slug: kandinsky-5-0-lite)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class OviParams(TypedDict, total=False):
     """Inference params for curated model `runware:190@1` (slug: ovi)."""
 
@@ -271,6 +232,7 @@ class Flux1DevSrpoParams(TypedDict, total=False):
     """Inference params for curated model `runware:111@1` (slug: flux-1-dev-srpo)."""
 
     model: Literal['runware:111@1']
+    acceleratorOptions: NotRequired[dict[str, object]]
     inputs: NotRequired[dict[str, object]]
     positivePrompt: str
     negativePrompt: NotRequired[str]
@@ -282,8 +244,7 @@ class Flux1DevSrpoParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
-    acceleratorOptions: NotRequired[dict[str, object]]
+    promptWeighting: NotRequired[Literal['sdEmbeds']]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
     controlNet: NotRequired[list[dict[str, object]]]
@@ -305,6 +266,7 @@ class Flux1DevSrpoParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Flux1DevSrpoResult(TypedDict, total=False):
     """Inference result for curated model `runware:111@1` (slug: flux-1-dev-srpo)."""
@@ -542,6 +504,7 @@ class HidreamI1FastParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class HidreamI1FastResult(TypedDict, total=False):
     """Inference result for curated model `runware:97@3` (slug: hidream-i1-fast)."""
@@ -582,6 +545,29 @@ class BriaRmbgV20OpenResult(TypedDict, total=False):
     imageURL: NotRequired[str]
     imageBase64Data: NotRequired[str]
     imageDataURI: NotRequired[str]
+
+class RunwareQwenImageStyleLoraTrainingParams(TypedDict, total=False):
+    """Inference params for curated model `runware:qwen-image@style-lora-training` (slug: runware-qwen-image-style-lora-training)."""
+
+    model: Literal['runware:qwen-image@style-lora-training']
+    inputs: dict[str, object]
+    importModel: dict[str, object]
+    learningRate: NotRequired[float]
+    trainingSteps: NotRequired[int]
+    triggerWord: NotRequired[str]
+    taskType: Literal['training']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+
+class RunwareQwenImageStyleLoraTrainingResult(TypedDict, total=False):
+    """Inference result for curated model `runware:qwen-image@style-lora-training` (slug: runware-qwen-image-style-lora-training)."""
+
+    taskType: Literal['training']
+    taskUUID: str
+    cost: NotRequired[float]
+    air: str
+    outputs: dict[str, object]
 
 class ControlnetPreprocessTileParams(TypedDict, total=False):
     """Inference params for curated model `runware:controlnet-preprocess@tile` (slug: controlnet-preprocess-tile)."""
@@ -1029,6 +1015,7 @@ class HidreamI1DevParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class HidreamI1DevResult(TypedDict, total=False):
     """Inference result for curated model `runware:97@2` (slug: hidream-i1-dev)."""
@@ -1107,6 +1094,7 @@ class HidreamI1FullParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class HidreamI1FullResult(TypedDict, total=False):
     """Inference result for curated model `runware:97@1` (slug: hidream-i1-full)."""
@@ -1351,6 +1339,29 @@ class ControlnetPreprocessOpenposeResult(TypedDict, total=False):
     guideImageDataURI: NotRequired[str]
     inputImageUUID: str
 
+class RunwareFlux1DevStyleLoraTrainingParams(TypedDict, total=False):
+    """Inference params for curated model `runware:flux-1-dev@style-lora-training` (slug: runware-flux-1-dev-style-lora-training)."""
+
+    model: Literal['runware:flux-1-dev@style-lora-training']
+    inputs: dict[str, object]
+    importModel: dict[str, object]
+    learningRate: NotRequired[float]
+    trainingSteps: NotRequired[int]
+    triggerWord: NotRequired[str]
+    taskType: Literal['training']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+
+class RunwareFlux1DevStyleLoraTrainingResult(TypedDict, total=False):
+    """Inference result for curated model `runware:flux-1-dev@style-lora-training` (slug: runware-flux-1-dev-style-lora-training)."""
+
+    taskType: Literal['training']
+    taskUUID: str
+    cost: NotRequired[float]
+    air: str
+    outputs: dict[str, object]
+
 class ControlnetPreprocessDepthParams(TypedDict, total=False):
     """Inference params for curated model `runware:controlnet-preprocess@depth` (slug: controlnet-preprocess-depth)."""
 
@@ -1428,6 +1439,7 @@ class ObjectEraserParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ObjectEraserResult(TypedDict, total=False):
     """Inference result for curated model `runware:300@1` (slug: object-eraser)."""
@@ -1441,6 +1453,29 @@ class ObjectEraserResult(TypedDict, total=False):
     imageDataURI: NotRequired[str]
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
+
+class RunwareZImageStyleLoraTrainingParams(TypedDict, total=False):
+    """Inference params for curated model `runware:z-image@style-lora-training` (slug: runware-z-image-style-lora-training)."""
+
+    model: Literal['runware:z-image@style-lora-training']
+    inputs: dict[str, object]
+    importModel: dict[str, object]
+    learningRate: NotRequired[float]
+    trainingSteps: NotRequired[int]
+    triggerWord: NotRequired[str]
+    taskType: Literal['training']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+
+class RunwareZImageStyleLoraTrainingResult(TypedDict, total=False):
+    """Inference result for curated model `runware:z-image@style-lora-training` (slug: runware-z-image-style-lora-training)."""
+
+    taskType: Literal['training']
+    taskUUID: str
+    cost: NotRequired[float]
+    air: str
+    outputs: dict[str, object]
 
 class Kandinsky50ImageLiteParams(TypedDict, total=False):
     """Inference params for curated model `runware:kandinsky-5.0-image-lite@1` (slug: kandinsky-5-0-image-lite)."""
@@ -1468,6 +1503,7 @@ class Kandinsky50ImageLiteParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Kandinsky50ImageLiteResult(TypedDict, total=False):
     """Inference result for curated model `runware:kandinsky-5.0-image-lite@1` (slug: kandinsky-5-0-image-lite)."""
@@ -1903,6 +1939,7 @@ class TwinflowZImageTurboParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class TwinflowZImageTurboResult(TypedDict, total=False):
     """Inference result for curated model `runware:twinflow-z-image-turbo@0` (slug: twinflow-z-image-turbo)."""
@@ -2142,7 +2179,7 @@ class Minimax01DirectorParams(TypedDict, total=False):
 
     model: Literal['minimax:2@1']
     inputs: NotRequired[dict[str, object]]
-    positivePrompt: NotRequired[str]
+    positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
     duration: NotRequired[Literal[6]]
@@ -2178,7 +2215,7 @@ class MinimaxHailuo23FastParams(TypedDict, total=False):
     """Inference params for curated model `minimax:4@2` (slug: minimax-hailuo-2-3-fast)."""
 
     model: Literal['minimax:4@2']
-    inputs: NotRequired[dict[str, object]]
+    inputs: dict[str, object]
     positivePrompt: NotRequired[str]
     width: NotRequired[int]
     height: NotRequired[int]
@@ -2461,6 +2498,7 @@ class PrunaaiPImageParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class PrunaaiPImageResult(TypedDict, total=False):
     """Inference result for curated model `prunaai:1@1` (slug: prunaai-p-image)."""
@@ -2515,6 +2553,7 @@ class PrunaaiPImageUpscaleParams(TypedDict, total=False):
     """Inference params for curated model `prunaai:p-image@upscale` (slug: prunaai-p-image-upscale)."""
 
     model: Literal['prunaai:p-image@upscale']
+    upscaleFactor: NotRequired[int]
     settings: NotRequired[dict[str, object]]
     targetMegapixels: NotRequired[int]
     taskType: Literal['upscale']
@@ -2560,6 +2599,7 @@ class PrunaaiPImageTryOnParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class PrunaaiPImageTryOnResult(TypedDict, total=False):
     """Inference result for curated model `prunaai:p-image@try-on` (slug: prunaai-p-image-try-on)."""
@@ -2595,6 +2635,7 @@ class PrunaaiPImageEditParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class PrunaaiPImageEditResult(TypedDict, total=False):
     """Inference result for curated model `prunaai:2@1` (slug: prunaai-p-image-edit)."""
@@ -2696,7 +2737,7 @@ class RundiffusionJuggernautLightningFluxParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
+    promptWeighting: NotRequired[Literal['sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
@@ -2717,6 +2758,7 @@ class RundiffusionJuggernautLightningFluxParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RundiffusionJuggernautLightningFluxResult(TypedDict, total=False):
     """Inference result for curated model `rundiffusion:110@101` (slug: rundiffusion-juggernaut-lightning-flux)."""
@@ -2749,7 +2791,6 @@ class RundiffusionJuggernautZParams(TypedDict, total=False):
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
-    controlNet: NotRequired[list[dict[str, object]]]
     ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
@@ -2763,6 +2804,7 @@ class RundiffusionJuggernautZParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RundiffusionJuggernautZResult(TypedDict, total=False):
     """Inference result for curated model `rundiffusion:200@100` (slug: rundiffusion-juggernaut-z)."""
@@ -2792,7 +2834,7 @@ class RundiffusionJuggernautBaseFluxParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
+    promptWeighting: NotRequired[Literal['sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
@@ -2815,6 +2857,7 @@ class RundiffusionJuggernautBaseFluxParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RundiffusionJuggernautBaseFluxResult(TypedDict, total=False):
     """Inference result for curated model `rundiffusion:120@100` (slug: rundiffusion-juggernaut-base-flux)."""
@@ -2844,7 +2887,7 @@ class RundiffusionJuggernautProFluxParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
+    promptWeighting: NotRequired[Literal['sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
@@ -2867,6 +2910,7 @@ class RundiffusionJuggernautProFluxParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RundiffusionJuggernautProFluxResult(TypedDict, total=False):
     """Inference result for curated model `rundiffusion:130@100` (slug: rundiffusion-juggernaut-pro-flux)."""
@@ -3125,7 +3169,7 @@ class ViduQ2TurboParams(TypedDict, total=False):
 
     model: Literal['vidu:3@2']
     inputs: NotRequired[dict[str, object]]
-    positivePrompt: NotRequired[str]
+    positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
     duration: NotRequired[float]
@@ -3214,6 +3258,7 @@ class ViduQ1ImageParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ViduQ1ImageResult(TypedDict, total=False):
     """Inference result for curated model `vidu:q1@image` (slug: vidu-q1-image)."""
@@ -3343,7 +3388,7 @@ class ViduQ3Params(TypedDict, total=False):
 
     model: Literal['vidu:4@1']
     inputs: NotRequired[dict[str, object]]
-    positivePrompt: NotRequired[str]
+    positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
     resolution: NotRequired[Literal['360p', '540p', '720p', '1080p']]
@@ -3446,6 +3491,7 @@ class StabilityaiStableDiffusion3Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class StabilityaiStableDiffusion3Result(TypedDict, total=False):
     """Inference result for curated model `runware:5@1` (slug: stabilityai-stable-diffusion-3)."""
@@ -3476,6 +3522,7 @@ class StabilityaiStableDiffusionXlV10VaeFixParams(TypedDict, total=False):
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
     clipSkip: NotRequired[int]
+    vae: NotRequired[str]
     promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
@@ -3483,6 +3530,7 @@ class StabilityaiStableDiffusionXlV10VaeFixParams(TypedDict, total=False):
     controlNet: NotRequired[list[dict[str, object]]]
     ipAdapters: NotRequired[list[dict[str, object]]]
     refiner: NotRequired[dict[str, object]]
+    embeddings: NotRequired[list[dict[str, object]]]
     hiresFix: NotRequired[Literal[True] | dict[str, object]]
     photoMaker: NotRequired[dict[str, object]]
     ultralytics: NotRequired[dict[str, object]]
@@ -3498,6 +3546,7 @@ class StabilityaiStableDiffusionXlV10VaeFixParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class StabilityaiStableDiffusionXlV10VaeFixResult(TypedDict, total=False):
     """Inference result for curated model `civitai:101055@128078` (slug: stabilityai-stable-diffusion-xl-v1-0-vae-fix)."""
@@ -3538,6 +3587,7 @@ class AlibabaQwenImageLayeredParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaQwenImageLayeredResult(TypedDict, total=False):
     """Inference result for curated model `alibaba:qwen-image@layered` (slug: alibaba-qwen-image-layered)."""
@@ -3664,6 +3714,7 @@ class AlibabaWan27ImageParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaWan27ImageResult(TypedDict, total=False):
     """Inference result for curated model `alibaba:wan@2.7-image` (slug: alibaba-wan2-7-image)."""
@@ -3723,7 +3774,6 @@ class AlibabaZImageParams(TypedDict, total=False):
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
-    controlNet: NotRequired[list[dict[str, object]]]
     ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
@@ -3737,6 +3787,7 @@ class AlibabaZImageParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaZImageResult(TypedDict, total=False):
     """Inference result for curated model `runware:z-image@0` (slug: alibaba-z-image)."""
@@ -3783,6 +3834,7 @@ class AlibabaQwenImageParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaQwenImageResult(TypedDict, total=False):
     """Inference result for curated model `runware:108@1` (slug: alibaba-qwen-image)."""
@@ -3948,6 +4000,7 @@ class AlibabaWan26ImageParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaWan26ImageResult(TypedDict, total=False):
     """Inference result for curated model `alibaba:wan@2.6-image` (slug: alibaba-wan2-6-image)."""
@@ -4031,6 +4084,7 @@ class AlibabaZImageTurboParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaZImageTurboResult(TypedDict, total=False):
     """Inference result for curated model `runware:z-image@turbo` (slug: alibaba-z-image-turbo)."""
@@ -4067,6 +4121,7 @@ class AlibabaQwenImage20Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaQwenImage20Result(TypedDict, total=False):
     """Inference result for curated model `alibaba:qwen-image@2.0` (slug: alibaba-qwen-image-2-0)."""
@@ -4103,6 +4158,7 @@ class AlibabaWan27ImageProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaWan27ImageProResult(TypedDict, total=False):
     """Inference result for curated model `alibaba:wan@2.7-image-pro` (slug: alibaba-wan2-7-image-pro)."""
@@ -4146,6 +4202,7 @@ class AlibabaQwenImageEditPlusParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaQwenImageEditPlusResult(TypedDict, total=False):
     """Inference result for curated model `runware:108@22` (slug: alibaba-qwen-image-edit-plus)."""
@@ -4190,50 +4247,6 @@ class AlibabaQwen3Tts17bBaseResult(TypedDict, total=False):
     audioBase64Data: NotRequired[str]
     audioDataURI: NotRequired[str]
     seed: NotRequired[int]
-
-class AlibabaWan22AnimateParams(TypedDict, total=False):
-    """Inference params for curated model `runware:200@8` (slug: alibaba-wan2-2-animate)."""
-
-    model: Literal['runware:200@8']
-    inputs: dict[str, object]
-    positivePrompt: NotRequired[str]
-    negativePrompt: NotRequired[str]
-    width: NotRequired[int]
-    height: NotRequired[int]
-    resolution: NotRequired[Literal['480p', '580p', '720p']]
-    fps: NotRequired[int]
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    advancedFeatures: NotRequired[dict[str, object]]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class AlibabaWan22AnimateResult(TypedDict, total=False):
-    """Inference result for curated model `runware:200@8` (slug: alibaba-wan2-2-animate)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
 
 class AlibabaWan26FlashParams(TypedDict, total=False):
     """Inference params for curated model `alibaba:wan@2.6-flash` (slug: alibaba-wan2-6-flash)."""
@@ -4306,6 +4319,7 @@ class AlibabaQwenImage2512Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaQwenImage2512Result(TypedDict, total=False):
     """Inference result for curated model `alibaba:qwen-image@2512` (slug: alibaba-qwen-image-2512)."""
@@ -4340,6 +4354,7 @@ class AlibabaWan25PreviewImageParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaWan25PreviewImageResult(TypedDict, total=False):
     """Inference result for curated model `runware:201@10` (slug: alibaba-wan2-5-preview-image)."""
@@ -4376,6 +4391,7 @@ class AlibabaQwenImage20ProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaQwenImage20ProResult(TypedDict, total=False):
     """Inference result for curated model `alibaba:qwen-image@2.0-pro` (slug: alibaba-qwen-image-2-0-pro)."""
@@ -4417,51 +4433,6 @@ class AlibabaQwen35397bResult(TypedDict, total=False):
     finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
     usage: dict[str, object]
 
-class AlibabaWan22A14bParams(TypedDict, total=False):
-    """Inference params for curated model `runware:200@6` (slug: alibaba-wan2-2-a14b)."""
-
-    model: Literal['runware:200@6']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: NotRequired[int]
-    height: NotRequired[int]
-    resolution: NotRequired[Literal['480p', '580p', '720p']]
-    duration: NotRequired[int]
-    fps: NotRequired[int]
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class AlibabaWan22A14bResult(TypedDict, total=False):
-    """Inference result for curated model `runware:200@6` (slug: alibaba-wan2-2-a14b)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class AlibabaQwenImageEditParams(TypedDict, total=False):
     """Inference params for curated model `runware:108@20` (slug: alibaba-qwen-image-edit)."""
 
@@ -4491,6 +4462,7 @@ class AlibabaQwenImageEditParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AlibabaQwenImageEditResult(TypedDict, total=False):
     """Inference result for curated model `runware:108@20` (slug: alibaba-qwen-image-edit)."""
@@ -4543,51 +4515,6 @@ class AlibabaHappyhorse10Result(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
-class AlibabaWan22A14bTurboParams(TypedDict, total=False):
-    """Inference params for curated model `runware:200@8` (slug: alibaba-wan2-2-a14b-turbo)."""
-
-    model: Literal['runware:200@8']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: NotRequired[int]
-    height: NotRequired[int]
-    resolution: NotRequired[Literal['480p', '580p', '720p']]
-    duration: NotRequired[int]
-    fps: NotRequired[int]
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class AlibabaWan22A14bTurboResult(TypedDict, total=False):
-    """Inference result for curated model `runware:200@8` (slug: alibaba-wan2-2-a14b-turbo)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class FishAudioS21ProParams(TypedDict, total=False):
     """Inference params for curated model `fishaudio:s2.1@pro` (slug: fish-audio-s2-1-pro)."""
 
@@ -4609,6 +4536,42 @@ class FishAudioS21ProParams(TypedDict, total=False):
 
 class FishAudioS21ProResult(TypedDict, total=False):
     """Inference result for curated model `fishaudio:s2.1@pro` (slug: fish-audio-s2-1-pro)."""
+
+    taskType: Literal['audioInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    audioUUID: str
+    audioURL: NotRequired[str]
+    audioBase64Data: NotRequired[str]
+    audioDataURI: NotRequired[str]
+    seed: NotRequired[int]
+
+class MireloSfx16Params(TypedDict, total=False):
+    """Inference params for curated model `mirelo:sfx@1.6` (slug: mirelo-sfx-1-6)."""
+
+    model: Literal['mirelo:sfx@1.6']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: NotRequired[str]
+    negativePrompt: NotRequired[str]
+    duration: NotRequired[float]
+    seed: NotRequired[int]
+    steps: NotRequired[int]
+    CFGScale: NotRequired[float]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['audioInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['MP3', 'WAV', 'FLAC', 'OGG']]
+    deliveryMethod: NotRequired[str]
+    audioSettings: NotRequired[dict[str, object]]
+
+class MireloSfx16Result(TypedDict, total=False):
+    """Inference result for curated model `mirelo:sfx@1.6` (slug: mirelo-sfx-1-6)."""
 
     taskType: Literal['audioInference']
     taskUUID: str
@@ -5142,6 +5105,7 @@ class LumaUni1Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class LumaUni1Result(TypedDict, total=False):
     """Inference result for curated model `luma:uni@1` (slug: luma-uni-1)."""
@@ -5177,6 +5141,7 @@ class LumaUni1MaxParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class LumaUni1MaxResult(TypedDict, total=False):
     """Inference result for curated model `luma:uni@1-max` (slug: luma-uni-1-max)."""
@@ -5248,6 +5213,7 @@ class RecraftV41ProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RecraftV41ProResult(TypedDict, total=False):
     """Inference result for curated model `recraft:v4.1-pro@0` (slug: recraft-v4-1-pro)."""
@@ -5308,6 +5274,7 @@ class RecraftV41UtilityParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RecraftV41UtilityResult(TypedDict, total=False):
     """Inference result for curated model `recraft:v4.1-utility@0` (slug: recraft-v4-1-utility)."""
@@ -5342,6 +5309,7 @@ class RecraftV41Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RecraftV41Result(TypedDict, total=False):
     """Inference result for curated model `recraft:v4.1@0` (slug: recraft-v4-1)."""
@@ -5405,6 +5373,7 @@ class RecraftV4ProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RecraftV4ProResult(TypedDict, total=False):
     """Inference result for curated model `recraft:v4-pro@0` (slug: recraft-v4-pro)."""
@@ -5439,6 +5408,7 @@ class RecraftV4Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RecraftV4Result(TypedDict, total=False):
     """Inference result for curated model `recraft:v4@0` (slug: recraft-v4)."""
@@ -5502,6 +5472,7 @@ class RecraftV41UtilityProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RecraftV41UtilityProResult(TypedDict, total=False):
     """Inference result for curated model `recraft:v4.1-utility-pro@0` (slug: recraft-v4-1-utility-pro)."""
@@ -5561,7 +5532,6 @@ class BflFlux2Klein9bParams(TypedDict, total=False):
     acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
     acceleratorOptions: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
-    ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
     webhookURL: NotRequired[str]
@@ -5574,6 +5544,7 @@ class BflFlux2Klein9bParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux2Klein9bResult(TypedDict, total=False):
     """Inference result for curated model `runware:400@2` (slug: bfl-flux-2-klein-9b)."""
@@ -5608,6 +5579,7 @@ class BflFluxVirtualTryOnParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFluxVirtualTryOnResult(TypedDict, total=False):
     """Inference result for curated model `bfl:flux@vto` (slug: bfl-flux-virtual-try-on)."""
@@ -5638,7 +5610,6 @@ class BflFlux2Klein4bParams(TypedDict, total=False):
     acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
     acceleratorOptions: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
-    ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
     webhookURL: NotRequired[str]
@@ -5651,6 +5622,7 @@ class BflFlux2Klein4bParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux2Klein4bResult(TypedDict, total=False):
     """Inference result for curated model `runware:400@4` (slug: bfl-flux-2-klein-4b)."""
@@ -5689,6 +5661,7 @@ class BflFlux2FlexParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux2FlexResult(TypedDict, total=False):
     """Inference result for curated model `bfl:6@1` (slug: bfl-flux-2-flex)."""
@@ -5725,6 +5698,7 @@ class BflFlux2MaxParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux2MaxResult(TypedDict, total=False):
     """Inference result for curated model `bfl:7@1` (slug: bfl-flux-2-max)."""
@@ -5761,6 +5735,7 @@ class BflFlux1KontextProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux1KontextProResult(TypedDict, total=False):
     """Inference result for curated model `bfl:3@1` (slug: bfl-flux-1-kontext-pro)."""
@@ -5793,6 +5768,7 @@ class BflFluxEraseParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFluxEraseResult(TypedDict, total=False):
     """Inference result for curated model `bfl:flux@erase` (slug: bfl-flux-erase)."""
@@ -5829,6 +5805,7 @@ class BflFlux1KontextMaxParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux1KontextMaxResult(TypedDict, total=False):
     """Inference result for curated model `bfl:4@1` (slug: bfl-flux-1-kontext-max)."""
@@ -5859,7 +5836,7 @@ class BflFlux1FillDevParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
+    promptWeighting: NotRequired[Literal['sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
@@ -5882,6 +5859,7 @@ class BflFlux1FillDevParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux1FillDevResult(TypedDict, total=False):
     """Inference result for curated model `runware:102@1` (slug: bfl-flux-1-fill-dev)."""
@@ -5912,7 +5890,6 @@ class BflFlux2Klein4bBaseParams(TypedDict, total=False):
     acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
     acceleratorOptions: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
-    ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
     webhookURL: NotRequired[str]
@@ -5925,6 +5902,7 @@ class BflFlux2Klein4bBaseParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux2Klein4bBaseResult(TypedDict, total=False):
     """Inference result for curated model `runware:400@5` (slug: bfl-flux-2-klein-4b-base)."""
@@ -5958,6 +5936,7 @@ class BflFluxOutpaintingParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFluxOutpaintingResult(TypedDict, total=False):
     """Inference result for curated model `bfl:flux@outpainting` (slug: bfl-flux-outpainting)."""
@@ -5993,6 +5972,7 @@ class BflFlux11ProUltraParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux11ProUltraResult(TypedDict, total=False):
     """Inference result for curated model `bfl:2@2` (slug: bfl-flux-1-1-pro-ultra)."""
@@ -6023,7 +6003,6 @@ class BflFlux2Klein9bBaseParams(TypedDict, total=False):
     acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
     acceleratorOptions: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
-    ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
     webhookURL: NotRequired[str]
@@ -6036,6 +6015,7 @@ class BflFlux2Klein9bBaseParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux2Klein9bBaseResult(TypedDict, total=False):
     """Inference result for curated model `runware:400@3` (slug: bfl-flux-2-klein-9b-base)."""
@@ -6065,7 +6045,6 @@ class BflFlux1KontextDevParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     acceleratorOptions: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
-    ipAdapters: NotRequired[list[dict[str, object]]]
     trueCFGScale: NotRequired[float]
     ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
@@ -6080,6 +6059,7 @@ class BflFlux1KontextDevParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux1KontextDevResult(TypedDict, total=False):
     """Inference result for curated model `runware:106@1` (slug: bfl-flux-1-kontext-dev)."""
@@ -6109,12 +6089,10 @@ class BflFlux1SchnellParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
+    promptWeighting: NotRequired[Literal['sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
-    controlNet: NotRequired[list[dict[str, object]]]
-    ipAdapters: NotRequired[list[dict[str, object]]]
     hiresFix: NotRequired[Literal[True] | dict[str, object]]
     trueCFGScale: NotRequired[float]
     ultralytics: NotRequired[dict[str, object]]
@@ -6130,6 +6108,7 @@ class BflFlux1SchnellParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux1SchnellResult(TypedDict, total=False):
     """Inference result for curated model `runware:100@1` (slug: bfl-flux-1-schnell)."""
@@ -6159,7 +6138,7 @@ class BflFlux1DevParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
+    promptWeighting: NotRequired[Literal['sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
@@ -6182,6 +6161,7 @@ class BflFlux1DevParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux1DevResult(TypedDict, total=False):
     """Inference result for curated model `runware:101@1` (slug: bfl-flux-1-dev)."""
@@ -6217,6 +6197,7 @@ class BflFlux11ProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux11ProResult(TypedDict, total=False):
     """Inference result for curated model `bfl:2@1` (slug: bfl-flux-1-1-pro)."""
@@ -6253,6 +6234,7 @@ class BflFlux2ProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux2ProResult(TypedDict, total=False):
     """Inference result for curated model `bfl:5@1` (slug: bfl-flux-2-pro)."""
@@ -6283,7 +6265,6 @@ class BflFlux2Klein9bKvParams(TypedDict, total=False):
     acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
     acceleratorOptions: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
-    ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
     webhookURL: NotRequired[str]
@@ -6296,6 +6277,7 @@ class BflFlux2Klein9bKvParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux2Klein9bKvResult(TypedDict, total=False):
     """Inference result for curated model `runware:400@6` (slug: bfl-flux-2-klein-9b-kv)."""
@@ -6332,6 +6314,7 @@ class BflFlux1ExpandProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux1ExpandProResult(TypedDict, total=False):
     """Inference result for curated model `bfl:1@3` (slug: bfl-flux-1-expand-pro)."""
@@ -6368,6 +6351,7 @@ class BflFlux1FillProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux1FillProResult(TypedDict, total=False):
     """Inference result for curated model `bfl:1@2` (slug: bfl-flux-1-fill-pro)."""
@@ -6398,7 +6382,6 @@ class BflFlux2DevParams(TypedDict, total=False):
     acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
     acceleratorOptions: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
-    ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
     webhookURL: NotRequired[str]
@@ -6411,6 +6394,7 @@ class BflFlux2DevParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BflFlux2DevResult(TypedDict, total=False):
     """Inference result for curated model `runware:400@1` (slug: bfl-flux-2-dev)."""
@@ -6505,6 +6489,7 @@ class TencentHunyuanimage30Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class TencentHunyuanimage30Result(TypedDict, total=False):
     """Inference result for curated model `runware:180@1` (slug: tencent-hunyuanimage-3-0)."""
@@ -6740,6 +6725,7 @@ class BriaImageReplaceBackgroundParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BriaImageReplaceBackgroundResult(TypedDict, total=False):
     """Inference result for curated model `bria:11@1` (slug: bria-image-replace-background)."""
@@ -6779,6 +6765,7 @@ class BriaFiboParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BriaFiboResult(TypedDict, total=False):
     """Inference result for curated model `bria:20@1` (slug: bria-fibo)."""
@@ -6887,7 +6874,7 @@ class BriaFiboEditParams(TypedDict, total=False):
 
     model: Literal['bria:21@1']
     inputs: dict[str, object]
-    positivePrompt: NotRequired[str]
+    positivePrompt: str
     negativePrompt: NotRequired[str]
     seed: NotRequired[int]
     steps: NotRequired[int]
@@ -6905,6 +6892,7 @@ class BriaFiboEditParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BriaFiboEditResult(TypedDict, total=False):
     """Inference result for curated model `bria:21@1` (slug: bria-fibo-edit)."""
@@ -6943,6 +6931,7 @@ class BriaFiboLiteParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BriaFiboLiteResult(TypedDict, total=False):
     """Inference result for curated model `bria:20@3` (slug: bria-fibo-lite)."""
@@ -6980,6 +6969,7 @@ class Bria32Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Bria32Result(TypedDict, total=False):
     """Inference result for curated model `bria:10@1` (slug: bria-3-2)."""
@@ -7015,6 +7005,7 @@ class BriaFiboEditToolsParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BriaFiboEditToolsResult(TypedDict, total=False):
     """Inference result for curated model `bria:21@2` (slug: bria-fibo-edit-tools)."""
@@ -7072,11 +7063,15 @@ class LightricksLtx23Params(TypedDict, total=False):
     model: Literal['lightricks:ltx@2.3']
     inputs: NotRequired[dict[str, object]]
     positivePrompt: str
-    width: NotRequired[int]
-    height: NotRequired[int]
-    duration: NotRequired[Literal[6, 8, 10]]
-    fps: NotRequired[Literal[24, 25, 48, 50]]
+    negativePrompt: NotRequired[str]
+    width: int
+    height: int
+    duration: float
+    fps: NotRequired[int]
+    seed: NotRequired[int]
+    steps: NotRequired[int]
     CFGScale: NotRequired[float]
+    lora: NotRequired[list[dict[str, object]]]
     settings: NotRequired[dict[str, object]]
     taskType: Literal['videoInference']
     taskUUID: str
@@ -7151,7 +7146,7 @@ class LightricksLtx2Params(TypedDict, total=False):
     negativePrompt: NotRequired[str]
     width: NotRequired[int]
     height: NotRequired[int]
-    duration: NotRequired[int]
+    duration: int
     fps: NotRequired[int]
     steps: NotRequired[int]
     CFGScale: NotRequired[float]
@@ -7221,10 +7216,12 @@ class LightricksLtx23FastParams(TypedDict, total=False):
     model: Literal['lightricks:ltx@2.3-fast']
     inputs: NotRequired[dict[str, object]]
     positivePrompt: str
-    width: NotRequired[int]
-    height: NotRequired[int]
-    duration: NotRequired[float]
-    fps: NotRequired[Literal[24, 25, 48, 50]]
+    width: int
+    height: int
+    duration: float
+    fps: NotRequired[int]
+    seed: NotRequired[int]
+    lora: NotRequired[list[dict[str, object]]]
     settings: NotRequired[dict[str, object]]
     taskType: Literal['videoInference']
     taskUUID: str
@@ -7271,6 +7268,7 @@ class Imagineart15ProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Imagineart15ProResult(TypedDict, total=False):
     """Inference result for curated model `imagineart:1.5-pro@0` (slug: imagineart-1-5-pro)."""
@@ -7304,6 +7302,7 @@ class Imagineart15Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Imagineart15Result(TypedDict, total=False):
     """Inference result for curated model `imagineart:1@5` (slug: imagineart-1-5)."""
@@ -7341,6 +7340,7 @@ class Imagineart20Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Imagineart20Result(TypedDict, total=False):
     """Inference result for curated model `imagineart:2.0@0` (slug: imagineart-2-0)."""
@@ -7401,6 +7401,7 @@ class ExactlyPhotoExtremeContrastParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ExactlyPhotoExtremeContrastResult(TypedDict, total=False):
     """Inference result for curated model `exactly:photo@extreme-contrast` (slug: exactly-photo-extreme-contrast)."""
@@ -7434,6 +7435,7 @@ class ExactlyPhotoGrainFilmLookParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ExactlyPhotoGrainFilmLookResult(TypedDict, total=False):
     """Inference result for curated model `exactly:photo@grain-film-look` (slug: exactly-photo-grain-film-look)."""
@@ -7467,6 +7469,7 @@ class ExactlyPhotoWarmLightParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ExactlyPhotoWarmLightResult(TypedDict, total=False):
     """Inference result for curated model `exactly:photo@warm-light` (slug: exactly-photo-warm-light)."""
@@ -7499,6 +7502,7 @@ class ExactlyIllustrativeTrainingResult(TypedDict, total=False):
     taskUUID: str
     cost: NotRequired[float]
     air: str
+    outputs: dict[str, object]
 
 class ExactlyPhotoJourneyParams(TypedDict, total=False):
     """Inference params for curated model `exactly:photo@journey` (slug: exactly-photo-journey)."""
@@ -7519,6 +7523,7 @@ class ExactlyPhotoJourneyParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ExactlyPhotoJourneyResult(TypedDict, total=False):
     """Inference result for curated model `exactly:photo@journey` (slug: exactly-photo-journey)."""
@@ -7552,6 +7557,7 @@ class ExactlyPhotoBrightPulseParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ExactlyPhotoBrightPulseResult(TypedDict, total=False):
     """Inference result for curated model `exactly:photo@bright-pulse` (slug: exactly-photo-bright-pulse)."""
@@ -7585,9 +7591,45 @@ class ExactlyPhotoDistantRealityParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ExactlyPhotoDistantRealityResult(TypedDict, total=False):
     """Inference result for curated model `exactly:photo@distant-reality` (slug: exactly-photo-distant-reality)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class BytedanceSeedream50ProParams(TypedDict, total=False):
+    """Inference params for curated model `bytedance:seedream@5.0-pro` (slug: bytedance-seedream-5-0-pro)."""
+
+    model: Literal['bytedance:seedream@5.0-pro']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
+
+class BytedanceSeedream50ProResult(TypedDict, total=False):
+    """Inference result for curated model `bytedance:seedream@5.0-pro` (slug: bytedance-seedream-5-0-pro)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -7621,6 +7663,7 @@ class BytedanceSeedream40Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BytedanceSeedream40Result(TypedDict, total=False):
     """Inference result for curated model `bytedance:5@0` (slug: bytedance-seedream-4-0)."""
@@ -7766,6 +7809,7 @@ class BytedanceSeedream45Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BytedanceSeedream45Result(TypedDict, total=False):
     """Inference result for curated model `bytedance:seedream@4.5` (slug: bytedance-seedream-4-5)."""
@@ -7849,6 +7893,37 @@ class BytedanceSeedance10ProFastResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
+class BytedanceSeedAudio10Params(TypedDict, total=False):
+    """Inference params for curated model `bytedance:seed-audio@1.0` (slug: bytedance-seed-audio-1-0)."""
+
+    model: Literal['bytedance:seed-audio@1.0']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    speech: NotRequired[dict[str, object]]
+    taskType: Literal['audioInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['MP3', 'WAV', 'FLAC', 'OGG']]
+    deliveryMethod: NotRequired[str]
+    audioSettings: NotRequired[dict[str, object]]
+
+class BytedanceSeedAudio10Result(TypedDict, total=False):
+    """Inference result for curated model `bytedance:seed-audio@1.0` (slug: bytedance-seed-audio-1-0)."""
+
+    taskType: Literal['audioInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    audioUUID: str
+    audioURL: NotRequired[str]
+    audioBase64Data: NotRequired[str]
+    audioDataURI: NotRequired[str]
+    seed: NotRequired[int]
+
 class BytedanceVideoUpscalerParams(TypedDict, total=False):
     """Inference params for curated model `bytedance:50@1` (slug: bytedance-video-upscaler)."""
 
@@ -7867,6 +7942,36 @@ class BytedanceVideoUpscalerParams(TypedDict, total=False):
 
 class BytedanceVideoUpscalerResult(TypedDict, total=False):
     """Inference result for curated model `bytedance:50@1` (slug: bytedance-video-upscaler)."""
+
+    taskType: Literal['upscale']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
+
+class BytedanceVideoEnhancementProParams(TypedDict, total=False):
+    """Inference params for curated model `bytedance:video-enhancement@pro` (slug: bytedance-video-enhancement-pro)."""
+
+    model: Literal['bytedance:video-enhancement@pro']
+    inputs: dict[str, object]
+    resolution: NotRequired[Literal['240p', '360p', '480p', '540p', '720p', '1080p', '2k', '4k']]
+    fps: NotRequired[float]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['upscale']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputQuality: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    deliveryMethod: NotRequired[str]
+
+class BytedanceVideoEnhancementProResult(TypedDict, total=False):
+    """Inference result for curated model `bytedance:video-enhancement@pro` (slug: bytedance-video-enhancement-pro)."""
 
     taskType: Literal['upscale']
     taskUUID: str
@@ -7934,6 +8039,7 @@ class BytedanceSeedream50LiteParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BytedanceSeedream50LiteResult(TypedDict, total=False):
     """Inference result for curated model `bytedance:seedream@5.0-lite` (slug: bytedance-seedream-5-0-lite)."""
@@ -7984,6 +8090,36 @@ class BytedanceSeedance20MiniResult(TypedDict, total=False):
     videoDataURI: NotRequired[str]
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
+
+class BytedanceVideoEnhancementStandardParams(TypedDict, total=False):
+    """Inference params for curated model `bytedance:video-enhancement@standard` (slug: bytedance-video-enhancement-standard)."""
+
+    model: Literal['bytedance:video-enhancement@standard']
+    inputs: dict[str, object]
+    resolution: NotRequired[Literal['240p', '360p', '480p', '540p', '720p', '1080p', '2k', '4k']]
+    fps: NotRequired[float]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['upscale']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputQuality: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    deliveryMethod: NotRequired[str]
+
+class BytedanceVideoEnhancementStandardResult(TypedDict, total=False):
+    """Inference result for curated model `bytedance:video-enhancement@standard` (slug: bytedance-video-enhancement-standard)."""
+
+    taskType: Literal['upscale']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
 
 class BytedanceSeedance10ProParams(TypedDict, total=False):
     """Inference params for curated model `bytedance:2@1` (slug: bytedance-seedance-1-0-pro)."""
@@ -8077,43 +8213,6 @@ class ZaiGlm51Result(TypedDict, total=False):
     finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
     usage: dict[str, object]
 
-class ZaiGlmImageParams(TypedDict, total=False):
-    """Inference params for curated model `runware:glm-image@0` (slug: zai-glm-image)."""
-
-    model: Literal['runware:glm-image@0']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: int
-    height: int
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    CFGScale: NotRequired[float]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class ZaiGlmImageResult(TypedDict, total=False):
-    """Inference result for curated model `runware:glm-image@0` (slug: zai-glm-image)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class Ideogram30ReplaceBackgroundParams(TypedDict, total=False):
     """Inference params for curated model `ideogram:4@5` (slug: ideogram-3-0-replace-background)."""
 
@@ -8133,6 +8232,7 @@ class Ideogram30ReplaceBackgroundParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram30ReplaceBackgroundResult(TypedDict, total=False):
     """Inference result for curated model `ideogram:4@5` (slug: ideogram-3-0-replace-background)."""
@@ -8169,45 +8269,10 @@ class Ideogram20RemixParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram20RemixResult(TypedDict, total=False):
     """Inference result for curated model `ideogram:3@2` (slug: ideogram-2-0-remix)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class Ideogram10RemixParams(TypedDict, total=False):
-    """Inference params for curated model `ideogram:1@2` (slug: ideogram-1-0-remix)."""
-
-    model: Literal['ideogram:1@2']
-    inputs: dict[str, object]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class Ideogram10RemixResult(TypedDict, total=False):
-    """Inference result for curated model `ideogram:1@2` (slug: ideogram-1-0-remix)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -8239,6 +8304,7 @@ class Ideogram30ReframeParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram30ReframeResult(TypedDict, total=False):
     """Inference result for curated model `ideogram:4@4` (slug: ideogram-3-0-reframe)."""
@@ -8274,6 +8340,7 @@ class Ideogram20Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram20Result(TypedDict, total=False):
     """Inference result for curated model `ideogram:3@1` (slug: ideogram-2-0)."""
@@ -8310,6 +8377,7 @@ class Ideogram40RemixParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram40RemixResult(TypedDict, total=False):
     """Inference result for curated model `ideogram:4@remix` (slug: ideogram-4-0-remix)."""
@@ -8347,111 +8415,10 @@ class Ideogram30RemixParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram30RemixResult(TypedDict, total=False):
     """Inference result for curated model `ideogram:4@2` (slug: ideogram-3-0-remix)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class Ideogram20ReframeParams(TypedDict, total=False):
-    """Inference params for curated model `ideogram:3@4` (slug: ideogram-2-0-reframe)."""
-
-    model: Literal['ideogram:3@4']
-    inputs: dict[str, object]
-    width: NotRequired[int]
-    height: NotRequired[int]
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class Ideogram20ReframeResult(TypedDict, total=False):
-    """Inference result for curated model `ideogram:3@4` (slug: ideogram-2-0-reframe)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class Ideogram10Params(TypedDict, total=False):
-    """Inference params for curated model `ideogram:1@1` (slug: ideogram-1-0)."""
-
-    model: Literal['ideogram:1@1']
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class Ideogram10Result(TypedDict, total=False):
-    """Inference result for curated model `ideogram:1@1` (slug: ideogram-1-0)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class Ideogram20EditParams(TypedDict, total=False):
-    """Inference params for curated model `ideogram:3@3` (slug: ideogram-2-0-edit)."""
-
-    model: Literal['ideogram:3@3']
-    inputs: dict[str, object]
-    positivePrompt: str
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class Ideogram20EditResult(TypedDict, total=False):
-    """Inference result for curated model `ideogram:3@3` (slug: ideogram-2-0-edit)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -8482,6 +8449,7 @@ class IdeogramLayerizeTextParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class IdeogramLayerizeTextResult(TypedDict, total=False):
     """Inference result for curated model `ideogram:layerize-text@0` (slug: ideogram-layerize-text)."""
@@ -8516,6 +8484,7 @@ class Ideogram30EditParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram30EditResult(TypedDict, total=False):
     """Inference result for curated model `ideogram:4@3` (slug: ideogram-3-0-edit)."""
@@ -8553,6 +8522,7 @@ class Ideogram30Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram30Result(TypedDict, total=False):
     """Inference result for curated model `ideogram:4@1` (slug: ideogram-3-0)."""
@@ -8588,6 +8558,7 @@ class Ideogram2aRemixParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram2aRemixResult(TypedDict, total=False):
     """Inference result for curated model `ideogram:2@2` (slug: ideogram-2a-remix)."""
@@ -8622,6 +8593,7 @@ class Ideogram2aParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram2aResult(TypedDict, total=False):
     """Inference result for curated model `ideogram:2@1` (slug: ideogram-2a)."""
@@ -8656,6 +8628,7 @@ class Ideogram40Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Ideogram40Result(TypedDict, total=False):
     """Inference result for curated model `ideogram:4@0` (slug: ideogram-4-0)."""
@@ -8693,6 +8666,7 @@ class Krea2TurboParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Krea2TurboResult(TypedDict, total=False):
     """Inference result for curated model `krea:krea@2-turbo` (slug: krea-2-turbo)."""
@@ -8729,6 +8703,7 @@ class Krea2MediumParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Krea2MediumResult(TypedDict, total=False):
     """Inference result for curated model `krea:krea@2-medium` (slug: krea-2-medium)."""
@@ -8758,7 +8733,7 @@ class KreaFlux1KreaDevParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
+    promptWeighting: NotRequired[Literal['sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
@@ -8781,6 +8756,7 @@ class KreaFlux1KreaDevParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class KreaFlux1KreaDevResult(TypedDict, total=False):
     """Inference result for curated model `runware:107@1` (slug: krea-flux-1-krea-dev)."""
@@ -8817,6 +8793,7 @@ class Krea2LargeParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Krea2LargeResult(TypedDict, total=False):
     """Inference result for curated model `krea:krea@2-large` (slug: krea-2-large)."""
@@ -9083,6 +9060,7 @@ class OpenaiGptImage1Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class OpenaiGptImage1Result(TypedDict, total=False):
     """Inference result for curated model `openai:1@1` (slug: openai-gpt-image-1)."""
@@ -9118,6 +9096,7 @@ class OpenaiGptImage1MiniParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class OpenaiGptImage1MiniResult(TypedDict, total=False):
     """Inference result for curated model `openai:1@2` (slug: openai-gpt-image-1-mini)."""
@@ -9211,6 +9190,7 @@ class OpenaiGptImage2Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class OpenaiGptImage2Result(TypedDict, total=False):
     """Inference result for curated model `openai:gpt-image@2` (slug: openai-gpt-image-2)."""
@@ -9276,6 +9256,7 @@ class OpenaiGptImage15Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class OpenaiGptImage15Result(TypedDict, total=False):
     """Inference result for curated model `openai:4@1` (slug: openai-gpt-image-1-5)."""
@@ -9413,74 +9394,6 @@ class OpenaiGpt54NanoResult(TypedDict, total=False):
     finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
     usage: dict[str, object]
 
-class SourcefulRiverflow2PreviewMaxParams(TypedDict, total=False):
-    """Inference params for curated model `sourceful:2@3` (slug: sourceful-riverflow-2-preview-max)."""
-
-    model: Literal['sourceful:2@3']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class SourcefulRiverflow2PreviewMaxResult(TypedDict, total=False):
-    """Inference result for curated model `sourceful:2@3` (slug: sourceful-riverflow-2-preview-max)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class SourcefulRiverflow11ProParams(TypedDict, total=False):
-    """Inference params for curated model `sourceful:1@2` (slug: sourceful-riverflow-1-1-pro)."""
-
-    model: Literal['sourceful:1@2']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class SourcefulRiverflow11ProResult(TypedDict, total=False):
-    """Inference result for curated model `sourceful:1@2` (slug: sourceful-riverflow-1-1-pro)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class SourcefulRiverflow20FastParams(TypedDict, total=False):
     """Inference params for curated model `sourceful:riverflow-2.0@fast` (slug: sourceful-riverflow-2-0-fast)."""
 
@@ -9502,6 +9415,7 @@ class SourcefulRiverflow20FastParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class SourcefulRiverflow20FastResult(TypedDict, total=False):
     """Inference result for curated model `sourceful:riverflow-2.0@fast` (slug: sourceful-riverflow-2-0-fast)."""
@@ -9538,77 +9452,10 @@ class SourcefulRiverflow25FastParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class SourcefulRiverflow25FastResult(TypedDict, total=False):
     """Inference result for curated model `sourceful:riverflow-2.5@fast` (slug: sourceful-riverflow-2-5-fast)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class SourcefulRiverflow11MiniParams(TypedDict, total=False):
-    """Inference params for curated model `sourceful:1@0` (slug: sourceful-riverflow-1-1-mini)."""
-
-    model: Literal['sourceful:1@0']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class SourcefulRiverflow11MiniResult(TypedDict, total=False):
-    """Inference result for curated model `sourceful:1@0` (slug: sourceful-riverflow-1-1-mini)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class SourcefulRiverflow2PreviewStandardParams(TypedDict, total=False):
-    """Inference params for curated model `sourceful:2@1` (slug: sourceful-riverflow-2-preview-standard)."""
-
-    model: Literal['sourceful:2@1']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class SourcefulRiverflow2PreviewStandardResult(TypedDict, total=False):
-    """Inference result for curated model `sourceful:2@1` (slug: sourceful-riverflow-2-preview-standard)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -9642,6 +9489,7 @@ class SourcefulRiverflow25ProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class SourcefulRiverflow25ProResult(TypedDict, total=False):
     """Inference result for curated model `sourceful:riverflow-2.5@pro` (slug: sourceful-riverflow-2-5-pro)."""
@@ -9677,77 +9525,10 @@ class SourcefulRiverflow20ProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class SourcefulRiverflow20ProResult(TypedDict, total=False):
     """Inference result for curated model `sourceful:riverflow-2.0@pro` (slug: sourceful-riverflow-2-0-pro)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class SourcefulRiverflow11Params(TypedDict, total=False):
-    """Inference params for curated model `sourceful:1@1` (slug: sourceful-riverflow-1-1)."""
-
-    model: Literal['sourceful:1@1']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class SourcefulRiverflow11Result(TypedDict, total=False):
-    """Inference result for curated model `sourceful:1@1` (slug: sourceful-riverflow-1-1)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class SourcefulRiverflow2PreviewFastParams(TypedDict, total=False):
-    """Inference params for curated model `sourceful:2@2` (slug: sourceful-riverflow-2-preview-fast)."""
-
-    model: Literal['sourceful:2@2']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class SourcefulRiverflow2PreviewFastResult(TypedDict, total=False):
-    """Inference result for curated model `sourceful:2@2` (slug: sourceful-riverflow-2-preview-fast)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -9847,77 +9628,6 @@ class GoogleGemini31FlashTtsResult(TypedDict, total=False):
     audioDataURI: NotRequired[str]
     seed: NotRequired[int]
 
-class GoogleVeo3Params(TypedDict, total=False):
-    """Inference params for curated model `google:3@0` (slug: google-veo-3)."""
-
-    model: Literal['google:3@0']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: NotRequired[int]
-    height: NotRequired[int]
-    resolution: NotRequired[Literal['720p', '1080p']]
-    duration: NotRequired[Literal[4, 6, 8]]
-    seed: NotRequired[int]
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class GoogleVeo3Result(TypedDict, total=False):
-    """Inference result for curated model `google:3@0` (slug: google-veo-3)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class GoogleImagen4PreviewParams(TypedDict, total=False):
-    """Inference params for curated model `google:2@1` (slug: google-imagen-4-preview)."""
-
-    model: Literal['google:2@1']
-    positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class GoogleImagen4PreviewResult(TypedDict, total=False):
-    """Inference result for curated model `google:2@1` (slug: google-imagen-4-preview)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class GoogleVeo31Params(TypedDict, total=False):
     """Inference params for curated model `google:3@2` (slug: google-veo-3-1)."""
 
@@ -9956,39 +9666,6 @@ class GoogleVeo31Result(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
-class GoogleImagen3Params(TypedDict, total=False):
-    """Inference params for curated model `google:1@1` (slug: google-imagen-3)."""
-
-    model: Literal['google:1@1']
-    positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class GoogleImagen3Result(TypedDict, total=False):
-    """Inference result for curated model `google:1@1` (slug: google-imagen-3)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class GoogleGemini35FlashParams(TypedDict, total=False):
     """Inference params for curated model `google:gemini@3.5-flash` (slug: google-gemini-3-5-flash)."""
 
@@ -10021,80 +9698,6 @@ class GoogleGemini35FlashResult(TypedDict, total=False):
     usage: dict[str, object]
     thoughtSignature: NotRequired[str]
 
-class GoogleVeo3FastParams(TypedDict, total=False):
-    """Inference params for curated model `google:3@1` (slug: google-veo-3-fast)."""
-
-    model: Literal['google:3@1']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: NotRequired[int]
-    height: NotRequired[int]
-    duration: NotRequired[Literal[4, 6, 8]]
-    seed: NotRequired[int]
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class GoogleVeo3FastResult(TypedDict, total=False):
-    """Inference result for curated model `google:3@1` (slug: google-veo-3-fast)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class GoogleVeo2Params(TypedDict, total=False):
-    """Inference params for curated model `google:2@0` (slug: google-veo-2)."""
-
-    model: Literal['google:2@0']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: NotRequired[int]
-    height: NotRequired[int]
-    duration: NotRequired[Literal[5, 6, 7, 8]]
-    seed: NotRequired[int]
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class GoogleVeo2Result(TypedDict, total=False):
-    """Inference result for curated model `google:2@0` (slug: google-veo-2)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class GoogleNanoBanana2Params(TypedDict, total=False):
     """Inference params for curated model `google:4@3` (slug: google-nano-banana-2)."""
 
@@ -10119,6 +9722,7 @@ class GoogleNanoBanana2Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class GoogleNanoBanana2Result(TypedDict, total=False):
     """Inference result for curated model `google:4@3` (slug: google-nano-banana-2)."""
@@ -10253,9 +9857,49 @@ class GoogleNanoBananaProParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class GoogleNanoBananaProResult(TypedDict, total=False):
     """Inference result for curated model `google:4@2` (slug: google-nano-banana-pro)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class GoogleNanoBanana2LiteParams(TypedDict, total=False):
+    """Inference params for curated model `google:nano-banana@2-lite` (slug: google-nano-banana-2-lite)."""
+
+    model: Literal['google:nano-banana@2-lite']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['1K']]
+    seed: NotRequired[int]
+    settings: NotRequired[dict[str, object]]
+    providerSettings: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
+
+class GoogleNanoBanana2LiteResult(TypedDict, total=False):
+    """Inference result for curated model `google:nano-banana@2-lite` (slug: google-nano-banana-2-lite)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -10289,6 +9933,7 @@ class GoogleNanoBananaParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class GoogleNanoBananaResult(TypedDict, total=False):
     """Inference result for curated model `google:4@1` (slug: google-nano-banana)."""
@@ -10370,39 +10015,6 @@ class GoogleGemini31ProResult(TypedDict, total=False):
     finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
     usage: dict[str, object]
 
-class GoogleImagen4FastParams(TypedDict, total=False):
-    """Inference params for curated model `google:2@3` (slug: google-imagen-4-fast)."""
-
-    model: Literal['google:2@3']
-    positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class GoogleImagen4FastResult(TypedDict, total=False):
-    """Inference result for curated model `google:2@3` (slug: google-imagen-4-fast)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class GoogleGemma431bParams(TypedDict, total=False):
     """Inference params for curated model `google:gemma@4-31b` (slug: google-gemma-4-31b)."""
 
@@ -10430,79 +10042,15 @@ class GoogleGemma431bResult(TypedDict, total=False):
     finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
     usage: dict[str, object]
 
-class GoogleImagen3FastParams(TypedDict, total=False):
-    """Inference params for curated model `google:1@2` (slug: google-imagen-3-fast)."""
+class GoogleGeminiOmniFlashParams(TypedDict, total=False):
+    """Inference params for curated model `google:gemini@omni-flash` (slug: google-gemini-omni-flash)."""
 
-    model: Literal['google:1@2']
+    model: Literal['google:gemini@omni-flash']
+    inputs: NotRequired[dict[str, object]]
     positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class GoogleImagen3FastResult(TypedDict, total=False):
-    """Inference result for curated model `google:1@2` (slug: google-imagen-3-fast)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class GoogleImagen4UltraParams(TypedDict, total=False):
-    """Inference params for curated model `google:2@2` (slug: google-imagen-4-ultra)."""
-
-    model: Literal['google:2@2']
-    positivePrompt: str
-    width: int
-    height: int
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class GoogleImagen4UltraResult(TypedDict, total=False):
-    """Inference result for curated model `google:2@2` (slug: google-imagen-4-ultra)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
-class VeedFabric10Params(TypedDict, total=False):
-    """Inference params for curated model `veed:fabric@1.0` (slug: veed-fabric-1-0)."""
-
-    model: Literal['veed:fabric@1.0']
-    inputs: dict[str, object]
-    resolution: NotRequired[Literal['720p', '480p']]
-    speech: NotRequired[dict[str, object]]
+    width: NotRequired[int]
+    height: NotRequired[int]
+    duration: NotRequired[int]
     settings: NotRequired[dict[str, object]]
     taskType: Literal['videoInference']
     taskUUID: str
@@ -10517,8 +10065,45 @@ class VeedFabric10Params(TypedDict, total=False):
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
 
-class VeedFabric10Result(TypedDict, total=False):
-    """Inference result for curated model `veed:fabric@1.0` (slug: veed-fabric-1-0)."""
+class GoogleGeminiOmniFlashResult(TypedDict, total=False):
+    """Inference result for curated model `google:gemini@omni-flash` (slug: google-gemini-omni-flash)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+    outputs: NotRequired[dict[str, object]]
+
+class VeedFabric10HostedParams(TypedDict, total=False):
+    """Inference params for curated model `veed:fabric@1.0-hosted` (slug: veed-fabric-1-0-hosted)."""
+
+    model: Literal['veed:fabric@1.0-hosted']
+    inputs: dict[str, object]
+    resolution: NotRequired[Literal['480p', '720p']]
+    seed: NotRequired[int]
+    acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
+    acceleratorOptions: NotRequired[dict[str, object]]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class VeedFabric10HostedResult(TypedDict, total=False):
+    """Inference result for curated model `veed:fabric@1.0-hosted` (slug: veed-fabric-1-0-hosted)."""
 
     taskType: Literal['videoInference']
     taskUUID: str
@@ -10535,6 +10120,7 @@ class Klingai16ProParams(TypedDict, total=False):
 
     model: Literal['klingai:3@2']
     inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
     duration: NotRequired[Literal[5, 10]]
@@ -10639,7 +10225,7 @@ class KlingaiAvatar20StandardParams(TypedDict, total=False):
     """Inference params for curated model `klingai:avatar@2.0-standard` (slug: klingai-avatar-2-0-standard)."""
 
     model: Literal['klingai:avatar@2.0-standard']
-    inputs: NotRequired[dict[str, object]]
+    inputs: dict[str, object]
     positivePrompt: NotRequired[str]
     taskType: Literal['videoInference']
     taskUUID: str
@@ -10687,6 +10273,7 @@ class KlingaiImageO3Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class KlingaiImageO3Result(TypedDict, total=False):
     """Inference result for curated model `klingai:kling-image@o3` (slug: klingai-image-o3)."""
@@ -10853,7 +10440,8 @@ class Klingai15StandardParams(TypedDict, total=False):
     """Inference params for curated model `klingai:2@1` (slug: klingai-1-5-standard)."""
 
     model: Literal['klingai:2@1']
-    inputs: NotRequired[dict[str, object]]
+    inputs: dict[str, object]
+    positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
     duration: NotRequired[Literal[5, 10]]
@@ -11179,6 +10767,7 @@ class Klingai15ProParams(TypedDict, total=False):
 
     model: Literal['klingai:2@2']
     inputs: dict[str, object]
+    positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
     duration: NotRequired[Literal[5, 10]]
@@ -11251,6 +10840,7 @@ class Klingai21StandardParams(TypedDict, total=False):
 
     model: Literal['klingai:5@1']
     inputs: dict[str, object]
+    positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
     duration: NotRequired[Literal[5, 10]]
@@ -11376,6 +10966,7 @@ class KlingaiImage30Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class KlingaiImage30Result(TypedDict, total=False):
     """Inference result for curated model `klingai:kling-image@3` (slug: klingai-image-3-0)."""
@@ -11394,7 +10985,7 @@ class KlingaiAvatar20ProParams(TypedDict, total=False):
     """Inference params for curated model `klingai:avatar@2.0-pro` (slug: klingai-avatar-2-0-pro)."""
 
     model: Literal['klingai:avatar@2.0-pro']
-    inputs: NotRequired[dict[str, object]]
+    inputs: dict[str, object]
     positivePrompt: NotRequired[str]
     taskType: Literal['videoInference']
     taskUUID: str
@@ -11463,7 +11054,7 @@ class Klingai21ProParams(TypedDict, total=False):
     """Inference params for curated model `klingai:5@2` (slug: klingai-2-1-pro)."""
 
     model: Literal['klingai:5@2']
-    inputs: NotRequired[dict[str, object]]
+    inputs: dict[str, object]
     positivePrompt: str
     negativePrompt: NotRequired[str]
     width: NotRequired[int]
@@ -11552,6 +11143,7 @@ class KlingaiImageO1Params(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class KlingaiImageO1Result(TypedDict, total=False):
     """Inference result for curated model `klingai:kling-image@o1` (slug: klingai-image-o1)."""
@@ -11591,6 +11183,7 @@ class BaiduErnieImageParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BaiduErnieImageResult(TypedDict, total=False):
     """Inference result for curated model `baidu:ernie-image@0` (slug: baidu-ernie-image)."""
@@ -11629,6 +11222,7 @@ class BaiduErnieImageTurboParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class BaiduErnieImageTurboResult(TypedDict, total=False):
     """Inference result for curated model `baidu:ernie-image@turbo` (slug: baidu-ernie-image-turbo)."""
@@ -11711,42 +11305,6 @@ class MemoriesVideoCaptioningResult(TypedDict, total=False):
     cost: NotRequired[float]
     text: str
 
-class XaiGrokImagineVideo15PreviewParams(TypedDict, total=False):
-    """Inference params for curated model `xai:grok-imagine@video-1.5-preview` (slug: xai-grok-imagine-video-1-5-preview)."""
-
-    model: Literal['xai:grok-imagine@video-1.5-preview']
-    inputs: dict[str, object]
-    positivePrompt: str
-    width: NotRequired[int]
-    height: NotRequired[int]
-    resolution: NotRequired[Literal['480p', '720p']]
-    duration: NotRequired[int]
-    taskType: Literal['videoInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class XaiGrokImagineVideo15PreviewResult(TypedDict, total=False):
-    """Inference result for curated model `xai:grok-imagine@video-1.5-preview` (slug: xai-grok-imagine-video-1-5-preview)."""
-
-    taskType: Literal['videoInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class XaiTtsParams(TypedDict, total=False):
     """Inference params for curated model `xai:tts@0` (slug: xai-tts)."""
 
@@ -11825,6 +11383,7 @@ class XaiGrokImagineImageQualityParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class XaiGrokImagineImageQualityResult(TypedDict, total=False):
     """Inference result for curated model `xai:grok-imagine@image-quality` (slug: xai-grok-imagine-image-quality)."""
@@ -11860,6 +11419,7 @@ class XaiGrokImagineImageParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class XaiGrokImagineImageResult(TypedDict, total=False):
     """Inference result for curated model `xai:grok-imagine@image` (slug: xai-grok-imagine-image)."""
@@ -11871,6 +11431,42 @@ class XaiGrokImagineImageResult(TypedDict, total=False):
     imageURL: NotRequired[str]
     imageBase64Data: NotRequired[str]
     imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class XaiGrokImagineVideo15Params(TypedDict, total=False):
+    """Inference params for curated model `xai:grok-imagine@video-1.5` (slug: xai-grok-imagine-video-1-5)."""
+
+    model: Literal['xai:grok-imagine@video-1.5']
+    inputs: dict[str, object]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['480p', '720p', '1080p']]
+    duration: NotRequired[int]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class XaiGrokImagineVideo15Result(TypedDict, total=False):
+    """Inference result for curated model `xai:grok-imagine@video-1.5` (slug: xai-grok-imagine-video-1-5)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
@@ -12094,6 +11690,7 @@ class RunwayGen4ImageTurboParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RunwayGen4ImageTurboResult(TypedDict, total=False):
     """Inference result for curated model `runway:4@2` (slug: runway-gen-4-image-turbo)."""
@@ -12202,6 +11799,7 @@ class RunwayGen4ImageParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class RunwayGen4ImageResult(TypedDict, total=False):
     """Inference result for curated model `runway:4@1` (slug: runway-gen-4-image)."""
@@ -12215,43 +11813,6 @@ class RunwayGen4ImageResult(TypedDict, total=False):
     imageDataURI: NotRequired[str]
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
-
-class Sd15DistilledArchParams(TypedDict, total=False):
-    """Inference params for architecture `sd-1-5-distilled`."""
-
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    strength: NotRequired[float]
-    maskMargin: NotRequired[int]
-    clipSkip: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    outpaint: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    controlNet: NotRequired[list[dict[str, object]]]
-    ipAdapters: NotRequired[list[dict[str, object]]]
-    hiresFix: NotRequired[Literal[True] | dict[str, object]]
-    ultralytics: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    model: str
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
 
 class Flux1SchnellArchParams(TypedDict, total=False):
     """Inference params for architecture `flux-1-schnell`."""
@@ -12267,7 +11828,7 @@ class Flux1SchnellArchParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
+    promptWeighting: NotRequired[Literal['sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
@@ -12287,6 +11848,7 @@ class Flux1SchnellArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class SdxlTurboArchParams(TypedDict, total=False):
     """Inference params for architecture `sdxl-turbo`."""
@@ -12303,6 +11865,7 @@ class SdxlTurboArchParams(TypedDict, total=False):
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
     clipSkip: NotRequired[int]
+    vae: NotRequired[str]
     promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
@@ -12310,6 +11873,7 @@ class SdxlTurboArchParams(TypedDict, total=False):
     controlNet: NotRequired[list[dict[str, object]]]
     ipAdapters: NotRequired[list[dict[str, object]]]
     refiner: NotRequired[dict[str, object]]
+    embeddings: NotRequired[list[dict[str, object]]]
     hiresFix: NotRequired[Literal[True] | dict[str, object]]
     ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
@@ -12325,6 +11889,7 @@ class SdxlTurboArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Flux1DevArchParams(TypedDict, total=False):
     """Inference params for architecture `flux-1-dev`."""
@@ -12340,7 +11905,7 @@ class Flux1DevArchParams(TypedDict, total=False):
     CFGScale: NotRequired[float]
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
+    promptWeighting: NotRequired[Literal['sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
@@ -12364,44 +11929,7 @@ class Flux1DevArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
-
-class SdxlHyperArchParams(TypedDict, total=False):
-    """Inference params for architecture `sdxl-hyper`."""
-
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    strength: NotRequired[float]
-    maskMargin: NotRequired[int]
-    clipSkip: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    outpaint: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    controlNet: NotRequired[list[dict[str, object]]]
-    ipAdapters: NotRequired[list[dict[str, object]]]
-    refiner: NotRequired[dict[str, object]]
-    hiresFix: NotRequired[Literal[True] | dict[str, object]]
-    ultralytics: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    model: str
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class SdxlArchParams(TypedDict, total=False):
     """Inference params for architecture `sdxl`."""
@@ -12418,6 +11946,7 @@ class SdxlArchParams(TypedDict, total=False):
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
     clipSkip: NotRequired[int]
+    vae: NotRequired[str]
     promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
@@ -12425,6 +11954,7 @@ class SdxlArchParams(TypedDict, total=False):
     controlNet: NotRequired[list[dict[str, object]]]
     ipAdapters: NotRequired[list[dict[str, object]]]
     refiner: NotRequired[dict[str, object]]
+    embeddings: NotRequired[list[dict[str, object]]]
     hiresFix: NotRequired[Literal[True] | dict[str, object]]
     photoMaker: NotRequired[dict[str, object]]
     ultralytics: NotRequired[dict[str, object]]
@@ -12441,6 +11971,7 @@ class SdxlArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Sd15ArchParams(TypedDict, total=False):
     """Inference params for architecture `sd-1-5`."""
@@ -12457,12 +11988,14 @@ class Sd15ArchParams(TypedDict, total=False):
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
     clipSkip: NotRequired[int]
+    vae: NotRequired[str]
     promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
     lora: NotRequired[list[dict[str, object]]]
     controlNet: NotRequired[list[dict[str, object]]]
     ipAdapters: NotRequired[list[dict[str, object]]]
+    embeddings: NotRequired[list[dict[str, object]]]
     hiresFix: NotRequired[Literal[True] | dict[str, object]]
     ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
@@ -12478,79 +12011,7 @@ class Sd15ArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
-
-class SdxlDistilledArchParams(TypedDict, total=False):
-    """Inference params for architecture `sdxl-distilled`."""
-
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    strength: NotRequired[float]
-    maskMargin: NotRequired[int]
-    clipSkip: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    outpaint: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    controlNet: NotRequired[list[dict[str, object]]]
-    ipAdapters: NotRequired[list[dict[str, object]]]
-    refiner: NotRequired[dict[str, object]]
-    hiresFix: NotRequired[Literal[True] | dict[str, object]]
-    ultralytics: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    model: str
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class Sd21ArchParams(TypedDict, total=False):
-    """Inference params for architecture `sd-2-1`."""
-
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    strength: NotRequired[float]
-    maskMargin: NotRequired[int]
-    clipSkip: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    outpaint: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    hiresFix: NotRequired[Literal[True] | dict[str, object]]
-    ultralytics: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    model: str
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class NoobaiArchParams(TypedDict, total=False):
     """Inference params for architecture `noobai`."""
@@ -12567,6 +12028,7 @@ class NoobaiArchParams(TypedDict, total=False):
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
     clipSkip: NotRequired[int]
+    vae: NotRequired[str]
     promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
@@ -12574,6 +12036,7 @@ class NoobaiArchParams(TypedDict, total=False):
     controlNet: NotRequired[list[dict[str, object]]]
     ipAdapters: NotRequired[list[dict[str, object]]]
     refiner: NotRequired[dict[str, object]]
+    embeddings: NotRequired[list[dict[str, object]]]
     hiresFix: NotRequired[Literal[True] | dict[str, object]]
     ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
@@ -12589,6 +12052,7 @@ class NoobaiArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class PonyArchParams(TypedDict, total=False):
     """Inference params for architecture `pony`."""
@@ -12605,6 +12069,7 @@ class PonyArchParams(TypedDict, total=False):
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
     clipSkip: NotRequired[int]
+    vae: NotRequired[str]
     promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
@@ -12612,6 +12077,7 @@ class PonyArchParams(TypedDict, total=False):
     controlNet: NotRequired[list[dict[str, object]]]
     ipAdapters: NotRequired[list[dict[str, object]]]
     refiner: NotRequired[dict[str, object]]
+    embeddings: NotRequired[list[dict[str, object]]]
     hiresFix: NotRequired[Literal[True] | dict[str, object]]
     ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
@@ -12627,44 +12093,7 @@ class PonyArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
-
-class SdxlLcmArchParams(TypedDict, total=False):
-    """Inference params for architecture `sdxl-lcm`."""
-
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    strength: NotRequired[float]
-    maskMargin: NotRequired[int]
-    clipSkip: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    outpaint: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    controlNet: NotRequired[list[dict[str, object]]]
-    ipAdapters: NotRequired[list[dict[str, object]]]
-    refiner: NotRequired[dict[str, object]]
-    hiresFix: NotRequired[Literal[True] | dict[str, object]]
-    ultralytics: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    model: str
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class SdxlLightningArchParams(TypedDict, total=False):
     """Inference params for architecture `sdxl-lightning`."""
@@ -12681,6 +12110,7 @@ class SdxlLightningArchParams(TypedDict, total=False):
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
     clipSkip: NotRequired[int]
+    vae: NotRequired[str]
     promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
@@ -12688,6 +12118,7 @@ class SdxlLightningArchParams(TypedDict, total=False):
     controlNet: NotRequired[list[dict[str, object]]]
     ipAdapters: NotRequired[list[dict[str, object]]]
     refiner: NotRequired[dict[str, object]]
+    embeddings: NotRequired[list[dict[str, object]]]
     hiresFix: NotRequired[Literal[True] | dict[str, object]]
     ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
@@ -12703,80 +12134,7 @@ class SdxlLightningArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
-
-class Sd15HyperArchParams(TypedDict, total=False):
-    """Inference params for architecture `sd-1-5-hyper`."""
-
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    strength: NotRequired[float]
-    maskMargin: NotRequired[int]
-    clipSkip: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    outpaint: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    controlNet: NotRequired[list[dict[str, object]]]
-    ipAdapters: NotRequired[list[dict[str, object]]]
-    hiresFix: NotRequired[Literal[True] | dict[str, object]]
-    ultralytics: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    model: str
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-
-class Sd15LcmArchParams(TypedDict, total=False):
-    """Inference params for architecture `sd-1-5-lcm`."""
-
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    seed: NotRequired[int]
-    steps: NotRequired[int]
-    scheduler: NotRequired[Literal['DDIM', 'DDIMScheduler', 'DDPMScheduler', 'DEISMultistepScheduler', 'Default', 'DPM++', 'DPM++ 2M', 'DPM++ 2M Beta', 'DPM++ 2M Exponential', 'DPM++ 2M Karras', 'DPM++ 2M SDE', 'DPM++ 2M SDE Beta', 'DPM++ 2M SDE Exponential', 'DPM++ 2M SDE Karras', 'DPM++ 2M SDE Uniform', 'DPM++ 2M Uniform', 'DPM++ 3M', 'DPM++ 3M Beta', 'DPM++ 3M Exponential', 'DPM++ 3M Karras', 'DPM++ 3M SDE Uniform', 'DPM++ 3M Uniform', 'DPM++ Beta', 'DPM++ Exponential', 'DPM++ Karras', 'DPM++ SDE', 'DPM++ SDE Beta', 'DPM++ SDE Exponential', 'DPM++ SDE Karras', 'DPM++ Uniform', 'DPM++ Uniform Beta', 'DPM++ Uniform Exponential', 'DPM++ Uniform Karras', 'DPMSolverMultistepInverse', 'DPMSolverMultistepScheduler', 'DPMSolverSinglestepScheduler', 'EDMDPMSolverMultistepScheduler', 'EDMEulerScheduler', 'Euler', 'Euler a', 'Euler Beta', 'Euler Exponential', 'Euler Karras', 'EulerAncestralDiscreteScheduler', 'EulerDiscreteScheduler', 'FlowMatchEulerDiscreteScheduler', 'Heun', 'HeunDiscreteScheduler', 'Heun Karras', 'IPNDMScheduler', 'IPNDM Uniform', 'IPNDM Uniform Beta', 'IPNDM Uniform Exponential', 'IPNDM Uniform Karras', 'KDPM2AncestralDiscreteScheduler', 'KDPM2DiscreteScheduler', 'LCM', 'LCMScheduler', 'LMS', 'LMSDiscreteScheduler', 'LMS Karras', 'PNDMScheduler', 'TCDScheduler', 'UniPC', 'UniPC 2M', 'UniPC 2M Karras', 'UniPC 2M Uniform', 'UniPC 3M', 'UniPC 3M Karras', 'UniPC 3M Uniform', 'UniPC Karras', 'UniPC Uniform', 'UniPC Uniform Beta', 'UniPC Uniform Exponential', 'UniPC Uniform Karras']]
-    CFGScale: NotRequired[float]
-    strength: NotRequired[float]
-    maskMargin: NotRequired[int]
-    clipSkip: NotRequired[int]
-    promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
-    acceleratorOptions: NotRequired[dict[str, object]]
-    outpaint: NotRequired[dict[str, object]]
-    lora: NotRequired[list[dict[str, object]]]
-    controlNet: NotRequired[list[dict[str, object]]]
-    ipAdapters: NotRequired[list[dict[str, object]]]
-    hiresFix: NotRequired[Literal[True] | dict[str, object]]
-    ultralytics: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    model: str
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class IllustriousArchParams(TypedDict, total=False):
     """Inference params for architecture `illustrious`."""
@@ -12793,6 +12151,7 @@ class IllustriousArchParams(TypedDict, total=False):
     strength: NotRequired[float]
     maskMargin: NotRequired[int]
     clipSkip: NotRequired[int]
+    vae: NotRequired[str]
     promptWeighting: NotRequired[Literal['compel', 'sdEmbeds']]
     acceleratorOptions: NotRequired[dict[str, object]]
     outpaint: NotRequired[dict[str, object]]
@@ -12800,6 +12159,7 @@ class IllustriousArchParams(TypedDict, total=False):
     controlNet: NotRequired[list[dict[str, object]]]
     ipAdapters: NotRequired[list[dict[str, object]]]
     refiner: NotRequired[dict[str, object]]
+    embeddings: NotRequired[list[dict[str, object]]]
     hiresFix: NotRequired[Literal[True] | dict[str, object]]
     ultralytics: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
@@ -12815,6 +12175,7 @@ class IllustriousArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class Flux1KontextDevArchParams(TypedDict, total=False):
     """Inference params for architecture `flux-1-kontext-dev`."""
@@ -12845,6 +12206,7 @@ class Flux1KontextDevArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ZImageArchParams(TypedDict, total=False):
     """Inference params for architecture `z-image`."""
@@ -12877,6 +12239,7 @@ class ZImageArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ZImageTurboArchParams(TypedDict, total=False):
     """Inference params for architecture `z-image-turbo`."""
@@ -12910,6 +12273,7 @@ class ZImageTurboArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class ExactlyIllustrativeArchParams(TypedDict, total=False):
     """Inference params for architecture `exactly-illustrative`."""
@@ -12932,6 +12296,7 @@ class ExactlyIllustrativeArchParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class VideoInferenceParams(TypedDict, total=False):
     """Loose params for the `videoInference` modality (slug: video)."""
@@ -12966,6 +12331,7 @@ class ImageInferenceParams(TypedDict, total=False):
     outputQuality: NotRequired[int]
     deliveryMethod: NotRequired[str]
     safety: NotRequired[dict[str, object]]
+    watermark: NotRequired[dict[str, object]]
 
 class AudioInferenceParams(TypedDict, total=False):
     """Loose params for the `audioInference` modality (slug: audio)."""
@@ -13274,6 +12640,22 @@ class PingResult(TypedDict, total=False):
 
     pong: Literal[True]
 
+class MediaStorageParams(TypedDict, total=False):
+    """Params for the `media-storage` utility task."""
+
+    taskType: Literal['mediaStorage']
+    taskUUID: str
+    operation: str
+    media: str
+
+class MediaStorageResult(TypedDict, total=False):
+    """Result for the `media-storage` utility task."""
+
+    taskType: Literal['mediaStorage']
+    taskUUID: str
+    mediaUUID: str
+    mediaURL: str
+
 class ImageUploadParams(TypedDict, total=False):
     """Params for the `image-upload` utility task."""
 
@@ -13293,19 +12675,28 @@ class AccountManagementParams(TypedDict, total=False):
 
     taskType: Literal['accountManagement']
     taskUUID: str
-    operation: Literal['getDetails']
+    operation: Literal['getDetails', 'getUsageActivity', 'getUsagePerformance', 'getUsageErrors']
+    startDate: NotRequired[str]
+    endDate: NotRequired[str]
+    models: NotRequired[list[str]]
+    apiKeys: NotRequired[list[str]]
+    groupBy: NotRequired[list[str]]
+    timezone: NotRequired[str]
 
 class AccountManagementResult(TypedDict, total=False):
     """Result for the `account-management` utility task."""
 
     taskType: Literal['accountManagement']
     taskUUID: str
-    organizationName: str
-    organizationUUID: str
-    balance: dict[str, object]
-    team: list[dict[str, object]]
-    apiKeys: list[dict[str, object]]
-    usage: dict[str, object]
+    operation: Literal['getDetails', 'getUsageActivity', 'getUsagePerformance', 'getUsageErrors']
+    startDate: NotRequired[str]
+    endDate: NotRequired[str]
+    organizationName: NotRequired[str]
+    organizationUUID: NotRequired[str]
+    balance: NotRequired[dict[str, object]]
+    team: NotRequired[list[dict[str, object]]]
+    apiKeys: NotRequired[list[dict[str, object]]]
+    usage: NotRequired[dict[str, object]]
 
 class ModelSearchParams(TypedDict, total=False):
     """Params for the `model-search` utility task."""
@@ -13433,6 +12824,15 @@ class CaptionResult(TypedDict, total=False):
     cost: NotRequired[float]
     structuredData: dict[str, object]
 
+class TrainingResult(TypedDict, total=False):
+    """Canonical result shape for `training` tasks."""
+
+    taskType: Literal['training']
+    taskUUID: str
+    cost: NotRequired[float]
+    air: str
+    outputs: dict[str, object]
+
 class UpscaleResult(TypedDict, total=False):
     """Canonical result shape for `upscale` tasks."""
 
@@ -13474,14 +12874,6 @@ class ThreeDInferenceResult(TypedDict, total=False):
     outputs: dict[str, object]
     seed: NotRequired[int]
 
-class TrainingResult(TypedDict, total=False):
-    """Canonical result shape for `training` tasks."""
-
-    taskType: Literal['training']
-    taskUUID: str
-    cost: NotRequired[float]
-    air: str
-
 class GetTaskDetailsResult2(TypedDict, total=False):
     """Canonical result shape for `getTaskDetails` tasks."""
 
@@ -13508,6 +12900,14 @@ class GetResponseResult2(TypedDict, total=False):
     progress: NotRequired[int]
     error: NotRequired[dict[str, object]]
 
+class MediaStorageResult2(TypedDict, total=False):
+    """Canonical result shape for `mediaStorage` tasks."""
+
+    taskType: Literal['mediaStorage']
+    taskUUID: str
+    mediaUUID: str
+    mediaURL: str
+
 class ImageUploadResult2(TypedDict, total=False):
     """Canonical result shape for `imageUpload` tasks."""
 
@@ -13520,12 +12920,15 @@ class AccountManagementResult2(TypedDict, total=False):
 
     taskType: Literal['accountManagement']
     taskUUID: str
-    organizationName: str
-    organizationUUID: str
-    balance: dict[str, object]
-    team: list[dict[str, object]]
-    apiKeys: list[dict[str, object]]
-    usage: dict[str, object]
+    operation: Literal['getDetails', 'getUsageActivity', 'getUsagePerformance', 'getUsageErrors']
+    startDate: NotRequired[str]
+    endDate: NotRequired[str]
+    organizationName: NotRequired[str]
+    organizationUUID: NotRequired[str]
+    balance: NotRequired[dict[str, object]]
+    team: NotRequired[list[dict[str, object]]]
+    apiKeys: NotRequired[list[dict[str, object]]]
+    usage: NotRequired[dict[str, object]]
 
 class ModelSearchResult2(TypedDict, total=False):
     """Canonical result shape for `modelSearch` tasks."""
@@ -13592,12 +12995,16 @@ models: dict[str, ModelEntry] = {
     "bytedance:5@0": ModelEntry(task_type="imageInference", id="bytedance-seedream-4-0"),
     "bytedance:5@1": ModelEntry(task_type="videoInference", id="bytedance-omnihuman-1"),
     "bytedance:5@2": ModelEntry(task_type="videoInference", id="bytedance-omnihuman-1-5"),
+    "bytedance:seed-audio@1.0": ModelEntry(task_type="audioInference", id="bytedance-seed-audio-1-0"),
     "bytedance:seedance@1.5-pro": ModelEntry(task_type="videoInference", id="bytedance-seedance-1-5-pro"),
     "bytedance:seedance@2.0": ModelEntry(task_type="videoInference", id="bytedance-seedance-2-0"),
     "bytedance:seedance@2.0-fast": ModelEntry(task_type="videoInference", id="bytedance-seedance-2-0-fast"),
     "bytedance:seedance@2.0-mini": ModelEntry(task_type="videoInference", id="bytedance-seedance-2-0-mini"),
     "bytedance:seedream@4.5": ModelEntry(task_type="imageInference", id="bytedance-seedream-4-5"),
     "bytedance:seedream@5.0-lite": ModelEntry(task_type="imageInference", id="bytedance-seedream-5-0-lite"),
+    "bytedance:seedream@5.0-pro": ModelEntry(task_type="imageInference", id="bytedance-seedream-5-0-pro"),
+    "bytedance:video-enhancement@pro": ModelEntry(task_type="upscale", id="bytedance-video-enhancement-pro"),
+    "bytedance:video-enhancement@standard": ModelEntry(task_type="upscale", id="bytedance-video-enhancement-standard"),
     "civitai:101055@128078": ModelEntry(task_type="imageInference", id="stabilityai-stable-diffusion-xl-v1-0-vae-fix"),
     "creatify:aurora@0": ModelEntry(task_type="videoInference", id="creatify-aurora-v1"),
     "creatify:aurora@fast": ModelEntry(task_type="videoInference", id="creatify-aurora-v1-fast"),
@@ -13611,14 +13018,6 @@ models: dict[str, ModelEntry] = {
     "exactly:photo@journey": ModelEntry(task_type="imageInference", id="exactly-photo-journey"),
     "exactly:photo@warm-light": ModelEntry(task_type="imageInference", id="exactly-photo-warm-light"),
     "fishaudio:s2.1@pro": ModelEntry(task_type="audioInference", id="fish-audio-s2-1-pro"),
-    "google:1@1": ModelEntry(task_type="imageInference", id="google-imagen-3"),
-    "google:1@2": ModelEntry(task_type="imageInference", id="google-imagen-3-fast"),
-    "google:2@0": ModelEntry(task_type="videoInference", id="google-veo-2"),
-    "google:2@1": ModelEntry(task_type="imageInference", id="google-imagen-4-preview"),
-    "google:2@2": ModelEntry(task_type="imageInference", id="google-imagen-4-ultra"),
-    "google:2@3": ModelEntry(task_type="imageInference", id="google-imagen-4-fast"),
-    "google:3@0": ModelEntry(task_type="videoInference", id="google-veo-3"),
-    "google:3@1": ModelEntry(task_type="videoInference", id="google-veo-3-fast"),
     "google:3@2": ModelEntry(task_type="videoInference", id="google-veo-3-1"),
     "google:3@3": ModelEntry(task_type="videoInference", id="google-veo-3-1-fast"),
     "google:4@1": ModelEntry(task_type="imageInference", id="google-nano-banana"),
@@ -13629,20 +13028,18 @@ models: dict[str, ModelEntry] = {
     "google:gemini@3.1-flash-tts": ModelEntry(task_type="audioInference", id="google-gemini-3-1-flash-tts"),
     "google:gemini@3.1-pro": ModelEntry(task_type="textInference", id="google-gemini-3-1-pro"),
     "google:gemini@3.5-flash": ModelEntry(task_type="textInference", id="google-gemini-3-5-flash"),
+    "google:gemini@omni-flash": ModelEntry(task_type="videoInference", id="google-gemini-omni-flash"),
     "google:gemma@4-31b": ModelEntry(task_type="textInference", id="google-gemma-4-31b"),
+    "google:nano-banana@2-lite": ModelEntry(task_type="imageInference", id="google-nano-banana-2-lite"),
     "google:veo@3.1-lite": ModelEntry(task_type="videoInference", id="google-veo-3-1-lite"),
     "heygen:avatar@4": ModelEntry(task_type="videoInference", id="heygen-avatar-iv"),
     "heygen:avatar@5": ModelEntry(task_type="videoInference", id="heygen-avatar-v"),
     "heygen:video-agent@0": ModelEntry(task_type="videoInference", id="heygen-video-agent"),
     "hyper3d:rodin@gen-2": ModelEntry(task_type="3dInference", id="hyper3d-rodin-gen-2"),
-    "ideogram:1@1": ModelEntry(task_type="imageInference", id="ideogram-1-0"),
-    "ideogram:1@2": ModelEntry(task_type="imageInference", id="ideogram-1-0-remix"),
     "ideogram:2@1": ModelEntry(task_type="imageInference", id="ideogram-2a"),
     "ideogram:2@2": ModelEntry(task_type="imageInference", id="ideogram-2a-remix"),
     "ideogram:3@1": ModelEntry(task_type="imageInference", id="ideogram-2-0"),
     "ideogram:3@2": ModelEntry(task_type="imageInference", id="ideogram-2-0-remix"),
-    "ideogram:3@3": ModelEntry(task_type="imageInference", id="ideogram-2-0-edit"),
-    "ideogram:3@4": ModelEntry(task_type="imageInference", id="ideogram-2-0-reframe"),
     "ideogram:4@0": ModelEntry(task_type="imageInference", id="ideogram-4-0"),
     "ideogram:4@1": ModelEntry(task_type="imageInference", id="ideogram-3-0"),
     "ideogram:4@2": ModelEntry(task_type="imageInference", id="ideogram-3-0-remix"),
@@ -13717,6 +13114,7 @@ models: dict[str, ModelEntry] = {
     "minimax:music@cover": ModelEntry(task_type="audioInference", id="minimax-music-cover"),
     "minimax:speech@2.8": ModelEntry(task_type="audioInference", id="minimax-speech-2-8"),
     "mirelo:1@1": ModelEntry(task_type="audioInference", id="mirelo-sfx-1-5"),
+    "mirelo:sfx@1.6": ModelEntry(task_type="audioInference", id="mirelo-sfx-1-6"),
     "moonshotai:kimi@k2.6": ModelEntry(task_type="textInference", id="moonshotai-kimi-k2-6"),
     "openai:1@1": ModelEntry(task_type="imageInference", id="openai-gpt-image-1"),
     "openai:1@2": ModelEntry(task_type="imageInference", id="openai-gpt-image-1-mini"),
@@ -13792,11 +13190,8 @@ models: dict[str, ModelEntry] = {
     "runware:154@1": ModelEntry(task_type="caption", id="open-age-detection"),
     "runware:180@1": ModelEntry(task_type="imageInference", id="tencent-hunyuanimage-3-0"),
     "runware:190@1": ModelEntry(task_type="videoInference", id="ovi"),
-    "runware:200@6": ModelEntry(task_type="videoInference", id="alibaba-wan2-2-a14b"),
-    "runware:200@8": ModelEntry(task_type="videoInference", id="alibaba-wan2-2-animate"),
     "runware:201@1": ModelEntry(task_type="videoInference", id="alibaba-wan2-5-preview"),
     "runware:201@10": ModelEntry(task_type="imageInference", id="alibaba-wan2-5-preview-image"),
-    "runware:210@1": ModelEntry(task_type="videoInference", id="kandinsky-5-0-lite"),
     "runware:300@1": ModelEntry(task_type="imageInference", id="object-eraser"),
     "runware:35@1": ModelEntry(task_type="imageMasking", id="yolov8n-face"),
     "runware:35@10": ModelEntry(task_type="imageMasking", id="mediapipe-eyes-lips-mesh"),
@@ -13847,11 +13242,13 @@ models: dict[str, ModelEntry] = {
     "runware:controlnet-preprocess@tile": ModelEntry(task_type="controlNetPreprocess", id="controlnet-preprocess-tile"),
     "runware:dia2@2b": ModelEntry(task_type="audioInference", id="dia2-2b"),
     "runware:dia@1.6b": ModelEntry(task_type="audioInference", id="dia-1-6b"),
-    "runware:glm-image@0": ModelEntry(task_type="imageInference", id="zai-glm-image"),
+    "runware:flux-1-dev@style-lora-training": ModelEntry(task_type="training", id="runware-flux-1-dev-style-lora-training"),
     "runware:kandinsky-5.0-image-lite@1": ModelEntry(task_type="imageInference", id="kandinsky-5-0-image-lite"),
     "runware:llama-3-1-8b@prompt-enhancer": ModelEntry(task_type="promptEnhance", id="llama-3-1-8b-prompt-enhancer"),
+    "runware:qwen-image@style-lora-training": ModelEntry(task_type="training", id="runware-qwen-image-style-lora-training"),
     "runware:twinflow-z-image-turbo@0": ModelEntry(task_type="imageInference", id="twinflow-z-image-turbo"),
     "runware:z-image@0": ModelEntry(task_type="imageInference", id="alibaba-z-image"),
+    "runware:z-image@style-lora-training": ModelEntry(task_type="training", id="runware-z-image-style-lora-training"),
     "runware:z-image@turbo": ModelEntry(task_type="imageInference", id="alibaba-z-image-turbo"),
     "runway:1@1": ModelEntry(task_type="videoInference", id="runway-gen-4-turbo"),
     "runway:1@2": ModelEntry(task_type="videoInference", id="runway-gen-4-5"),
@@ -13860,12 +13257,6 @@ models: dict[str, ModelEntry] = {
     "runway:4@2": ModelEntry(task_type="imageInference", id="runway-gen-4-image-turbo"),
     "runway:aleph@2.0": ModelEntry(task_type="videoInference", id="runway-aleph-2-0"),
     "skywork:skyreels@v4": ModelEntry(task_type="videoInference", id="skywork-skyreels-v4"),
-    "sourceful:1@0": ModelEntry(task_type="imageInference", id="sourceful-riverflow-1-1-mini"),
-    "sourceful:1@1": ModelEntry(task_type="imageInference", id="sourceful-riverflow-1-1"),
-    "sourceful:1@2": ModelEntry(task_type="imageInference", id="sourceful-riverflow-1-1-pro"),
-    "sourceful:2@1": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-preview-standard"),
-    "sourceful:2@2": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-preview-fast"),
-    "sourceful:2@3": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-preview-max"),
     "sourceful:riverflow-2.0@fast": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-0-fast"),
     "sourceful:riverflow-2.0@pro": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-0-pro"),
     "sourceful:riverflow-2.5@fast": ModelEntry(task_type="imageInference", id="sourceful-riverflow-2-5-fast"),
@@ -13878,7 +13269,7 @@ models: dict[str, ModelEntry] = {
     "tencent:hunyuan-3d@3.1-rapid": ModelEntry(task_type="3dInference", id="tencent-hunyuan-3d-3-1-rapid"),
     "topazlabs:starlight-precise@2.5": ModelEntry(task_type="upscale", id="topazlabs-starlight-precise-2-5"),
     "tripo:v3.1@0": ModelEntry(task_type="3dInference", id="tripo-v3-1"),
-    "veed:fabric@1.0": ModelEntry(task_type="videoInference", id="veed-fabric-1-0"),
+    "veed:fabric@1.0-hosted": ModelEntry(task_type="videoInference", id="veed-fabric-1-0-hosted"),
     "vidu:1@0": ModelEntry(task_type="videoInference", id="vidu-q1-classic"),
     "vidu:1@1": ModelEntry(task_type="videoInference", id="vidu-q1"),
     "vidu:1@5": ModelEntry(task_type="videoInference", id="vidu-1-5"),
@@ -13891,7 +13282,7 @@ models: dict[str, ModelEntry] = {
     "xai:grok-imagine@image": ModelEntry(task_type="imageInference", id="xai-grok-imagine-image"),
     "xai:grok-imagine@image-quality": ModelEntry(task_type="imageInference", id="xai-grok-imagine-image-quality"),
     "xai:grok-imagine@video": ModelEntry(task_type="videoInference", id="xai-grok-imagine-video"),
-    "xai:grok-imagine@video-1.5-preview": ModelEntry(task_type="videoInference", id="xai-grok-imagine-video-1-5-preview"),
+    "xai:grok-imagine@video-1.5": ModelEntry(task_type="videoInference", id="xai-grok-imagine-video-1-5"),
     "xai:grok@4.3": ModelEntry(task_type="textInference", id="xai-grok-4-3"),
     "xai:tts@0": ModelEntry(task_type="audioInference", id="xai-tts"),
     "zai:glm@4.7": ModelEntry(task_type="textInference", id="zai-glm-4-7"),
@@ -13907,14 +13298,7 @@ architecture_task_types: dict[str, str] = {
     "noobai": "imageInference",
     "pony": "imageInference",
     "sd-1-5": "imageInference",
-    "sd-1-5-distilled": "imageInference",
-    "sd-1-5-hyper": "imageInference",
-    "sd-1-5-lcm": "imageInference",
-    "sd-2-1": "imageInference",
     "sdxl": "imageInference",
-    "sdxl-distilled": "imageInference",
-    "sdxl-hyper": "imageInference",
-    "sdxl-lcm": "imageInference",
     "sdxl-lightning": "imageInference",
     "sdxl-turbo": "imageInference",
     "z-image": "imageInference",

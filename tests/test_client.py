@@ -98,6 +98,7 @@ class TestUtilityMethods:
             ("model_search", "modelSearch"),
             ("model_upload", "modelUpload"),
             ("image_upload", "imageUpload"),
+            ("media_storage", "mediaStorage"),
             ("account_management", "accountManagement"),
             ("get_response", "getResponse"),
             ("get_task_details", "getTaskDetails"),

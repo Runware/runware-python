@@ -170,6 +170,8 @@ class TestTopLevelReExports:
             "ModelSearchResult",
             "ImageUploadParams",
             "ImageUploadResult",
+            "MediaStorageParams",
+            "MediaStorageResult",
             "ModelUploadParams",
             "ModelUploadResult",
             "AccountManagementParams",

@@ -529,10 +529,15 @@ models = await client.model_search({
     "limit": 10,
 })
 
-# Upload an image for use as input
-uploaded = await client.image_upload({
-    "image": "https://example.com/photo.jpg",  # URL, Data URI, or Base64
+# Store media (image, video, or audio) for reuse as input. Returns a mediaUUID.
+# Supersedes the deprecated, image-only image_upload.
+uploaded = await client.media_storage({
+    "operation": "upload",
+    "media": "https://example.com/photo.jpg",  # URL, Data URI, or Base64
 })
+
+# Delete stored media by its mediaUUID
+await client.media_storage({"operation": "delete", "media": uploaded[0]["mediaUUID"]})
 
 # Get account details
 account = await client.account_management({"operation": "getDetails"})
@@ -603,14 +608,14 @@ from pathlib import Path
 from runware import file_to_data_uri
 
 data_uri = file_to_data_uri(Path("photo.jpg"))
-await client.image_upload({"image": data_uri})
+await client.media_storage({"operation": "upload", "media": data_uri})
 ```
 
 Accepts both `Path` and `bytes` — `bytes` is useful when the file lives in memory (e.g. a freshly downloaded blob).
 
 `file_to_base64` does the same read but returns raw base64 with no `data:` prefix or MIME type (the server sniffs the real format from the bytes).
 
-You usually don't need either helper for inputs: `run()` and `image_upload` auto-encode local file paths. Any string value (recursively, including nested dicts and lists) that points to an existing file on disk is read and replaced with its base64 before the request is sent. URLs, UUIDs, data URIs, existing base64, and prompts pass through untouched.
+You usually don't need either helper for inputs: `run()` and `media_storage` auto-encode local file paths. Any string value (recursively, including nested dicts and lists) that points to an existing file on disk is read and replaced with its base64 before the request is sent. URLs, UUIDs, data URIs, existing base64, and prompts pass through untouched.
 
 ```python
 await client.run({"model": "...", "seedImage": "./photo.jpg"})
