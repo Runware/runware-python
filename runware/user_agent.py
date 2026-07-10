@@ -29,7 +29,8 @@ def _resolve_sdk_version() -> str:
         return "0.0.0"
 
 
-_SDK_VERSION = _resolve_sdk_version()
+# The installed SDK version, re-exported publicly as ``runware.SDK_VERSION``.
+SDK_VERSION = _resolve_sdk_version()
 _base: str | None = None
 
 
@@ -40,7 +41,7 @@ def _base_user_agent() -> str:
             f"python/{platform.python_version()}; "
             f"{platform.system()} {platform.machine()}"
         )
-        _base = f"runware-python/{_SDK_VERSION} ({runtime}) schemas/{SCHEMAS_VERSION}"
+        _base = f"runware-python/{SDK_VERSION} ({runtime}) schemas/{SCHEMAS_VERSION}"
     return _base
 
 

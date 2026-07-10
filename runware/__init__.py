@@ -150,8 +150,12 @@ from .types.task_map import (
 )
 from .utils.file import file_to_base64, file_to_data_uri
 from .validate import clear_validator_cache
+from .user_agent import SDK_VERSION
+
+__version__ = SDK_VERSION
 
 __all__ = [
+    "SDK_VERSION",
     "SCHEMAS_VERSION",
     "AccountManagementParams",
     "AccountManagementResult",
