@@ -318,7 +318,7 @@ def build(schema_map: dict[str, Any]) -> str:
                 disc = _variant_discriminator(variant)
                 vclass = to_class_name(candidate, disc) if disc else f"{candidate}Variant{i + 1}"
                 variant_names.append(add_typed_dict(vclass, variant, ""))
-            alias = f"{candidate} = Union[{', '.join(variant_names)}]"
+            alias = f"{candidate} = {' | '.join(variant_names)}"
             typed_dicts.append(f"# {description}\n{alias}" if description else alias)
             return candidate
         typed_dicts.append(emit_typed_dict(candidate, schema, description=description))
@@ -524,7 +524,7 @@ def build(schema_map: dict[str, Any]) -> str:
         from __future__ import annotations
 
         from dataclasses import dataclass
-        from typing import Literal, NotRequired, TypedDict, Union
+        from typing import Literal, NotRequired, TypedDict
 
         SCHEMAS_VERSION = "{SCHEMAS_VERSION}"
 

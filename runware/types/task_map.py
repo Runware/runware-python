@@ -8,7 +8,7 @@ Re-run `uv run python scripts/generate_types.py` after bumping
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal, NotRequired, TypedDict, Union
+from typing import Literal, NotRequired, TypedDict
 
 SCHEMAS_VERSION = "20260722152433"
 
@@ -213,7 +213,7 @@ class ViduQ3TurboParamsVariant2(TypedDict, total=False):
     inputs: object
 
 # Inference params for curated model `vidu:4@2` (slug: vidu-q3-turbo).
-ViduQ3TurboParams = Union[ViduQ3TurboParamsVariant1, ViduQ3TurboParamsVariant2]
+ViduQ3TurboParams = ViduQ3TurboParamsVariant1 | ViduQ3TurboParamsVariant2
 
 class ViduQ3TurboResult(TypedDict, total=False):
     """Inference result for curated model `vidu:4@2` (slug: vidu-q3-turbo)."""
@@ -12816,7 +12816,7 @@ class MediaStorageResultDelete(TypedDict, total=False):
     mediaUUID: str
 
 # Result for the `media-storage` utility task.
-MediaStorageResult = Union[MediaStorageResultUpload, MediaStorageResultDelete]
+MediaStorageResult = MediaStorageResultUpload | MediaStorageResultDelete
 
 class AuthenticationParams(TypedDict, total=False):
     """Params for the `authentication` utility task."""
@@ -13084,7 +13084,7 @@ class MediaStorageResult2Delete(TypedDict, total=False):
     mediaUUID: str
 
 # Canonical result shape for `mediaStorage` tasks.
-MediaStorageResult2 = Union[MediaStorageResult2Upload, MediaStorageResult2Delete]
+MediaStorageResult2 = MediaStorageResult2Upload | MediaStorageResult2Delete
 
 class ModelSearchResult2(TypedDict, total=False):
     """Canonical result shape for `modelSearch` tasks."""
