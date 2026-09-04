@@ -666,7 +666,7 @@ wheels = [
 
 [[package]]
 name = "runware-sdk"
-version = "1.6.9"
+version = "1.6.10"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
