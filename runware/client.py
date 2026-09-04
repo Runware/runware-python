@@ -905,6 +905,11 @@ class _AsyncCollector:
         "videoUUID",
         "audioUUID",
         "modelUUID",
+        "maskImageUUID",
+        "guideImageUUID",
+        "mediaUUID",
+        # Last resort: every item in a batch shares the taskUUID, so a result
+        # that reaches this key can only be deduped as a single slot.
         "taskUUID",
     )
 
@@ -1074,12 +1079,35 @@ def _progress_value(item: LoosePayload) -> float | None:
     return None
 
 
+# Media results always arrive as `<thing>URL`, `<thing>Base64Data`, or
+# `<thing>DataURI` (image, video, audio, maskImage, guideImage, media), so
+# matching the suffix recognises every task type today and any media param added
+# later. UUID keys are deliberately excluded: an in-flight progress frame
+# carries `imageUUID` with no output attached yet.
+_RESULT_SUFFIXES: tuple[str, ...] = ("URL", "Base64Data", "DataURI")
+
+# Results that share no common suffix.
+_RESULT_KEYS: frozenset[str] = frozenset({
+    "text",            # text inference, prompt enhance, caption
+    "structuredData",  # classification captions
+    "outputs",         # 3D inference, training
+    "air",             # training
+    "result",
+})
+
+
 def _is_terminal(item: LoosePayload) -> bool:
-    for key in ("imageURL", "videoURL", "audioURL", "modelURL", "text", "result"):
-        if item.get(key) is not None:
+    # `success` is the terminal status returned while polling; the statuses are
+    # processing, success, and error.
+    if item.get("status") == "success":
+        return True
+    for key in item:
+        if (
+            (key in _RESULT_KEYS or key.endswith(_RESULT_SUFFIXES))
+            and item.get(key) is not None
+        ):
             return True
-    status: object = item.get("status")
-    return status == "completed"
+    return False
 
 
 def _next_poll_delay(poll_number: int, current: float) -> float:
