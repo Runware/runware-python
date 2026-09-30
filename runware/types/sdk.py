@@ -55,6 +55,8 @@ class SDKConfig:
     transport: TransportType = "websocket"
     ws_base_url: str = "wss://ws-api.runware.ai/v1"
     http_base_url: str = "https://api.runware.ai/v1"
+    # Serverless API origin, without a version path. Used by invoke and get_task.
+    serverless_base_url: str = "https://api.serverless.runware.ai"
 
     timeout: int = 1_200_000
     poll_timeout: int = 1_200_000

@@ -34,11 +34,11 @@ from .types.content import (
 SessionProvider = Callable[[], Awaitable[aiohttp.ClientSession]]
 
 
-# Models whose status marks them reachable only through the OpenAI-compatible
-# endpoint — not the native Runware API — are hidden from the SDK's model listing
-# by default, since the SDK can't run them. A caller can still surface them by
-# passing the matching ``status`` filter explicitly.
-NON_NATIVE_STATUSES = frozenset({"openai-compatible"})
+# Models whose status marks them reachable only through a compatible endpoint
+# (OpenAI, Anthropic or TypeSafe format) — not the native Runware API — are hidden
+# from the SDK's model listing by default, since the SDK can't run them. A caller
+# can still surface them by passing the matching ``status`` filter explicitly.
+NON_NATIVE_STATUSES = frozenset({"compatible-only"})
 
 
 def _exclude_non_native(result: object) -> object:
@@ -79,7 +79,7 @@ class ContentClient:
         result = await self._fetch_json(url, treat_404_as_none=False)
 
         # An explicit ``status`` filter is an intentional opt-in, so trust the
-        # service result. Otherwise hide non-native (OpenAI-only) models.
+        # service result. Otherwise hide non-native (compatible-only) models.
         if "status" not in options and result is not None:
             result = _exclude_non_native(result)
 

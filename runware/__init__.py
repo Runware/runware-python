@@ -20,6 +20,13 @@ Options & config:
     RuntimeDependencies        — inject custom aiohttp session / WS connect
     WebSocketConnectFactory    — type alias for the WS connect callable
 
+Serverless:
+    InvokeOptions              — per-call options for client.invoke()
+    GetTaskOptions             — per-call options for client.get_task()
+    ServerlessTask             — a task as the invoke and task routes return it
+    DeliveryMethod             — "sync" or "async"
+    TaskStatus                 — "pending", "completed" or "failed"
+
 Streaming:
     TextStream                 — LLM stream result with async iterators
     TextStreamChunk            — one parsed SSE chunk
@@ -91,6 +98,13 @@ from .types.sdk import (
     SDKConfig,
     StreamOptions,
     WebSocketConnectFactory,
+)
+from .types.serverless import (
+    DeliveryMethod,
+    GetTaskOptions,
+    InvokeOptions,
+    ServerlessTask,
+    TaskStatus,
 )
 from .types.stream import TextStreamChunk, TextStreamResult
 from .types.task_map import (
@@ -174,6 +188,7 @@ __all__ = [
     "ControlnetPreprocessParams",
     "Creator",
     "CreatorWithModels",
+    "DeliveryMethod",
     "ErrorCode",
     "ExampleMetadata",
     "GetModelExamplesOptions",
@@ -181,12 +196,14 @@ __all__ = [
     "GetResponseResult",
     "GetTaskDetailsParams",
     "GetTaskDetailsResult",
+    "GetTaskOptions",
     "GuideMetadata",
     "ImageInferenceParams",
     "ImageInferenceResult",
     "ImageMaskingResult",
     "ImageUploadParams",
     "ImageUploadResult",
+    "InvokeOptions",
     "ListCollectionsOptions",
     "ListModelsOptions",
     "LogCategory",
@@ -219,7 +236,9 @@ __all__ = [
     "Runware",
     "RunwareError",
     "SDKConfig",
+    "ServerlessTask",
     "StreamOptions",
+    "TaskStatus",
     "TaskType",
     "TextInferenceParams",
     "TextInferenceResult",

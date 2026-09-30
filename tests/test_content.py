@@ -90,6 +90,22 @@ class TestListModels:
         assert "paginate=true" in calls[0]
         assert result == envelope
 
+    async def test_hides_compatible_only(self):
+        body = [
+            {"air": "runware:101@1", "status": "live"},
+            {"air": "typesafe:jev@1", "status": "compatible-only"},
+        ]
+        session, _ = _mock_session(body=body)
+        result = await _client(session).list_models()
+        assert isinstance(result, list)
+        assert [model.get("air") for model in result] == ["runware:101@1"]
+
+    async def test_keeps_compatible_only_when_status_filter_asks(self):
+        session, _ = _mock_session(body=[{"air": "typesafe:jev@1", "status": "compatible-only"}])
+        result = await _client(session).list_models({"status": "compatible-only"})
+        assert isinstance(result, list)
+        assert len(result) == 1
+
 
 @pytest.mark.asyncio
 class TestGetModel:

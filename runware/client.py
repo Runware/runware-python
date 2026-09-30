@@ -15,10 +15,12 @@ from .constants import SCHEMAS_BASE_URL
 from .content import ContentClient
 from .errors import create_runware_error, parse_api_error
 from .registry import Registry, RegistryData, create_registry
+from .serverless import ServerlessApi
 from .stream import TextStream, create_text_stream
 from .transport.rest import RestTransport
 from .transport.websocket import WebSocketTransport
 from .types.sdk import LoosePayload, RunOptions, SDKConfig, StreamOptions
+from .types.serverless import GetTaskOptions, InvokeOptions, ServerlessTask
 from .types.task_map import (
     AccountManagementParams,
     AccountManagementResult,
@@ -121,6 +123,12 @@ class Runware:
         # (listings, single model details, examples, pricing, capabilities,
         # creators). Hits the content service, separate from the inference API.
         self.content: ContentClient = ContentClient(self._ensure_validation_session)
+
+        # Calling your own serverless apps. A different origin from the
+        # inference API, sharing this client's session and retry settings.
+        self._serverless: ServerlessApi = ServerlessApi(
+            self._ensure_validation_session, self._config,
+        )
 
     async def __aenter__(self) -> Self:
         await self.connect()
@@ -411,6 +419,57 @@ class Runware:
             list[GetTaskDetailsResult],
             await self._utility("getTaskDetails", dict(params), options),
         )
+
+    # ------------------------------------------------------------- serverless
+
+    async def invoke(
+        self,
+        app_id: str,
+        endpoint_path: str,
+        payload: dict[str, Any] | None = None,  # pyright: ignore[reportExplicitAny]
+        *,
+        task_id: str | None = None,
+        options: InvokeOptions | None = None,
+    ) -> ServerlessTask:
+        """
+        Call an endpoint on one of your serverless apps and return the
+        finished task.
+
+            task = await client.invoke("my-app", "generate", {"prompt": "a cat"})
+            print(task["output"])
+
+        ``delivery_method`` decides how the wait happens, not whether you get
+        a result: ``async`` (the default) takes an acknowledgement and polls,
+        ``sync`` holds one request open and is the fast path for work that
+        finishes in seconds. ``wait=False`` returns the accepted task instead,
+        for a job you mean to pick up later with ``get_task``.
+
+        Every invocation carries a task id, generated unless you pass one.
+        Sending the same id again returns the task it already names instead of
+        starting a second, so a call whose response was lost is safe to repeat.
+
+        Raises a ``RunwareError`` when the task fails to start. A task that
+        runs and fails comes back with ``status`` ``failed`` and its ``error``
+        set, because that is an outcome rather than a broken call.
+        """
+        return await self._serverless.invoke(
+            app_id, endpoint_path, payload, task_id=task_id, options=options,
+        )
+
+    async def get_task(
+        self,
+        app_id: str,
+        task_id: str,
+        options: GetTaskOptions | None = None,
+    ) -> ServerlessTask:
+        """
+        Read one serverless task by id.
+
+        ``invoke`` already waits for you, so reach for this when you want to
+        poll yourself: after ``invoke`` with ``wait=False``, or from a
+        different process than the one that submitted the task.
+        """
+        return await self._serverless.get_task(app_id, task_id, options)
 
     # ----------------------------------------------------------- internal
 

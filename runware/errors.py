@@ -220,6 +220,11 @@ class RunwareError(Exception):
         status_code: HTTP status code, when the error originated from an HTTP response.
         validation_errors: Structured per-field errors (only when code == "validation"
             and the failure was raised by the opt-in client-side validator).
+        problem_type: RFC 9457 problem type URI, when the error came from an API that
+            returns `application/problem+json`. This is the stable identifier for the
+            problem class: switch on it rather than on `status_code` or the message.
+        request_id: Correlation id for the failed request, echoed in `X-Request-Id`.
+        retry_after: Seconds to wait before retrying, from a `Retry-After` header.
     """
 
     code: ErrorCode
@@ -230,6 +235,9 @@ class RunwareError(Exception):
     documentation: str | None
     status_code: int | None
     validation_errors: list[object] | None
+    problem_type: str | None
+    request_id: str | None
+    retry_after: float | None
 
     def __init__(self, raw_code: str, message: str) -> None:
         super().__init__(message)
@@ -241,6 +249,9 @@ class RunwareError(Exception):
         self.documentation = None
         self.status_code = None
         self.validation_errors = None
+        self.problem_type = None
+        self.request_id = None
+        self.retry_after = None
 
     @property
     def message(self) -> str:

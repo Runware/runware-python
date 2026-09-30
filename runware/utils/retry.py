@@ -13,6 +13,22 @@ from ..types.sdk import RetryStrategy
 T = TypeVar("T")
 
 
+def calculate_retry_delay(
+    attempt: int, base_delay_ms: int, retry_strategy: RetryStrategy,
+) -> int:
+    """
+    Backoff delay in ms for a zero-based attempt number, with jitter so a
+    fleet of clients retrying the same failure does not land together.
+    """
+    if retry_strategy == "linear":
+        delay_ms = base_delay_ms * (attempt + 1)
+    else:
+        # pow(2, n) for non-negative n returns int; cast to silence the
+        # int|float widening in the type stubs.
+        delay_ms = min(base_delay_ms * cast(int, 2**attempt), 30_000)
+    return delay_ms + random.randint(0, 1_000)
+
+
 async def with_retry(
     fn: Callable[[], Awaitable[T]],
     *,
@@ -47,27 +63,19 @@ async def with_retry(
             if attempt >= max_retries:
                 raise
 
+            delay_ms = calculate_retry_delay(attempt, retry_delay_ms, retry_strategy)
             attempt += 1
-            if retry_strategy == "linear":
-                delay_ms: int = retry_delay_ms * attempt
-            else:
-                # pow(2, n) for non-negative n returns int; cast to silence
-                # the int|float widening in the type stubs.
-                delay_ms = min(
-                    retry_delay_ms * cast(int, 2 ** (attempt - 1)), 30_000,
-                )
-            delay_ms += random.randint(0, 1_000)
 
             if on_retry is not None:
                 on_retry(exc, attempt, delay_ms)
 
             try:
-                await _interruptible_sleep(delay_ms / 1000.0, cancel_event)
+                await interruptible_sleep(delay_ms / 1000.0, cancel_event)
             except asyncio.CancelledError:
                 raise create_runware_error("aborted", "Request aborted") from last_exc
 
 
-async def _interruptible_sleep(seconds: float, cancel_event: asyncio.Event | None) -> None:
+async def interruptible_sleep(seconds: float, cancel_event: asyncio.Event | None) -> None:
     if cancel_event is None:
         await asyncio.sleep(seconds)
         return

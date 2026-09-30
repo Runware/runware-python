@@ -90,6 +90,9 @@ class MockSession:
     def post(self, url: str, **kwargs: Any) -> MockResponse:
         return self._take("POST", url, **kwargs)
 
+    def request(self, method: str, url: str, **kwargs: Any) -> MockResponse:
+        return self._take(method.upper(), url, **kwargs)
+
     def _take(self, method: str, url: str, **kwargs: Any) -> MockResponse:
         self.request_log.append(
             RequestLog(
