@@ -82,7 +82,6 @@ from .types.task_map import (
     operation_task_types as _bundled_operation_task_types,
 )
 from .types.transport import RequestOptions, WireFrame
-from .utils.file import encode_local_files
 from .validate import validate_tasks
 
 
@@ -264,7 +263,6 @@ class Runware:
         options: RunOptions | None = None,
     ) -> list[dict[str, Any]]:  # pyright: ignore[reportExplicitAny]
         """Run an inference task."""
-        params = cast("dict[str, Any]", encode_local_files(params))  # pyright: ignore[reportExplicitAny]
         params = await self._normalize_model_param(params)
         task_type = await self._resolve_task_type(params)
         task_uuid = str(params.get("taskUUID") or uuid.uuid4())
@@ -379,19 +377,17 @@ class Runware:
         self, params: ImageUploadParams, options: RunOptions | None = None,
     ) -> list[ImageUploadResult]:
         """Deprecated: use :meth:`media_storage`, which handles any media type and supports deletion."""
-        encoded = cast("dict[str, Any]", encode_local_files(dict(params)))  # pyright: ignore[reportExplicitAny]
         return cast(
             list[ImageUploadResult],
-            await self._utility("imageUpload", encoded, options),
+            await self._utility("imageUpload", dict(params), options),
         )
 
     async def media_storage(
         self, params: MediaStorageParams, options: RunOptions | None = None,
     ) -> list[MediaStorageResult]:
-        encoded = cast("dict[str, Any]", encode_local_files(dict(params)))  # pyright: ignore[reportExplicitAny]
         return cast(
             list[MediaStorageResult],
-            await self._utility("mediaStorage", encoded, options),
+            await self._utility("mediaStorage", dict(params), options),
         )
 
     async def account_management(
