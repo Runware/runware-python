@@ -639,26 +639,20 @@ The per-model methods (`get_model`, `get_model_examples`, `get_model_pricing`) a
 
 ## File helpers
 
-`file_to_data_uri` encodes a local file as a `data:` URI for passing as input:
+**The SDK never reads the filesystem on its own.** A string you pass as a parameter is sent as that string, prompts and media parameters alike. When you want a file's contents on the wire, you say so:
 
 ```python
-from pathlib import Path
-from runware import file_to_data_uri
+from runware import file_to_base64, file_to_data_uri
 
-data_uri = file_to_data_uri(Path("photo.jpg"))
-await client.media_storage({"operation": "upload", "media": data_uri})
+await client.run({"model": "...", "seedImage": file_to_base64("photo.jpg")})
+await client.media_storage({"operation": "upload", "media": file_to_data_uri("photo.jpg")})
 ```
 
-Accepts both `Path` and `bytes` — `bytes` is useful when the file lives in memory (e.g. a freshly downloaded blob).
+`file_to_base64` returns raw base64, with no `data:` prefix and no MIME type, which is what a media parameter takes most directly: the server reads the real format from the bytes. `file_to_data_uri` returns a `data:<mime>;base64,...` URI, taking the MIME from the file's extension.
 
-`file_to_base64` does the same read but returns raw base64 with no `data:` prefix or MIME type (the server sniffs the real format from the bytes).
+Both accept a `str`, a `Path`, `bytes`, or a file-like object, so a blob you already hold in memory needs no round trip through disk.
 
-You usually don't need either helper for inputs: `run()` and `media_storage` auto-encode local file paths. Any string value (recursively, including nested dicts and lists) that points to an existing file on disk is read and replaced with its base64 before the request is sent. URLs, UUIDs, data URIs, existing base64, and prompts pass through untouched.
-
-```python
-await client.run({"model": "...", "seedImage": "./photo.jpg"})
-await client.run({"model": "...", "referenceImages": ["./a.jpg", "./b.jpg"]})
-```
+> Before 1.7.1 the SDK replaced any string that happened to name a readable file with that file's contents, in every parameter. Passing a path straight to `seedImage` no longer works: wrap it in `file_to_base64`.
 
 ## Custom dependencies
 
