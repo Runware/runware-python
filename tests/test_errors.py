@@ -30,6 +30,7 @@ class TestDeriveCode:
             ("rateLimitExceeded", "rateLimit"),
             ("contentPolicyViolation", "safety"),
             ("nsfwContentDetected", "safety"),
+            ("invalidProviderContent", "safety"),
             ("unauthorized", "auth"),
             ("invalidApiKey", "auth"),
             ("requestTimeout", "timeout"),
@@ -43,6 +44,8 @@ class TestDeriveCode:
             ("invalidModel", "validation"),
             ("missingParameter", "validation"),
             ("validationFailed", "validation"),
+            ("parameterConflict", "validation"),
+            ("parameterConflictNegative", "validation"),
             ("somethingNeverSeenBefore", "unknown"),
         ],
     )

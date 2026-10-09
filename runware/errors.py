@@ -69,6 +69,7 @@ _SAFETY_CODES: set[str] = {
     "promptBlocked",
     "imageBlocked",
     "moderationFailed",
+    "invalidProviderContent",
 }
 
 _AUTH_CODES: set[str] = {
@@ -187,6 +188,7 @@ def derive_code(raw: str) -> ErrorCode:
         raw.startswith("invalid")
         or raw.startswith("missing")
         or raw.startswith("conflict")
+        or "Conflict" in raw
         or raw.startswith("duplicate")
         or raw.startswith("unsupported")
         or raw.startswith("value")
