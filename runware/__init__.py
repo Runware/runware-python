@@ -15,6 +15,8 @@ Errors:
 
 Options & config:
     SDKConfig                  — config dataclass
+    TransportType              — "websocket" or "rest"
+    RetryStrategy              — "linear" or "exponential"
     RunOptions                 — per-call options for client.run()
     StreamOptions              — per-call options for client.stream()
     RuntimeDependencies        — inject custom aiohttp session / WS connect
@@ -93,10 +95,12 @@ from .types.content import (
     PricingModelListItem,
 )
 from .types.sdk import (
+    RetryStrategy,
     RunOptions,
     RuntimeDependencies,
     SDKConfig,
     StreamOptions,
+    TransportType,
     WebSocketConnectFactory,
 )
 from .types.serverless import (
@@ -231,6 +235,7 @@ __all__ = [
     "RemoveBackgroundParams",
     "RemoveBackgroundResult",
     "RemoveBackgroundVideoParams",
+    "RetryStrategy",
     "RunOptions",
     "RuntimeDependencies",
     "Runware",
@@ -249,6 +254,7 @@ __all__ = [
     "ThreeDInferenceResult",
     "TrainingParams",
     "TrainingResult",
+    "TransportType",
     "UpscaleImageParams",
     "UpscaleParams",
     "UpscaleResult",
