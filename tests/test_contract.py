@@ -18,6 +18,7 @@ from typing import Any
 
 import pytest
 
+import runware
 from runware.errors import (
     build_documentation_url,
     derive_code,
@@ -123,3 +124,14 @@ def test_parse_api_error(raw: Any, expected: dict[str, Any], case_name: str) -> 
             f"contract drift in {case_name!r}: field {key!r} was {actual!r}, "
             f"expected {want!r}"
         )
+
+
+# ----------------------------------------------------------- public_exports
+
+
+def test_public_exports() -> None:
+    expected = _load("public-exports.json")["expected"]
+    wanted = sorted(
+        [*expected["shared"], *expected["renamed"].values(), *expected["python_only"]]
+    )
+    assert sorted(runware.__all__) == wanted
