@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20261012162326 — do not edit manually.
+AUTO-GENERATED from runware schemas v20261012233936 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,9 +10,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "20261012162326"
+SCHEMAS_VERSION = "20261012233936"
 
-TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
+TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "promptEnhance", "removeBackground", "textInference", "tools", "training", "upscale", "vectorize", "videoInference"]
 
 
 @dataclass(frozen=True)
@@ -4402,44 +4402,6 @@ class GoogleGemini31ProResult(TypedDict, total=False):
     text: str
     finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
     usage: dict[str, object]
-
-class GoogleNanoBananaParams(TypedDict, total=False):
-    """Inference params for curated model `google:4@1` (slug: google-nano-banana)."""
-
-    model: Literal['google:4@1']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: NotRequired[int]
-    height: NotRequired[int]
-    settings: NotRequired[dict[str, object]]
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    routing: NotRequired[dict[str, object]]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-    advancedFeatures: NotRequired[dict[str, object]]
-
-class GoogleNanoBananaResult(TypedDict, total=False):
-    """Inference result for curated model `google:4@1` (slug: google-nano-banana)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
 
 class GoogleGemma431bParams(TypedDict, total=False):
     """Inference params for curated model `google:gemma@4-31b` (slug: google-gemma-4-31b)."""
@@ -9236,6 +9198,28 @@ class ControlnetPreprocessSegResult(TypedDict, total=False):
     guideImageDataURI: NotRequired[str]
     inputImageUUID: str
 
+class FfmpegParams(TypedDict, total=False):
+    """Inference params for curated model `runware:ffmpeg@0` (slug: ffmpeg)."""
+
+    model: Literal['runware:ffmpeg@0']
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV', 'MKV', 'MP3', 'WAV', 'AAC', 'FLAC', 'OGG', 'PNG', 'JPG', 'WEBP']]
+    inputs: dict[str, object]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['tools']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    ttl: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+
+class FfmpegResult(TypedDict, total=False):
+    """Inference result for curated model `runware:ffmpeg@0` (slug: ffmpeg)."""
+
+    taskType: Literal['tools']
+    taskUUID: str
+    cost: NotRequired[float]
+    outputs: dict[str, object]
+
 class RunwareFlux2Klein4bStyleLoraTrainingParams(TypedDict, total=False):
     """Inference params for curated model `runware:flux-2-klein-4b@style-lora-training` (slug: runware-flux-2-klein-4b-style-lora-training)."""
 
@@ -13577,6 +13561,17 @@ class UpscaleImageParams(TypedDict, total=False):
     deliveryMethod: NotRequired[str]
     inputs: dict[str, object]
 
+class ToolsParams(TypedDict, total=False):
+    """Params for the `tools` operation."""
+
+    taskType: Literal['tools']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    model: str
+    ttl: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+
 class RemoveBackgroundVideoParams(TypedDict, total=False):
     """Params for the `remove-background-video` operation."""
 
@@ -13839,7 +13834,7 @@ class GetResponseParams(TypedDict, total=False):
 class GetResponseResult(TypedDict, total=False):
     """Result for the `get-response` utility task."""
 
-    taskType: Literal['authentication', 'imageInference', 'videoInference', 'audioInference', 'textInference', '3dInference', 'modelSearch', 'modelUpload', 'accountManagement', 'imageUpload', 'mediaStorage', 'getResponse', 'caption', 'controlNetPreprocess', 'imageMasking', 'promptEnhance', 'removeBackground', 'upscale', 'vectorize', 'training', 'ping']
+    taskType: Literal['authentication', 'imageInference', 'videoInference', 'audioInference', 'textInference', '3dInference', 'modelSearch', 'modelUpload', 'accountManagement', 'imageUpload', 'mediaStorage', 'getResponse', 'caption', 'controlNetPreprocess', 'imageMasking', 'promptEnhance', 'removeBackground', 'upscale', 'vectorize', 'training', 'tools', 'ping']
     taskUUID: str
     status: Literal['processing', 'success', 'error']
     progress: NotRequired[int]
@@ -14031,6 +14026,14 @@ class ControlNetPreprocessResult(TypedDict, total=False):
     guideImageDataURI: NotRequired[str]
     inputImageUUID: str
 
+class ToolsResult(TypedDict, total=False):
+    """Canonical result shape for `tools` tasks."""
+
+    taskType: Literal['tools']
+    taskUUID: str
+    cost: NotRequired[float]
+    outputs: dict[str, object]
+
 class PromptEnhanceResult(TypedDict, total=False):
     """Canonical result shape for `promptEnhance` tasks."""
 
@@ -14086,7 +14089,7 @@ class ModelUploadResult2(TypedDict, total=False):
 class GetResponseResult2(TypedDict, total=False):
     """Canonical result shape for `getResponse` tasks."""
 
-    taskType: Literal['authentication', 'imageInference', 'videoInference', 'audioInference', 'textInference', '3dInference', 'modelSearch', 'modelUpload', 'accountManagement', 'imageUpload', 'mediaStorage', 'getResponse', 'caption', 'controlNetPreprocess', 'imageMasking', 'promptEnhance', 'removeBackground', 'upscale', 'vectorize', 'training', 'ping']
+    taskType: Literal['authentication', 'imageInference', 'videoInference', 'audioInference', 'textInference', '3dInference', 'modelSearch', 'modelUpload', 'accountManagement', 'imageUpload', 'mediaStorage', 'getResponse', 'caption', 'controlNetPreprocess', 'imageMasking', 'promptEnhance', 'removeBackground', 'upscale', 'vectorize', 'training', 'tools', 'ping']
     taskUUID: str
     status: Literal['processing', 'success', 'error']
     progress: NotRequired[int]
@@ -14216,7 +14219,6 @@ models: dict[str, ModelEntry] = {
     "fishaudio:s2.1@pro": ModelEntry(task_type="audioInference", id="fish-audio-s2-1-pro"),
     "google:3@2": ModelEntry(task_type="videoInference", id="google-veo-3-1"),
     "google:3@3": ModelEntry(task_type="videoInference", id="google-veo-3-1-fast"),
-    "google:4@1": ModelEntry(task_type="imageInference", id="google-nano-banana"),
     "google:4@2": ModelEntry(task_type="imageInference", id="google-nano-banana-pro"),
     "google:4@3": ModelEntry(task_type="imageInference", id="google-nano-banana-2"),
     "google:gemini@3-flash": ModelEntry(task_type="textInference", id="google-gemini-3-flash"),
@@ -14442,6 +14444,7 @@ models: dict[str, ModelEntry] = {
     "runware:controlnet-preprocess@softedge": ModelEntry(task_type="controlNetPreprocess", id="controlnet-preprocess-softedge"),
     "runware:controlnet-preprocess@tile": ModelEntry(task_type="controlNetPreprocess", id="controlnet-preprocess-tile"),
     "runware:dia2@2b": ModelEntry(task_type="audioInference", id="dia2-2b"),
+    "runware:ffmpeg@0": ModelEntry(task_type="tools", id="ffmpeg"),
     "runware:flux-1-dev@style-lora-training": ModelEntry(task_type="training", id="runware-flux-1-dev-style-lora-training"),
     "runware:flux-2-klein-4b@style-lora-training": ModelEntry(task_type="training", id="runware-flux-2-klein-4b-style-lora-training"),
     "runware:flux-2-klein-9b@style-lora-training": ModelEntry(task_type="training", id="runware-flux-2-klein-9b-style-lora-training"),
@@ -14528,6 +14531,7 @@ operation_task_types: dict[str, str] = {
     "remove-background": "removeBackground",
     "remove-background-image": "removeBackground",
     "remove-background-video": "removeBackground",
+    "tools": "tools",
     "training": "training",
     "upscale": "upscale",
     "upscale-image": "upscale",
