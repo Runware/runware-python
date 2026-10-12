@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20260930171803 — do not edit manually.
+AUTO-GENERATED from runware schemas v20261012162326 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "20260930171803"
+SCHEMAS_VERSION = "20261012162326"
 
 TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "promptEnhance", "removeBackground", "textInference", "training", "upscale", "vectorize", "videoInference"]
 
@@ -33,6 +33,7 @@ class ExactlyPhotoGrainFilmLookParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -67,6 +68,7 @@ class ExactlyPhotoJourneyParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -101,6 +103,7 @@ class ExactlyPhotoExtremeContrastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -135,6 +138,7 @@ class ExactlyPhotoWarmLightParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -169,6 +173,7 @@ class ExactlyPhotoBrightPulseParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -223,6 +228,7 @@ class ExactlyPhotoDistantRealityParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -257,6 +263,7 @@ class MicrosoftTrellis2Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -284,6 +291,7 @@ class Imagineart15ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -318,6 +326,7 @@ class Imagineart15Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -356,6 +365,7 @@ class Imagineart20Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -390,6 +400,7 @@ class Ideogram30EditParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -424,6 +435,7 @@ class IdeogramLayerizeTextParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -460,6 +472,7 @@ class Ideogram40Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -498,6 +511,7 @@ class Ideogram20RemixParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -538,6 +552,7 @@ class Ideogram40qParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -575,6 +590,7 @@ class Ideogram45Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -608,6 +624,7 @@ class IdeogramObjectRemoverParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -645,6 +662,7 @@ class Ideogram30RemixParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -680,6 +698,7 @@ class Ideogram45PreciseEditParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -718,6 +737,7 @@ class Ideogram30Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -753,6 +773,7 @@ class Ideogram2aParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -788,6 +809,7 @@ class Ideogram30ReframeParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -822,6 +844,7 @@ class Ideogram30ReplaceBackgroundParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -859,6 +882,7 @@ class Ideogram40RemixParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -896,6 +920,7 @@ class Ideogram2aRemixParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -932,6 +957,7 @@ class Ideogram20Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -963,6 +989,7 @@ class IdeogramRemoveBackgroundParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -995,6 +1022,7 @@ class OpenaiGptImage2Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1031,6 +1059,7 @@ class OpenaiGptImage25SunburstParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1063,6 +1092,7 @@ class OpenaiClipVitL14Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     deliveryMethod: NotRequired[str]
     inputs: dict[str, object]
 
@@ -1088,6 +1118,7 @@ class OpenaiGptImage15Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1125,6 +1156,7 @@ class OpenaiGpt54ProParams(TypedDict, total=False):
     taskType: Literal['textInference']
     taskUUID: str
     webhookURL: NotRequired[str]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     numberResults: NotRequired[int]
@@ -1154,6 +1186,7 @@ class OpenaiGptImage1MiniParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1191,6 +1224,7 @@ class OpenaiGpt55Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     deliveryMethod: NotRequired[str]
     numberResults: NotRequired[int]
@@ -1219,6 +1253,7 @@ class OpenaiGpt54NanoParams(TypedDict, total=False):
     taskType: Literal['textInference']
     taskUUID: str
     webhookURL: NotRequired[str]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -1248,6 +1283,7 @@ class OpenaiGpt54Params(TypedDict, total=False):
     taskType: Literal['textInference']
     taskUUID: str
     webhookURL: NotRequired[str]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -1278,6 +1314,7 @@ class OpenaiGptImage1Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1314,6 +1351,7 @@ class OpenaiGptImage25FlareParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1353,6 +1391,7 @@ class OpenaiGpt5NanoParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     deliveryMethod: NotRequired[str]
     numberResults: NotRequired[int]
     includeUsage: NotRequired[bool]
@@ -1383,6 +1422,7 @@ class OpenaiGpt5MiniParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     deliveryMethod: NotRequired[str]
     numberResults: NotRequired[int]
     includeUsage: NotRequired[bool]
@@ -1410,6 +1450,7 @@ class OpenaiGpt54MiniParams(TypedDict, total=False):
     taskType: Literal['textInference']
     taskUUID: str
     webhookURL: NotRequired[str]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -1451,6 +1492,7 @@ class StabilityaiStableDiffusion3Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1506,6 +1548,7 @@ class StabilityaiStableDiffusionXlV10VaeFixParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1542,6 +1585,7 @@ class BriaImageReplaceBackgroundParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1582,6 +1626,7 @@ class BriaFiboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1621,6 +1666,7 @@ class BriaFiboLiteParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1654,6 +1700,7 @@ class BriaImageIncreaseResolutionParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -1686,6 +1733,7 @@ class BriaFiboEditToolsParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1724,6 +1772,7 @@ class Bria32Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1756,6 +1805,7 @@ class BriaVideoBackgroundRemovalParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -1790,6 +1840,7 @@ class BriaFiboEditParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1822,6 +1873,7 @@ class BriaRmbgV20Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -1850,6 +1902,7 @@ class BriaVideoIncreaseResolutionParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -1879,6 +1932,7 @@ class BriaVideoEraserParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1917,6 +1971,7 @@ class MinimaxH3Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1950,6 +2005,7 @@ class MinimaxSpeech28Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -1984,6 +2040,7 @@ class MinimaxHailuo23Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2018,6 +2075,7 @@ class MinimaxM27Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -2049,6 +2107,7 @@ class Minimax01LiveParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2083,6 +2142,7 @@ class MinimaxM3Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -2114,6 +2174,7 @@ class MinimaxH3FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2151,6 +2212,7 @@ class Minimax01Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2185,6 +2247,7 @@ class MinimaxMusicCoverParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2221,6 +2284,7 @@ class MinimaxH3MaxParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2255,6 +2319,7 @@ class MinimaxM27HighspeedParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -2283,6 +2348,7 @@ class MinimaxMusic26Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2318,6 +2384,7 @@ class MinimaxHailuo23FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2356,6 +2423,7 @@ class MinimaxH3MaxTurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2393,6 +2461,7 @@ class Minimax01DirectorParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2430,6 +2499,7 @@ class MinimaxHailuo02Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2464,6 +2534,7 @@ class PrunaaiPImageTryOnParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2500,6 +2571,7 @@ class PrunaaiPImageEditParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2536,6 +2608,7 @@ class PrunaaiPImageIdeogramParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2570,6 +2643,7 @@ class PrunaaiPImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2610,6 +2684,7 @@ class PrunaaiPVideoParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2649,6 +2724,7 @@ class PrunaaiPVideo2Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2682,6 +2758,7 @@ class PrunaaiPImageUpscaleParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -2713,6 +2790,7 @@ class PrunaaiPVideoEditParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2751,6 +2829,7 @@ class PrunaaiPVideo2ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2787,6 +2866,7 @@ class PrunaaiPVideoAnimateParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2823,6 +2903,7 @@ class PrunaaiPVideoReplaceParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2859,6 +2940,7 @@ class PrunaaiPVideoAvatarParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2901,6 +2983,7 @@ class LightricksLtx23Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2940,6 +3023,7 @@ class LightricksLtx23FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -2977,6 +3061,7 @@ class LightricksLtx25ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3014,6 +3099,7 @@ class LightricksLtx25FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3054,6 +3140,7 @@ class LightricksLtx2Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3093,6 +3180,7 @@ class PixverseV35Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3128,6 +3216,7 @@ class PixverseModifyParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3167,6 +3256,7 @@ class PixverseV45Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3206,6 +3296,7 @@ class PixverseV5Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3245,6 +3336,7 @@ class PixverseV4Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3284,6 +3376,7 @@ class PixverseV6Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3316,6 +3409,7 @@ class PixverseLipsyncParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3355,6 +3449,7 @@ class PixverseV56Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3393,6 +3488,7 @@ class PixverseV5FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3432,6 +3528,7 @@ class PixverseV55Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3469,6 +3566,7 @@ class RunwayGen45Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3504,6 +3602,7 @@ class RunwayGen4ImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3537,6 +3636,7 @@ class RunwayAleph20Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3574,6 +3674,7 @@ class RunwayGen4TurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3609,6 +3710,7 @@ class RunwayGen4ImageTurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3647,6 +3749,7 @@ class XaiGrokImagineVideo15Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3682,6 +3785,7 @@ class XaiGrokImagineImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3718,6 +3822,7 @@ class XaiGrok43Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -3747,6 +3852,7 @@ class XaiGrokImagineImageQualityParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3784,6 +3890,7 @@ class XaiGrokImagineVideoParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3795,6 +3902,43 @@ class XaiGrokImagineVideoParams(TypedDict, total=False):
 
 class XaiGrokImagineVideoResult(TypedDict, total=False):
     """Inference result for curated model `xai:grok-imagine@video` (slug: xai-grok-imagine-video)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class XaiGrokImagineVideo15LiteParams(TypedDict, total=False):
+    """Inference params for curated model `xai:grok-imagine@video-1.5-lite` (slug: xai-grok-imagine-video-1-5-lite)."""
+
+    model: Literal['xai:grok-imagine@video-1.5-lite']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['480p', '720p', '1080p']]
+    duration: NotRequired[int]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class XaiGrokImagineVideo15LiteResult(TypedDict, total=False):
+    """Inference result for curated model `xai:grok-imagine@video-1.5-lite` (slug: xai-grok-imagine-video-1-5-lite)."""
 
     taskType: Literal['videoInference']
     taskUUID: str
@@ -3820,6 +3964,7 @@ class XaiGrokImagineImage20Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3852,6 +3997,7 @@ class XaiTtsParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3882,6 +4028,7 @@ class TopazlabsWonder35Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -3912,6 +4059,7 @@ class TopazlabsStarlightPrecise25Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -3943,6 +4091,7 @@ class TopazlabsProteus4Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -3978,6 +4127,7 @@ class GoogleNanoBanana2Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -3990,6 +4140,45 @@ class GoogleNanoBanana2Params(TypedDict, total=False):
 
 class GoogleNanoBanana2Result(TypedDict, total=False):
     """Inference result for curated model `google:4@3` (slug: google-nano-banana-2)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class GoogleNanoBanana21Params(TypedDict, total=False):
+    """Inference params for curated model `google:nano-banana@2.1` (slug: google-nano-banana-2-1)."""
+
+    model: Literal['google:nano-banana@2.1']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['1K', '2K', '4K']]
+    seed: NotRequired[int]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+    advancedFeatures: NotRequired[dict[str, object]]
+
+class GoogleNanoBanana21Result(TypedDict, total=False):
+    """Inference result for curated model `google:nano-banana@2.1` (slug: google-nano-banana-2-1)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -4017,6 +4206,7 @@ class GoogleNanoBanana2LiteParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4056,6 +4246,7 @@ class GoogleGemini35FlashParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     deliveryMethod: NotRequired[str]
     numberResults: NotRequired[int]
@@ -4087,6 +4278,7 @@ class GoogleGemini31FlashLiteParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     deliveryMethod: NotRequired[str]
     numberResults: NotRequired[int]
@@ -4118,6 +4310,7 @@ class GoogleNanoBananaProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4157,6 +4350,7 @@ class GoogleVeo31LiteParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4192,6 +4386,7 @@ class GoogleGemini31ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -4222,6 +4417,7 @@ class GoogleNanoBananaParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4256,6 +4452,7 @@ class GoogleGemma431bParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -4283,6 +4480,7 @@ class GoogleGemini31FlashTtsParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4319,6 +4517,7 @@ class GoogleVeo31Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4354,6 +4553,7 @@ class GoogleGemini3FlashParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -4385,6 +4585,7 @@ class GoogleGeminiOmniFlash11Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4423,6 +4624,7 @@ class GoogleVeo31FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4461,6 +4663,7 @@ class BytedanceSeedance15ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4498,6 +4701,7 @@ class BytedanceSeedream40Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4530,6 +4734,7 @@ class BytedanceOmnihuman1Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4567,6 +4772,7 @@ class BytedanceSeedream45Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4606,6 +4812,7 @@ class BytedanceSeedance10ProFastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4641,6 +4848,7 @@ class BytedanceSeedream50LiteParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4680,6 +4888,7 @@ class BytedanceSeedance10ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4713,6 +4922,7 @@ class BytedanceVideoEnhancementStandardParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -4743,6 +4953,7 @@ class BytedanceSeedAudio10Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4777,6 +4988,7 @@ class BytedanceSeedream50ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4815,6 +5027,7 @@ class BytedanceSeedream50FlashParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4854,6 +5067,7 @@ class BytedanceSeedance20FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4891,6 +5105,7 @@ class BytedanceSeedance25Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4925,6 +5140,7 @@ class BytedanceVideoEnhancementProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -4959,6 +5175,7 @@ class BytedanceSeedance20MiniParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -4996,6 +5213,7 @@ class BytedanceSeedance20Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5030,6 +5248,7 @@ class BytedanceOmnihuman15Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5060,6 +5279,7 @@ class BytedanceVideoUpscalerParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -5092,6 +5312,7 @@ class Klingai25TurboStandardParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5130,6 +5351,7 @@ class KlingaiVideo26ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5167,6 +5389,7 @@ class KlingaiVideo30OmniProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5204,6 +5427,7 @@ class KlingaiVideo30StandardParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5236,6 +5460,7 @@ class KlingaiAvatar20ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5268,6 +5493,7 @@ class KlingaiAvatar20StandardParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5305,6 +5531,7 @@ class KlingaiVideo30Omni4kParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5341,6 +5568,7 @@ class KlingaiVideoO1ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5376,6 +5604,7 @@ class KlingaiImageO1Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5414,6 +5643,7 @@ class KlingaiVideo30ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5447,6 +5677,7 @@ class KlingaiVideo26StandardParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5484,6 +5715,7 @@ class KlingaiVideo30OmniStandardParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5521,6 +5753,7 @@ class KlingaiVideo30TurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5553,6 +5786,7 @@ class KlingaiLipSyncParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5588,6 +5822,7 @@ class KlingaiImage30Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5623,6 +5858,7 @@ class KlingaiImageO3Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5660,6 +5896,7 @@ class KlingaiVideoO1StandardParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5697,6 +5934,7 @@ class KlingaiVideo304kParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5734,6 +5972,7 @@ class Klingai25TurboProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5779,6 +6018,7 @@ class RundiffusionJuggernautZFastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5832,6 +6072,7 @@ class RundiffusionJuggernautBaseFluxParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5882,6 +6123,7 @@ class RundiffusionJuggernautLightningFluxParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5928,6 +6170,7 @@ class RundiffusionJuggernautZParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -5981,6 +6224,7 @@ class RundiffusionJuggernautProFluxParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6020,6 +6264,7 @@ class BaiduErnieImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6059,6 +6304,7 @@ class BaiduErnieImageTurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6103,6 +6349,7 @@ class AlibabaQwenImageEditPlusParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6143,6 +6390,7 @@ class AlibabaWan26Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6188,6 +6436,7 @@ class AlibabaZImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6226,6 +6475,7 @@ class AlibabaQwenImage30Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6265,6 +6515,7 @@ class AlibabaWan30PrimeParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6311,6 +6562,7 @@ class AlibabaQwenImage2512Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6358,6 +6610,7 @@ class AlibabaQwenImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6395,6 +6648,7 @@ class AlibabaWan27ImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6432,6 +6686,7 @@ class AlibabaWan26ImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6466,6 +6721,7 @@ class AlibabaQwen3Tts17bBaseParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6495,6 +6751,7 @@ class AlibabaQwen25Vl3bInstructParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     deliveryMethod: NotRequired[str]
     inputs: dict[str, object]
 
@@ -6512,7 +6769,6 @@ class AlibabaQwenImage21ProParams(TypedDict, total=False):
     model: Literal['alibaba:qwen-image@2.1-pro']
     inputs: NotRequired[dict[str, object]]
     positivePrompt: str
-    negativePrompt: NotRequired[str]
     width: NotRequired[int]
     height: NotRequired[int]
     seed: NotRequired[int]
@@ -6521,6 +6777,7 @@ class AlibabaQwenImage21ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6561,6 +6818,7 @@ class AlibabaWan27Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6598,6 +6856,7 @@ class AlibabaQwenImage30ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6637,6 +6896,7 @@ class AlibabaHappyhorse10Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6673,6 +6933,7 @@ class AlibabaQwenImage20ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6707,6 +6968,7 @@ class AlibabaQwen3Tts17bVoicedesignParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6748,6 +7010,7 @@ class AlibabaQwenImageEdit2511Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6795,6 +7058,7 @@ class AlibabaZImageTurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6827,6 +7091,7 @@ class AlibabaQwen25Vl7bInstructParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     deliveryMethod: NotRequired[str]
     inputs: dict[str, object]
 
@@ -6849,6 +7114,7 @@ class AlibabaQwen3Tts17bCustomvoiceParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6881,6 +7147,7 @@ class AlibabaWan25PreviewImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6893,6 +7160,44 @@ class AlibabaWan25PreviewImageParams(TypedDict, total=False):
 
 class AlibabaWan25PreviewImageResult(TypedDict, total=False):
     """Inference result for curated model `runware:201@10` (slug: alibaba-wan2-5-preview-image)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class AlibabaQwenImage21TurboParams(TypedDict, total=False):
+    """Inference params for curated model `alibaba:qwen-image@2.1-turbo` (slug: alibaba-qwen-image-2-1-turbo)."""
+
+    model: Literal['alibaba:qwen-image@2.1-turbo']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    seed: NotRequired[int]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+    advancedFeatures: NotRequired[dict[str, object]]
+
+class AlibabaQwenImage21TurboResult(TypedDict, total=False):
+    """Inference result for curated model `alibaba:qwen-image@2.1-turbo` (slug: alibaba-qwen-image-2-1-turbo)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -6920,6 +7225,7 @@ class AlibabaWan30Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -6961,6 +7267,7 @@ class AlibabaQwenImageLayeredParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7000,6 +7307,7 @@ class AlibabaWan25PreviewParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7036,6 +7344,7 @@ class AlibabaWan27ImageProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7074,6 +7383,7 @@ class AlibabaHappyhorse11Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7117,6 +7427,7 @@ class AlibabaQwenImageEditParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7154,6 +7465,7 @@ class AlibabaQwenImage20Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7194,6 +7506,7 @@ class AlibabaWan26FlashParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7229,6 +7542,7 @@ class SourcefulRiverflow20FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7266,6 +7580,7 @@ class SourcefulRiverflow25ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7302,6 +7617,7 @@ class SourcefulRiverflow20ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7339,6 +7655,7 @@ class SourcefulRiverflow25FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7373,6 +7690,7 @@ class CreatifyAuroraV1FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7406,6 +7724,7 @@ class CreatifyAuroraV1Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7439,6 +7758,7 @@ class MetaSam3dObjectsParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7469,6 +7789,7 @@ class MetaMuseImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7501,6 +7822,7 @@ class MetaLlava16Mistral7bParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     deliveryMethod: NotRequired[str]
     inputs: dict[str, object]
 
@@ -7524,6 +7846,7 @@ class BooguImage01EditTurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7561,6 +7884,7 @@ class BooguImage01EditParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7595,6 +7919,7 @@ class FishAudioS21ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7630,6 +7955,7 @@ class SkyworkSkyreelsV4Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7662,6 +7988,7 @@ class InworldTts2Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7693,6 +8020,7 @@ class InworldTts15MaxParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7723,6 +8051,7 @@ class InworldTts15MiniParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7752,6 +8081,7 @@ class SyncLipsync2ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7784,6 +8114,7 @@ class SyncLipsync2Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7816,6 +8147,7 @@ class SyncReact1Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7848,6 +8180,7 @@ class Sync3Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7882,6 +8215,7 @@ class Hyper3dRodinGen2Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7906,13 +8240,14 @@ class HeygenAvatarIvParams(TypedDict, total=False):
     positivePrompt: NotRequired[str]
     width: NotRequired[int]
     height: NotRequired[int]
-    resolution: NotRequired[Literal['720p', '1080p']]
+    resolution: NotRequired[Literal['360p', '480p', '540p', '720p', '1080p']]
     speech: NotRequired[dict[str, object]]
     settings: NotRequired[dict[str, object]]
     taskType: Literal['videoInference']
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7951,6 +8286,7 @@ class HeygenVideo10Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -7987,6 +8323,7 @@ class HeygenAvatarVParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8022,6 +8359,7 @@ class HeygenVideoAgentParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8058,6 +8396,7 @@ class Krea2LargeParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8111,6 +8450,7 @@ class KreaFlux1KreaDevParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8149,6 +8489,7 @@ class Krea2TurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8186,6 +8527,7 @@ class Krea2MediumParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8223,6 +8565,7 @@ class Krea2MediumTurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8250,20 +8593,21 @@ class Krea2RawParams(TypedDict, total=False):
     """Inference params for curated model `krea:krea@2-raw` (slug: krea-2-raw)."""
 
     model: Literal['krea:krea@2-raw']
+    steps: NotRequired[int]
+    CFGScale: NotRequired[float]
     inputs: NotRequired[dict[str, object]]
     positivePrompt: str
     negativePrompt: NotRequired[str]
     width: int
     height: int
     seed: NotRequired[int]
-    steps: NotRequired[int]
-    CFGScale: NotRequired[float]
     acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
     lora: NotRequired[list[dict[str, object]]]
     taskType: Literal['imageInference']
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8298,6 +8642,7 @@ class TencentHunyuan3d31RapidParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8325,6 +8670,7 @@ class TencentHunyuan3d31ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8355,6 +8701,7 @@ class TripoV31Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8378,6 +8725,7 @@ class MediapipeNoseLipsMeshParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -8409,6 +8757,7 @@ class CcsrParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -8458,6 +8807,7 @@ class Flux1DevSrpoParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8488,6 +8838,7 @@ class BirefnetPortraitParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -8515,6 +8866,7 @@ class MediapipeLipsMeshParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -8545,6 +8897,7 @@ class RembgV14Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -8595,6 +8948,7 @@ class BirefnetV1BaseParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -8622,6 +8976,7 @@ class BirefnetV1BaseCodParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -8649,6 +9004,7 @@ class Qwen25Vl7bAgeDetectorParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     deliveryMethod: NotRequired[str]
     inputs: dict[str, object]
 
@@ -8678,6 +9034,7 @@ class HidreamI1FastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8716,6 +9073,7 @@ class AceStepV15TurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -8744,6 +9102,7 @@ class BirefnetGeneralResolution512x512Fp16Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -8771,6 +9130,7 @@ class MediapipeNoseEyesMeshParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -8800,6 +9160,7 @@ class ControlnetPreprocessNormalbaeParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -8827,6 +9188,7 @@ class ControlnetPreprocessTileParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -8854,6 +9216,7 @@ class ControlnetPreprocessSegParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -8905,6 +9268,7 @@ class RealEsrganParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -8933,6 +9297,7 @@ class ControlnetPreprocessOpenposeParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -8960,6 +9325,7 @@ class MediapipeNoseMeshParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -8999,6 +9365,7 @@ class AceStepV15XlSftParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -9027,6 +9394,7 @@ class VitAgeClassifierParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     deliveryMethod: NotRequired[str]
     inputs: dict[str, object]
 
@@ -9056,6 +9424,7 @@ class HidreamI1DevParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -9087,6 +9456,7 @@ class Yolov8nPersonSegParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9139,6 +9509,7 @@ class BirefnetDisParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -9177,6 +9548,7 @@ class TwinflowZImageTurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -9208,6 +9580,7 @@ class Yolov8nFaceParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9237,6 +9610,7 @@ class MediapipeEyesMeshParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9267,6 +9641,7 @@ class SwinirParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -9296,6 +9671,7 @@ class StableDiffusionLatentUpscalerParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -9323,6 +9699,7 @@ class BirefnetHrsodDhuParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -9350,6 +9727,7 @@ class MediapipeFaceMeshParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9379,6 +9757,7 @@ class ControlnetPreprocessSoftedgeParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9406,6 +9785,7 @@ class OpenAgeDetectionParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     deliveryMethod: NotRequired[str]
     inputs: dict[str, object]
 
@@ -9425,6 +9805,7 @@ class ControlnetPreprocessMlsdParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9485,6 +9866,7 @@ class HidreamI1FullParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -9525,6 +9907,7 @@ class AceStepV15BaseParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -9564,6 +9947,7 @@ class Kandinsky50ImageLiteParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -9595,6 +9979,7 @@ class MediapipeFaceFullParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9626,6 +10011,7 @@ class ClarityParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -9653,6 +10039,7 @@ class MediapipeFaceMeshEyesOnlyParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9682,6 +10069,7 @@ class Yolov8nHandParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9711,6 +10099,7 @@ class ControlnetPreprocessLineartParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9739,6 +10128,7 @@ class ControlnetPreprocessCannyParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9766,6 +10156,7 @@ class BirefnetMassiveTrDis5kTrTesParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -9799,6 +10190,7 @@ class Dia22bParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -9827,6 +10219,7 @@ class BirefnetGeneralParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -9854,6 +10247,7 @@ class ControlnetPreprocessDepthParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9881,6 +10275,7 @@ class Yolov8sFaceParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9918,6 +10313,7 @@ class AceStepV15XlTurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -9946,6 +10342,7 @@ class MediapipeFaceShortParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -9975,6 +10372,7 @@ class BirefnetMattingParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -10002,6 +10400,7 @@ class MediapipeEyesLipsMeshParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -10032,6 +10431,7 @@ class Llama318bPromptEnhancerParams(TypedDict, total=False):
     webhookURL: NotRequired[str]
     deliveryMethod: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     prompt: str
     promptMaxLength: NotRequired[int]
     promptVersions: NotRequired[int]
@@ -10075,6 +10475,7 @@ class Yolov8sPersonSegParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -10109,6 +10510,7 @@ class ObjectEraserParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10140,6 +10542,7 @@ class ControlnetPreprocessShuffleParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -10167,6 +10570,7 @@ class ControlnetPreprocessScribbleParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -10204,6 +10608,7 @@ class AceStepV15XlBaseParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10232,6 +10637,7 @@ class ControlnetPreprocessLineartAnimeParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
     deliveryMethod: NotRequired[str]
@@ -10262,6 +10668,7 @@ class Meshy6Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10293,6 +10700,7 @@ class MireloSfx15Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10326,6 +10734,7 @@ class BflFlux1KontextProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10363,6 +10772,7 @@ class BflFlux1FillProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10400,6 +10810,7 @@ class BflFlux1KontextMaxParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10443,6 +10854,7 @@ class BflFlux2DevParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10482,6 +10894,7 @@ class BflFlux2FlexParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10535,6 +10948,7 @@ class BflFlux1DevParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10568,6 +10982,7 @@ class BflFluxOutpaintingParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10611,6 +11026,7 @@ class BflFlux2Klein9bBaseParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10660,6 +11076,7 @@ class BflFlux1SchnellParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10703,6 +11120,7 @@ class BflFlux2Klein9bKvParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10740,6 +11158,7 @@ class BflFlux2ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10776,6 +11195,7 @@ class BflFlux11ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10809,6 +11229,7 @@ class BflFluxEraseParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10843,6 +11264,7 @@ class BflFluxVideoEditFastParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10878,6 +11300,7 @@ class BflFlux11ProUltraParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10921,6 +11344,7 @@ class BflFlux2Klein4bParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10959,6 +11383,7 @@ class BflFlux3VideoParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -10993,6 +11418,7 @@ class BflFluxVideoUpscaleParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
@@ -11043,6 +11469,7 @@ class BflFlux1FillDevParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11079,6 +11506,7 @@ class BflFlux1ExpandProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11116,6 +11544,7 @@ class BflFlux2MaxParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11159,6 +11588,7 @@ class BflFlux2Klein4bBaseParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11194,6 +11624,7 @@ class BflFluxVirtualTryOnParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11238,6 +11669,7 @@ class BflFlux1KontextDevParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11250,6 +11682,44 @@ class BflFlux1KontextDevParams(TypedDict, total=False):
 
 class BflFlux1KontextDevResult(TypedDict, total=False):
     """Inference result for curated model `runware:106@1` (slug: bfl-flux-1-kontext-dev)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
+class BflFlux3ImageParams(TypedDict, total=False):
+    """Inference params for curated model `bfl:flux@3-image` (slug: bfl-flux-3-image)."""
+
+    model: Literal['bfl:flux@3-image']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['0.75K', '1K', '2K', '4K']]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+    advancedFeatures: NotRequired[dict[str, object]]
+
+class BflFlux3ImageResult(TypedDict, total=False):
+    """Inference result for curated model `bfl:flux@3-image` (slug: bfl-flux-3-image)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -11281,6 +11751,7 @@ class BflFlux2Klein9bParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11316,6 +11787,7 @@ class AnthropicClaudeHaiku45Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -11344,6 +11816,7 @@ class AnthropicClaudeOpus48Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -11372,6 +11845,7 @@ class AnthropicClaudeOpus47Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -11400,6 +11874,7 @@ class AnthropicClaudeSonnet46Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -11430,6 +11905,7 @@ class AnthropicClaudeFable5Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     deliveryMethod: NotRequired[str]
     numberResults: NotRequired[int]
@@ -11458,6 +11934,7 @@ class RecraftV41FlashParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11493,6 +11970,7 @@ class RecraftV41UtilityParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11528,6 +12006,7 @@ class RecraftV41Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11560,6 +12039,7 @@ class RecraftVectorizeParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
@@ -11589,6 +12069,7 @@ class RecraftV4Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11624,6 +12105,7 @@ class RecraftV41UtilityProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11660,6 +12142,7 @@ class RecraftV4StylesVectorParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
@@ -11691,6 +12174,7 @@ class RecraftV4StylesProVectorParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
@@ -11721,6 +12205,7 @@ class RecraftV41ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11757,6 +12242,7 @@ class RecraftV4StylesProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11793,6 +12279,7 @@ class RecraftV4ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11828,6 +12315,7 @@ class RecraftV4ProVectorParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
@@ -11857,6 +12345,7 @@ class RecraftV4VectorParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
@@ -11887,6 +12376,7 @@ class RecraftV4StylesParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11926,6 +12416,7 @@ class Vidu20Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -11964,6 +12455,7 @@ class ViduQ1ClassicParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -12001,6 +12493,7 @@ class ViduQ1Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -12039,6 +12532,7 @@ class ViduQ3Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -12073,6 +12567,7 @@ class ViduQ1ImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -12111,6 +12606,7 @@ class ViduQ2TurboParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -12148,6 +12644,7 @@ class ViduQ2ProParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -12206,6 +12703,7 @@ class VeedFabric10HostedParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -12240,6 +12738,7 @@ class ZaiGlm51Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
     deliveryMethod: NotRequired[str]
@@ -12265,6 +12764,7 @@ class PicsartImageVectorizerParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
@@ -12297,6 +12797,7 @@ class LumaRay32Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -12332,6 +12833,7 @@ class LumaUni1MaxParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -12368,6 +12870,7 @@ class LumaUni1Params(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -12421,6 +12924,34 @@ class SdxlTurboArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    model: str
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+    advancedFeatures: NotRequired[dict[str, object]]
+
+class Krea2TurboOssArchParams(TypedDict, total=False):
+    """Inference params for architecture `krea-2-turbo-oss`."""
+
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: int
+    height: int
+    seed: NotRequired[int]
+    steps: NotRequired[int]
+    acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
+    lora: NotRequired[list[dict[str, object]]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12462,6 +12993,36 @@ class PonyArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    model: str
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+    advancedFeatures: NotRequired[dict[str, object]]
+
+class Krea2RawOssArchParams(TypedDict, total=False):
+    """Inference params for architecture `krea-2-raw-oss`."""
+
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    negativePrompt: NotRequired[str]
+    width: int
+    height: int
+    seed: NotRequired[int]
+    steps: NotRequired[int]
+    CFGScale: NotRequired[float]
+    acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
+    lora: NotRequired[list[dict[str, object]]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12496,6 +13057,7 @@ class ZImageTurboArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12536,6 +13098,7 @@ class Flux1DevArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12568,6 +13131,7 @@ class ZImageArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12608,6 +13172,7 @@ class Sd15ArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12650,6 +13215,7 @@ class SdxlArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12691,6 +13257,7 @@ class NoobaiArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12732,6 +13299,7 @@ class SdxlLightningArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12768,6 +13336,7 @@ class Flux1SchnellArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12809,6 +13378,7 @@ class IllustriousArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12840,6 +13410,7 @@ class Flux1KontextDevArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12863,6 +13434,7 @@ class ExactlyIllustrativeArchParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12881,6 +13453,7 @@ class AudioInferenceParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12897,6 +13470,7 @@ class TextInferenceParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     messages: list[dict[str, object]]
     outputFormat: NotRequired[Literal['TEXT']]
@@ -12912,6 +13486,7 @@ class ImageInferenceParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12930,6 +13505,7 @@ class VideoInferenceParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12947,6 +13523,7 @@ class ThreeDInferenceParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     numberResults: NotRequired[int]
     uploadEndpoint: NotRequired[str]
@@ -12962,6 +13539,7 @@ class ControlnetPreprocessParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
@@ -12977,6 +13555,7 @@ class CaptionVideoParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     deliveryMethod: NotRequired[str]
     inputs: dict[str, object]
@@ -12988,6 +13567,7 @@ class UpscaleImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -13004,6 +13584,7 @@ class RemoveBackgroundVideoParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -13020,6 +13601,7 @@ class RemoveBackgroundParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -13032,6 +13614,7 @@ class RemoveBackgroundImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -13049,6 +13632,7 @@ class PromptEnhanceParams(TypedDict, total=False):
     webhookURL: NotRequired[str]
     deliveryMethod: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     prompt: str
     promptMaxLength: NotRequired[int]
@@ -13061,6 +13645,7 @@ class CaptionImageParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     deliveryMethod: NotRequired[str]
     inputs: dict[str, object]
@@ -13072,6 +13657,7 @@ class VectorizeParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -13086,6 +13672,7 @@ class MaskingParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
     outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
@@ -13111,6 +13698,7 @@ class CaptionParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
 
 class UpscaleParams(TypedDict, total=False):
@@ -13120,6 +13708,7 @@ class UpscaleParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -13132,6 +13721,7 @@ class UpscaleVideoParams(TypedDict, total=False):
     taskUUID: str
     webhookURL: NotRequired[str]
     includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
     model: str
     uploadEndpoint: NotRequired[str]
     ttl: NotRequired[int]
@@ -13260,15 +13850,15 @@ class ModelSearchParams(TypedDict, total=False):
 
     taskType: Literal['modelSearch']
     taskUUID: str
-    search: str
-    source: NotRequired[Literal['featured', 'community']]
+    search: NotRequired[str]
+    source: NotRequired[Literal['official', 'community']]
     category: NotRequired[Literal['checkpoint', 'lora', 'lycoris', 'vae', 'embeddings']]
     architecture: NotRequired[str]
     capabilities: NotRequired[list[str]]
     visibility: NotRequired[Literal['public', 'private', 'favorite', 'owned']]
     limit: NotRequired[int]
     offset: NotRequired[int]
-    sort: NotRequired[Literal['popularity', '-popularity', 'name', '-name', 'addedUnixTimestamp', '-addedUnixTimestamp', 'updatedDateUnixTimestamp', '-updatedDateUnixTimestamp']]
+    sort: NotRequired[Literal['_score', 'popularity', '-popularity', 'name', '-name', 'addedUnixTimestamp', '-addedUnixTimestamp', 'updatedDateUnixTimestamp', '-updatedDateUnixTimestamp']]
 
 class ModelSearchResult(TypedDict, total=False):
     """Result for the `model-search` utility task."""
@@ -13543,6 +14133,7 @@ models: dict[str, ModelEntry] = {
     "alibaba:qwen-image@2.0": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-2-0"),
     "alibaba:qwen-image@2.0-pro": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-2-0-pro"),
     "alibaba:qwen-image@2.1-pro": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-2-1-pro"),
+    "alibaba:qwen-image@2.1-turbo": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-2-1-turbo"),
     "alibaba:qwen-image@2512": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-2512"),
     "alibaba:qwen-image@3.0": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-3-0"),
     "alibaba:qwen-image@3.0-pro": ModelEntry(task_type="imageInference", id="alibaba-qwen-image-3-0-pro"),
@@ -13574,6 +14165,7 @@ models: dict[str, ModelEntry] = {
     "bfl:5@1": ModelEntry(task_type="imageInference", id="bfl-flux-2-pro"),
     "bfl:6@1": ModelEntry(task_type="imageInference", id="bfl-flux-2-flex"),
     "bfl:7@1": ModelEntry(task_type="imageInference", id="bfl-flux-2-max"),
+    "bfl:flux@3-image": ModelEntry(task_type="imageInference", id="bfl-flux-3-image"),
     "bfl:flux@3-video": ModelEntry(task_type="videoInference", id="bfl-flux-3-video"),
     "bfl:flux@erase": ModelEntry(task_type="imageInference", id="bfl-flux-erase"),
     "bfl:flux@outpainting": ModelEntry(task_type="imageInference", id="bfl-flux-outpainting"),
@@ -13635,6 +14227,7 @@ models: dict[str, ModelEntry] = {
     "google:gemini@omni-flash-1.1": ModelEntry(task_type="videoInference", id="google-gemini-omni-flash-1-1"),
     "google:gemma@4-31b": ModelEntry(task_type="textInference", id="google-gemma-4-31b"),
     "google:nano-banana@2-lite": ModelEntry(task_type="imageInference", id="google-nano-banana-2-lite"),
+    "google:nano-banana@2.1": ModelEntry(task_type="imageInference", id="google-nano-banana-2-1"),
     "google:veo@3.1-lite": ModelEntry(task_type="videoInference", id="google-veo-3-1-lite"),
     "heygen:avatar@4": ModelEntry(task_type="videoInference", id="heygen-avatar-iv"),
     "heygen:avatar@5": ModelEntry(task_type="videoInference", id="heygen-avatar-v"),
@@ -13893,6 +14486,7 @@ models: dict[str, ModelEntry] = {
     "xai:grok-imagine@image-quality": ModelEntry(task_type="imageInference", id="xai-grok-imagine-image-quality"),
     "xai:grok-imagine@video": ModelEntry(task_type="videoInference", id="xai-grok-imagine-video"),
     "xai:grok-imagine@video-1.5": ModelEntry(task_type="videoInference", id="xai-grok-imagine-video-1-5"),
+    "xai:grok-imagine@video-1.5-lite": ModelEntry(task_type="videoInference", id="xai-grok-imagine-video-1-5-lite"),
     "xai:grok@4.3": ModelEntry(task_type="textInference", id="xai-grok-4-3"),
     "xai:tts@0": ModelEntry(task_type="audioInference", id="xai-tts"),
     "zai:glm@5.1": ModelEntry(task_type="textInference", id="zai-glm-5-1"),
@@ -13904,6 +14498,8 @@ architecture_task_types: dict[str, str] = {
     "flux-1-kontext-dev": "imageInference",
     "flux-1-schnell": "imageInference",
     "illustrious": "imageInference",
+    "krea-2-raw-oss": "imageInference",
+    "krea-2-turbo-oss": "imageInference",
     "noobai": "imageInference",
     "pony": "imageInference",
     "sd-1-5": "imageInference",
