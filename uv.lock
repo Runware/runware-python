@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.11"
 
 [[package]]
@@ -666,7 +666,7 @@ wheels = [
 
 [[package]]
 name = "runware-sdk"
-version = "1.7.3"
+version = "1.7.4"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
