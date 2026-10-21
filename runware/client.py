@@ -425,6 +425,7 @@ class Runware:
         payload: dict[str, Any] | None = None,  # pyright: ignore[reportExplicitAny]
         *,
         task_id: str | None = None,
+        environment: str | None = None,
         options: InvokeOptions | None = None,
     ) -> ServerlessTask:
         """
@@ -444,12 +445,21 @@ class Runware:
         Sending the same id again returns the task it already names instead of
         starting a second, so a call whose response was lost is safe to repeat.
 
+        ``environment`` selects which copy of the app to call, falling back to
+        ``config.serverless_environment`` and then to ``production``. Waiting
+        polls the task in that same environment.
+
         Raises a ``RunwareError`` when the task fails to start. A task that
         runs and fails comes back with ``status`` ``failed`` and its ``error``
         set, because that is an outcome rather than a broken call.
         """
         return await self._serverless.invoke(
-            app_id, endpoint_path, payload, task_id=task_id, options=options,
+            app_id,
+            endpoint_path,
+            payload,
+            task_id=task_id,
+            environment=environment,
+            options=options,
         )
 
     async def get_task(
@@ -457,6 +467,8 @@ class Runware:
         app_id: str,
         task_id: str,
         options: GetTaskOptions | None = None,
+        *,
+        environment: str | None = None,
     ) -> ServerlessTask:
         """
         Read one serverless task by id.
@@ -464,8 +476,13 @@ class Runware:
         ``invoke`` already waits for you, so reach for this when you want to
         poll yourself: after ``invoke`` with ``wait=False``, or from a
         different process than the one that submitted the task.
+
+        Pass the ``environment`` the task was invoked in. It falls back to
+        ``config.serverless_environment`` and then to ``production``.
         """
-        return await self._serverless.get_task(app_id, task_id, options)
+        return await self._serverless.get_task(
+            app_id, task_id, options, environment=environment,
+        )
 
     # ----------------------------------------------------------- internal
 

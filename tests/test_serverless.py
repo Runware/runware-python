@@ -527,3 +527,104 @@ async def test_get_task_honors_a_per_call_timeout_option() -> None:
     result = await api.get_task("my-app", TASK_ID, GetTaskOptions(timeout=1_000))
 
     assert result["id"] == TASK_ID
+
+
+# ---------------------------------------------------------------- environment
+
+
+STAGING_ASYNC_URL = f"{ASYNC_URL}?environment=staging"
+STAGING_TASK_URL = f"{TASK_URL}?environment=staging"
+
+
+@pytest.mark.asyncio
+async def test_sends_no_environment_when_none_is_set() -> None:
+    session = MockSession()
+    session.add("POST", ASYNC_URL, MockResponse(status=200, payload=task()))
+    session.add("GET", TASK_URL, MockResponse(status=200, payload=task()))
+    api = make_api(session)
+
+    await api.invoke("my-app", "generate")
+    await api.get_task("my-app", TASK_ID)
+
+    assert [entry.url for entry in session.request_log] == [ASYNC_URL, TASK_URL]
+
+
+@pytest.mark.asyncio
+async def test_addresses_the_client_environment() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=200, payload=task()))
+    session.add("GET", STAGING_TASK_URL, MockResponse(status=200, payload=task()))
+    api = make_api(session, serverless_environment="staging")
+
+    await api.invoke("my-app", "generate")
+    await api.get_task("my-app", TASK_ID)
+
+    assert [entry.url for entry in session.request_log] == [
+        STAGING_ASYNC_URL, STAGING_TASK_URL,
+    ]
+
+
+@pytest.mark.asyncio
+async def test_a_per_call_environment_overrides_the_client_one() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=200, payload=task()))
+    session.add("GET", STAGING_TASK_URL, MockResponse(status=200, payload=task()))
+    api = make_api(session, serverless_environment="production")
+
+    await api.invoke("my-app", "generate", environment="staging")
+    await api.get_task("my-app", TASK_ID, environment="staging")
+
+    assert [entry.url for entry in session.request_log] == [
+        STAGING_ASYNC_URL, STAGING_TASK_URL,
+    ]
+
+
+@pytest.mark.asyncio
+async def test_polls_in_the_environment_the_task_was_invoked_in() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=202, payload=pending()))
+    session.add("GET", STAGING_TASK_URL, MockResponse(status=200, payload=pending()))
+    session.add("GET", STAGING_TASK_URL, MockResponse(status=200, payload=task()))
+    api = make_api(session)
+
+    result = await api.invoke(
+        "my-app", "generate", environment="staging", options=no_wait(),
+    )
+
+    assert result["status"] == "completed"
+    assert session.count("GET", STAGING_TASK_URL) == 2
+    assert session.count("GET", TASK_URL) == 0
+
+
+@pytest.mark.asyncio
+async def test_names_the_environment_when_the_poll_budget_runs_out() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=202, payload=pending()))
+    api = make_api(session, poll_timeout=0)
+
+    with pytest.raises(RunwareError, match=r'environment="staging"\) to pick it up'):
+        _ = await api.invoke(
+            "my-app", "generate", environment="staging", options=no_wait(),
+        )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("environment", ["", "Staging", "-dev", "a/b", "a" * 64])
+async def test_rejects_an_environment_that_cannot_exist(environment: str) -> None:
+    session = MockSession()
+    api = make_api(session)
+
+    with pytest.raises(RunwareError) as excinfo:
+        _ = await api.invoke("my-app", "generate", environment=environment)
+    assert excinfo.value.parameter == "environment"
+    assert session.request_log == []
+
+
+@pytest.mark.asyncio
+async def test_rejects_an_invalid_client_environment_before_any_request() -> None:
+    session = MockSession()
+    api = make_api(session, serverless_environment="Staging")
+
+    with pytest.raises(RunwareError, match='environment "Staging" is invalid'):
+        _ = await api.get_task("my-app", TASK_ID)
+    assert session.request_log == []

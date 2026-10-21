@@ -597,6 +597,22 @@ task = await client.get_task("image-tools", accepted["id"])
 
 A task that runs and fails comes back with `status` set to `"failed"` and its `error` set. Only a failure to start raises.
 
+An app id names one copy of the app per environment. Calls go to `production` unless you name another environment, for the whole client or for one call. Waiting polls the task in the environment it was invoked in; when you call `get_task` yourself, pass that same environment.
+
+```python
+client = Runware(serverless_environment="staging")
+
+task = await client.invoke("image-tools", "generate", {"prompt": "a red bicycle"})
+
+task = await client.invoke(
+    "image-tools", "generate", {"prompt": "a red bicycle"}, environment="production",
+)
+accepted = await client.invoke(
+    "image-tools", "train", {"epochs": 10}, environment="dev", options=InvokeOptions(wait=False),
+)
+task = await client.get_task("image-tools", accepted["id"], environment="dev")
+```
+
 ## Content metadata
 
 `client.content.*` exposes Runware's curated model catalog as read-only metadata — names, AIRs, headlines, capabilities, pricing, examples. Public information, no extra cost.
