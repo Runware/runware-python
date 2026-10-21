@@ -49,6 +49,7 @@ dependencies = [
     "aiohttp>=3.10",
     "websockets>=13",
     "fastjsonschema>=2.20",
+    "typing-extensions>=4.4",
 ]
 
 [project.urls]

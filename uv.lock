@@ -671,6 +671,7 @@ source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
     { name = "fastjsonschema" },
+    { name = "typing-extensions" },
     { name = "websockets" },
 ]
 
@@ -688,6 +689,7 @@ dev = [
 requires-dist = [
     { name = "aiohttp", specifier = ">=3.10" },
     { name = "fastjsonschema", specifier = ">=2.20" },
+    { name = "typing-extensions", specifier = ">=4.4" },
     { name = "websockets", specifier = ">=13" },
 ]
 
