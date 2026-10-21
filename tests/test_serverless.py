@@ -8,9 +8,10 @@ from typing import Any, cast
 import aiohttp
 import pytest
 
+from runware import Runware
 from runware.errors import RunwareError
 from runware.serverless import ServerlessApi
-from runware.types.sdk import SDKConfig
+from runware.types.sdk import RuntimeDependencies, SDKConfig
 from runware.types.serverless import GetTaskOptions, InvokeOptions
 
 from ._mocks import MockResponse, MockSession
@@ -609,7 +610,9 @@ async def test_names_the_environment_when_the_poll_budget_runs_out() -> None:
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("environment", ["", "Staging", "-dev", "a/b", "a" * 64])
+@pytest.mark.parametrize(
+    "environment", ["", "Staging", "-dev", ".dev", "_dev", "a/b", "staging\n", "a" * 64],
+)
 async def test_rejects_an_environment_that_cannot_exist(environment: str) -> None:
     session = MockSession()
     api = make_api(session)
@@ -621,10 +624,57 @@ async def test_rejects_an_environment_that_cannot_exist(environment: str) -> Non
 
 
 @pytest.mark.asyncio
-async def test_rejects_an_invalid_client_environment_before_any_request() -> None:
+@pytest.mark.parametrize(
+    "environment", ["pr-12", "feature_x", "v1.2", "1st", "a" * 63],
+)
+async def test_accepts_every_name_the_platform_allows(environment: str) -> None:
+    url = f"{ASYNC_URL}?environment={environment}"
     session = MockSession()
-    api = make_api(session, serverless_environment="Staging")
+    session.add("POST", url, MockResponse(status=200, payload=task()))
+    api = make_api(session)
 
-    with pytest.raises(RunwareError, match='environment "Staging" is invalid'):
-        _ = await api.get_task("my-app", TASK_ID)
-    assert session.request_log == []
+    await api.invoke("my-app", "generate", environment=environment)
+
+    assert session.request_log[0].url == url
+
+
+def test_rejects_an_invalid_client_environment_when_built() -> None:
+    with pytest.raises(RunwareError) as excinfo:
+        _ = make_api(MockSession(), serverless_environment="Staging")
+    assert excinfo.value.parameter == "serverless_environment"
+    assert 'serverless_environment "Staging" is invalid' in str(excinfo.value)
+
+
+@pytest.mark.asyncio
+async def test_names_no_environment_in_the_hint_when_none_is_set() -> None:
+    session = MockSession()
+    session.add("POST", ASYNC_URL, MockResponse(status=202, payload=pending()))
+    api = make_api(session, poll_timeout=0)
+
+    with pytest.raises(RunwareError, match=rf'get_task\("my-app", "{TASK_ID}"\) to pick it up'):
+        _ = await api.invoke("my-app", "generate", options=no_wait())
+
+
+@pytest.mark.asyncio
+async def test_the_client_passes_a_per_call_environment_through() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=200, payload=task()))
+    session.add("GET", STAGING_TASK_URL, MockResponse(status=200, payload=task()))
+    client = Runware(
+        api_key="test-key",
+        serverless_base_url=ORIGIN,
+        transport="rest",
+        dependencies=RuntimeDependencies(
+            session=cast("aiohttp.ClientSession", session),
+        ),
+    )
+
+    try:
+        await client.invoke("my-app", "generate", environment="staging")
+        await client.get_task("my-app", TASK_ID, environment="staging")
+    finally:
+        await client.close()
+
+    assert [entry.url for entry in session.request_log] == [
+        STAGING_ASYNC_URL, STAGING_TASK_URL,
+    ]

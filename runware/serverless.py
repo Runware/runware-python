@@ -19,6 +19,7 @@ import time
 import uuid
 from collections.abc import Awaitable, Callable
 from typing import Any, cast
+from urllib.parse import urlencode
 
 import aiohttp
 
@@ -122,17 +123,21 @@ def validate_endpoint_path(endpoint_path: object) -> str:
     return endpoint_path
 
 
-def validate_environment(environment: object) -> str | None:
+def validate_environment(
+    environment: object, parameter: str = "environment",
+) -> str | None:
     """Check an environment name against the platform's own pattern."""
     if environment is None:
         return None
-    if not isinstance(environment, str) or not _ENVIRONMENT_PATTERN.match(environment):
+    if not isinstance(environment, str) or not _ENVIRONMENT_PATTERN.fullmatch(
+        environment,
+    ):
         raise create_runware_error(
             "invalidParameter",
-            f'environment "{environment}" is invalid: use 1 to 63 lowercase '
+            f'{parameter} "{environment}" is invalid: use 1 to 63 lowercase '
             + "letters, digits, hyphens, underscores or periods, starting with "
             + "a letter or digit",
-            parameter="environment",
+            parameter=parameter,
         )
     return environment
 
@@ -239,6 +244,9 @@ class ServerlessApi:
     def __init__(
         self, session_provider: SessionProvider, config: SDKConfig,
     ) -> None:
+        _ = validate_environment(
+            config.serverless_environment, "serverless_environment",
+        )
         self._session_provider: SessionProvider = session_provider
         self._config: SDKConfig = config
 
@@ -255,7 +263,9 @@ class ServerlessApi:
 
     def _app_url(self, app: str, path: str, environment: str | None) -> str:
         url = f"{self._origin}/v1/apps/{app}/{path}"
-        return url if environment is None else f"{url}?environment={environment}"
+        if environment is None:
+            return url
+        return f"{url}?{urlencode({'environment': environment})}"
 
     async def invoke(
         self,
