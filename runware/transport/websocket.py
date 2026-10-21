@@ -22,6 +22,7 @@ import json
 import secrets
 import time
 from collections.abc import Callable, Coroutine
+from dataclasses import dataclass
 from typing import Any, cast
 
 import websockets
@@ -41,6 +42,18 @@ _HEARTBEAT_INTERVAL_SECONDS = 30.0
 _HEARTBEAT_INACTIVITY_THRESHOLD_MS = 100_000
 _RECONNECT_BACKOFF_CAP_MS = 30_000
 _RECONNECT_JITTER_MAX_MS = 1_000
+_READ_ONLY_TASK_TYPES = frozenset({"getResponse", "getTaskDetails", "modelSearch", "accountManagement"})
+
+
+def _can_resend(task: LoosePayload) -> bool:
+    return task.get("taskType") in _READ_ONLY_TASK_TYPES or task.get("deliveryMethod") == "async"
+
+
+@dataclass
+class _InFlightRequest:
+    task: LoosePayload
+    sent: bool
+    resent: bool = False
 
 
 class WebSocketTransport:
@@ -56,7 +69,9 @@ class WebSocketTransport:
         self._heartbeat_task: asyncio.Task[None] | None = None
         self._background_tasks: set[asyncio.Task[None]] = set()
         self._task_callbacks: dict[str, ResponseCallback] = {}
+        self._in_flight: dict[str, _InFlightRequest] = {}
         self._connected: bool = False
+        self._connected_at: float | None = None
         self._should_reconnect: bool = False
         self._is_reconnecting: bool = False
         self._reconnect_attempt: int = 0
@@ -72,14 +87,27 @@ class WebSocketTransport:
     def session_id(self) -> str | None:
         return self._session_uuid
 
+    @property
+    def connected_at(self) -> float | None:
+        """`time.monotonic()` of the last successful authentication."""
+        return self._connected_at
+
     async def connect(self) -> None:
-        """Open the WebSocket and authenticate."""
+        """Open the WebSocket and authenticate. No-op when already connected."""
         async with self._connect_lock:
             self._should_reconnect = True
+            if self._connected:
+                return
             # Reset the reconnect counter so a fresh connect() after a prior
             # give-up doesn't start already over the limit.
             self._reconnect_attempt = 0
             await self._open_once()
+
+    async def ensure_connected(self) -> None:
+        """Connect unless connected, or unless a reconnect is already under way."""
+        if self._connected or self._will_reconnect():
+            return
+        await self.connect()
 
     async def disconnect(self) -> None:
         """Close the socket and stop reconnect attempts."""
@@ -90,30 +118,83 @@ class WebSocketTransport:
             except Exception as exc:
                 self._log.error(f"task callback raised during disconnect: {exc}")
         self._task_callbacks.clear()
+        self._in_flight.clear()
         await self._teardown_socket()
 
     async def send_request(
         self,
         data: LoosePayload | list[LoosePayload],
     ) -> None:
-        if not self._connected or self._ws is None:
+        if not self._connected and not self._will_reconnect():
             raise create_runware_error("notConnected", "Not connected to WebSocket server")
         payload = data if isinstance(data, list) else [data]
-        serialized = json.dumps(payload)
-        self._log.send(_redact(payload))
-        try:
-            await self._ws.send(serialized)
-        except (ConnectionClosed, OSError) as exc:
-            raise create_runware_error(
-                "sendFailed",
-                f"Failed to send WebSocket message: {exc}",
-            ) from exc
+        for task in payload:
+            task_uuid = task.get("taskUUID")
+            if isinstance(task_uuid, str):
+                self._in_flight[task_uuid] = _InFlightRequest(task=task, sent=self._connected)
+        if not self._connected:
+            self._log.connection(
+                f"Reconnecting, holding {len(payload)} request(s) until the connection is back"
+            )
+            return
+        await self._send(payload)
 
     def subscribe_to_task(self, task_uuid: str, callback: ResponseCallback) -> None:
         self._task_callbacks[task_uuid] = callback
 
     def unsubscribe_from_task(self, task_uuid: str) -> None:
         self._task_callbacks.pop(task_uuid, None)
+        self._in_flight.pop(task_uuid, None)
+
+    def _will_reconnect(self) -> bool:
+        return self._should_reconnect and self._is_reconnecting
+
+    async def _send(self, payload: list[LoosePayload]) -> None:
+        ws = self._ws
+        if ws is None:
+            raise create_runware_error("notConnected", "Not connected to WebSocket server")
+        self._log.send(_redact(payload))
+        try:
+            await ws.send(json.dumps(payload))
+        except (ConnectionClosed, OSError) as exc:
+            if not self._should_reconnect:
+                raise create_runware_error(
+                    "sendFailed",
+                    f"Failed to send WebSocket message: {exc}",
+                ) from exc
+            for task in payload:
+                request = self._in_flight.get(cast(str, task.get("taskUUID")))
+                if request is not None:
+                    request.sent = False
+            self._log.connection(f"Send failed, holding {len(payload)} request(s): {exc}")
+            if self._ws is ws:
+                self._connected = False
+                self._schedule_reconnect()
+
+    async def _send_in_flight(self) -> None:
+        pending: list[LoosePayload] = []
+        for task_uuid, request in list(self._in_flight.items()):
+            if request.sent and not _can_resend(request.task):
+                del self._in_flight[task_uuid]
+                cb = self._task_callbacks.get(task_uuid)
+                if cb is not None:
+                    self._safe_call(cb, {"error": [{
+                        "code": "connectionLost",
+                        "message": (
+                            "Connection lost before the response arrived. "
+                            "The request may have been processed."
+                        ),
+                        "taskUUID": task_uuid,
+                    }]})
+                continue
+            if request.sent:
+                request.resent = True
+            request.sent = True
+            pending.append(request.task)
+        if not pending:
+            return
+        self._log.connection(f"Sending {len(pending)} pending request(s) after reconnect")
+        await self._send(pending)
 
     async def _default_connect(self, url: str) -> ClientConnection:
         # Identify the client on the handshake. `additional_headers` is the
@@ -146,17 +227,18 @@ class WebSocketTransport:
                 f"WebSocket connection failed: {exc}",
             ) from exc
 
-        self._connected = True
-        self._last_activity_ms = time.monotonic() * 1000
-
         try:
             await self._authenticate()
         except BaseException:
             await self._teardown_socket(close_socket=True)
             raise
 
+        self._connected = True
+        self._connected_at = time.monotonic()
+        self._last_activity_ms = time.monotonic() * 1000
         self._receive_task = asyncio.create_task(self._receive_loop())
         self._heartbeat_task = asyncio.create_task(self._heartbeat_loop())
+        await self._send_in_flight()
 
     async def _authenticate(self) -> None:
         if self._ws is None:
@@ -299,9 +381,9 @@ class WebSocketTransport:
         except Exception as exc:
             self._log.error(f"WebSocket receive loop error: {exc}")
         finally:
-            self._connected = False
-            if self._should_reconnect:
-                self._spawn_background(self._reconnect())
+            if self._ws is ws:
+                self._connected = False
+                self._schedule_reconnect()
 
     def _safe_call(self, cb: ResponseCallback, frame: WsResponse) -> None:
         """
@@ -332,9 +414,23 @@ class WebSocketTransport:
                     unrouted.append(err)
             delivered = False
             for task_uuid, errs in by_task.items():
+                request = self._in_flight.pop(task_uuid, None)
                 cb = self._task_callbacks.get(task_uuid)
-                if cb is not None:
-                    delivered = True
+                if cb is None:
+                    continue
+                delivered = True
+                if (
+                    request is not None
+                    and request.resent
+                    and request.task.get("deliveryMethod") == "async"
+                    and all(err.get("code") == "conflictTaskUUID" for err in errs)
+                ):
+                    ack_item: dict[str, object] = {
+                        "taskType": request.task.get("taskType"),
+                        "taskUUID": task_uuid,
+                    }
+                    self._safe_call(cb, {"data": [ack_item]})
+                else:
                     self._safe_call(cb, {"error": errs})
             if unrouted or not delivered:
                 self._log.error("Unroutable WebSocket error", errors_list)
@@ -364,6 +460,7 @@ class WebSocketTransport:
                 items_by_task.setdefault(task_uuid, []).append(item_dict)
 
         for task_uuid, items in items_by_task.items():
+            self._in_flight.pop(task_uuid, None)
             cb = self._task_callbacks.get(task_uuid)
             if cb is not None:
                 self._safe_call(cb, {"data": items})
@@ -381,7 +478,7 @@ class WebSocketTransport:
                     await ws.send(json.dumps([{"taskType": "ping", "ping": True}]))
                 except (ConnectionClosed, OSError) as exc:
                     self._log.heartbeat(f"Ping failed, reconnecting: {exc}")
-                    self._spawn_background(self._reconnect())
+                    self._schedule_reconnect()
                     return
 
                 inactivity_ms = time.monotonic() * 1000 - self._last_activity_ms
@@ -389,17 +486,21 @@ class WebSocketTransport:
                     self._log.heartbeat(
                         f"No activity for {inactivity_ms:.0f}ms, reconnecting"
                     )
-                    self._spawn_background(self._reconnect())
+                    self._schedule_reconnect()
                     return
         except asyncio.CancelledError:
             return
 
-    async def _reconnect(self) -> None:
+    def _schedule_reconnect(self) -> None:
         if not self._should_reconnect or self._is_reconnecting:
             return
         self._is_reconnecting = True
+        self._spawn_background(self._reconnect())
+
+    async def _reconnect(self) -> None:
         try:
-            await self._teardown_socket(close_socket=True)
+            async with self._connect_lock:
+                await self._teardown_socket(close_socket=True)
             while self._should_reconnect:
                 self._reconnect_attempt += 1
                 if self._reconnect_attempt > self._config.max_reconnect_attempts:
@@ -407,14 +508,14 @@ class WebSocketTransport:
                     self._log.error(f"Reconnection failed after {attempts} attempts, giving up")
                     error = create_runware_error(
                         "reconnectionFailed",
-                        (
-                            "Permanently disconnected after "
-                            f"{self._reconnect_attempt - 1} reconnection attempts"
-                        ),
+                        f"Permanently disconnected after {attempts} reconnection attempts",
                     )
                     for cb in list(self._task_callbacks.values()):
-                        cb({"error": [{"code": "reconnectionFailed", "message": str(error)}]})
+                        self._safe_call(
+                            cb, {"error": [{"code": "reconnectionFailed", "message": str(error)}]},
+                        )
                     self._task_callbacks.clear()
+                    self._in_flight.clear()
                     return
 
                 # Exponential backoff with jitter. Jitter is applied AFTER the
@@ -437,34 +538,40 @@ class WebSocketTransport:
                 if not self._should_reconnect:
                     return
 
-                try:
-                    await self._open_once()
-                    self._log.connection(
-                        f"Reconnected with {len(self._task_callbacks)} pending task(s)"
-                    )
-                    self._reconnect_attempt = 0
-                    return
-                except Exception as exc:
-                    self._log.error(f"Reconnect failed: {exc}")
+                async with self._connect_lock:
+                    if self._connected:
+                        self._reconnect_attempt = 0
+                        return
+                    try:
+                        await self._open_once()
+                    except Exception as exc:
+                        self._log.error(f"Reconnect failed: {exc}")
+                        continue
+                self._log.connection(
+                    f"Reconnected with {len(self._task_callbacks)} pending task(s)"
+                )
+                self._reconnect_attempt = 0
+                return
         finally:
             self._is_reconnecting = False
 
     async def _teardown_socket(self, *, close_socket: bool = False) -> None:
         self._connected = False
-        if self._heartbeat_task is not None:
-            self._heartbeat_task.cancel()
-            with contextlib.suppress(asyncio.CancelledError, Exception):
-                await self._heartbeat_task
-            self._heartbeat_task = None
-        if self._receive_task is not None:
-            self._receive_task.cancel()
-            with contextlib.suppress(asyncio.CancelledError, Exception):
-                await self._receive_task
-            self._receive_task = None
-        if close_socket and self._ws is not None:
-            with contextlib.suppress(Exception):
-                await self._ws.close()
+        ws = self._ws
         self._ws = None
+        heartbeat_task, self._heartbeat_task = self._heartbeat_task, None
+        receive_task, self._receive_task = self._receive_task, None
+        if heartbeat_task is not None:
+            heartbeat_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError, Exception):
+                await heartbeat_task
+        if receive_task is not None:
+            receive_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError, Exception):
+                await receive_task
+        if close_socket and ws is not None:
+            with contextlib.suppress(Exception):
+                await ws.close()
 
     def _spawn_background(
         self,

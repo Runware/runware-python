@@ -84,6 +84,7 @@ from .types.task_map import (
 from .types.transport import RequestOptions, WireFrame
 from .validate import validate_tasks
 
+_ACK_TIMEOUT_SECONDS = 30.0
 
 class Runware:
     """Async Runware client. Use as a context manager or call `close()` manually."""
@@ -725,8 +726,7 @@ class Runware:
         """
         if self._ws_transport is None:
             raise RuntimeError("WebSocket transport unavailable on a WS-selected code path")
-        if not self._ws_transport.is_connected:
-            await self._ws_transport.connect()
+        await self._ws_transport.ensure_connected()
 
         cancel_event = options.cancel_event if options else None
         loop = asyncio.get_running_loop()
@@ -787,17 +787,7 @@ class Runware:
         try:
             await self._ws_transport.send_request(wire_task)
 
-            ack_timeout_seconds = 30.0
-            try:
-                await asyncio.wait_for(ack_future, timeout=ack_timeout_seconds)
-            except TimeoutError as exc:
-                raise create_runware_error(
-                    "timeout",
-                    (
-                        f"ACK not received for task {task_uuid} after "
-                        f"{ack_timeout_seconds:.0f}s"
-                    ),
-                ) from exc
+            await self._wait_for_ack(ack_future, task_uuid, poll_timeout_seconds)
 
             _maybe_raise_item_errors(
                 collector,
@@ -858,6 +848,45 @@ class Runware:
         finally:
             self._ws_transport.unsubscribe_from_task(task_uuid)
 
+    async def _wait_for_ack(
+        self,
+        ack_future: asyncio.Future[None],
+        task_uuid: str,
+        poll_timeout_seconds: float,
+    ) -> None:
+        """
+        Wait for the ACK, counting only connected time against the ACK window.
+
+        A reconnect sends the request again, so time spent reconnecting must
+        not fail the run. The whole wait stays bounded by the poll budget.
+        """
+        if self._ws_transport is None:
+            raise RuntimeError("WebSocket transport unavailable on a WS-selected code path")
+        submitted_at = time.monotonic()
+        window = _ACK_TIMEOUT_SECONDS
+        while True:
+            try:
+                await asyncio.wait_for(asyncio.shield(ack_future), timeout=window)
+                return
+            except TimeoutError as exc:
+                connected_at = self._ws_transport.connected_at
+                connected_for = (
+                    time.monotonic() - connected_at
+                    if self._ws_transport.is_connected and connected_at is not None
+                    else 0.0
+                )
+                within_budget = time.monotonic() - submitted_at < poll_timeout_seconds
+                if connected_for < _ACK_TIMEOUT_SECONDS and within_budget:
+                    window = _ACK_TIMEOUT_SECONDS - connected_for
+                    continue
+                raise create_runware_error(
+                    "timeout",
+                    (
+                        f"ACK not received for task {task_uuid} after "
+                        f"{_ACK_TIMEOUT_SECONDS:.0f}s"
+                    ),
+                ) from exc
+
     async def _ws_send_and_collect(
         self,
         *,
@@ -870,8 +899,7 @@ class Runware:
     ) -> list[LoosePayload]:
         if self._ws_transport is None:
             raise RuntimeError("WebSocket transport unavailable on a WS-selected code path")
-        if not self._ws_transport.is_connected:
-            await self._ws_transport.connect()
+        await self._ws_transport.ensure_connected()
 
         loop = asyncio.get_running_loop()
         future: asyncio.Future[list[LoosePayload]] = loop.create_future()

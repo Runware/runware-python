@@ -190,7 +190,7 @@ async with Runware(transport="websocket") as client:
     videos = await client.run({"model": "google:3@3", "positivePrompt": "...", "width": 1280, "height": 720})
 ```
 
-WebSocket connections are automatically recovered on network interruptions. The SDK re-authenticates with the same session UUID and the server replays pending results.
+WebSocket connections are automatically recovered on network interruptions. Requests made while the connection is down wait for it to come back. After a reconnect, the SDK sends again any read or async request that had no reply yet. A synchronous request that may already have run fails with a `connection` error instead of being sent twice.
 
 ### REST
 

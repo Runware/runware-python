@@ -54,6 +54,7 @@ _SDK_ONLY_RAW_CODES: set[str] = {
     "notConnected",
     "notOpen",
     "reconnectionFailed",
+    "connectionLost",
     "sendFailed",
     "connectionFailed",
     "missingApiKey",
@@ -149,7 +150,14 @@ def derive_code(raw: str) -> ErrorCode:
     """
     if raw == "aborted":
         return "aborted"
-    if raw in ("connectionFailed", "notConnected", "notOpen", "reconnectionFailed", "disconnected"):
+    if raw in (
+        "connectionFailed",
+        "notConnected",
+        "notOpen",
+        "reconnectionFailed",
+        "connectionLost",
+        "disconnected",
+    ):
         return "connection"
 
     if (
