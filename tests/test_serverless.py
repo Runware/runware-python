@@ -700,3 +700,50 @@ async def test_the_client_addresses_its_own_environment() -> None:
         await client.close()
 
     assert session.request_log[0].url == STAGING_ASYNC_URL
+
+
+# ------------------------------------------------------------------- budget
+
+
+PAUSED_PROBLEM = {
+    "type": "https://docs.runware.ai/serverless/errors#environment-paused",
+    "title": "Too Many Requests",
+    "status": 429,
+    "detail": 'environment "staging" is paused at its monthly budget',
+}
+
+
+@pytest.mark.asyncio
+async def test_does_not_retry_an_environment_paused_at_its_budget() -> None:
+    session = MockSession()
+    session.add(
+        "POST",
+        STAGING_ASYNC_URL,
+        MockResponse(status=429, payload=PAUSED_PROBLEM, headers={"Retry-After": "0"}),
+    )
+    api = make_api(session, max_retries=3)
+
+    with pytest.raises(RunwareError, match="paused at its monthly budget") as excinfo:
+        _ = await api.invoke("my-app", "generate", environment="staging")
+
+    assert session.count("POST", STAGING_ASYNC_URL) == 1
+    assert excinfo.value.code == "quota"
+    assert excinfo.value.retryable is False
+    assert excinfo.value.status_code == 429
+
+
+@pytest.mark.asyncio
+async def test_still_retries_any_other_429() -> None:
+    session = MockSession()
+    session.add(
+        "POST",
+        ASYNC_URL,
+        MockResponse(status=429, payload={"status": 429}, headers={"Retry-After": "0"}),
+    )
+    session.add("POST", ASYNC_URL, MockResponse(status=200, payload=task()))
+    api = make_api(session, max_retries=2)
+
+    result = await api.invoke("my-app", "generate")
+
+    assert result["status"] == "completed"
+    assert session.count("POST", ASYNC_URL) == 2

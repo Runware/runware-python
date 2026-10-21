@@ -57,6 +57,10 @@ _SYNC_MIN_TIMEOUT_MS = 300_000
 
 _TERMINAL = frozenset({"completed", "failed"})
 
+# The 429 an environment paused at its monthly budget answers invoke with. It
+# holds until the budget is raised or the UTC month turns, so it is not retried.
+_ENVIRONMENT_PAUSED_TYPE = "https://docs.runware.ai/serverless/errors#environment-paused"
+
 
 def is_terminal(status: str) -> bool:
     """Whether a task status is final."""
@@ -208,10 +212,12 @@ def _problem_to_error(
     if lines:
         message = message + "\n" + "\n".join(lines)
 
-    error = create_runware_error(
-        _raw_code_for_status(status), message, status_code=status,
-    )
     problem_type = problem.get("type")
+    raw_code = (
+        "environmentPaused" if problem_type == _ENVIRONMENT_PAUSED_TYPE
+        else _raw_code_for_status(status)
+    )
+    error = create_runware_error(raw_code, message, status_code=status)
     if isinstance(problem_type, str) and problem_type != "about:blank":
         error.problem_type = problem_type
     request_id = problem.get("requestId")
@@ -488,7 +494,7 @@ class ServerlessApi:
     @staticmethod
     def _should_retry(error: BaseException) -> bool:
         if is_runware_error(error):
-            if error.code == "aborted":
+            if error.code in ("aborted", "quota"):
                 return False
             if error.code == "timeout":
                 return True
