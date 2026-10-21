@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import time
 from collections.abc import Callable
 from typing import Any
 
@@ -47,6 +48,7 @@ class FakeConnection:
                 continue
             self.server.log.append(f"s{self.id}:{task_type}")
             self.server.received.append((self.id, task))
+            self.server.received_at.append(time.monotonic())
             self.server.handler(task, self)
 
     def _auth_ok(self) -> None:
@@ -84,6 +86,7 @@ class FakeServer:
         self.sockets: list[FakeConnection] = []
         self.log: list[str] = []
         self.received: list[tuple[int, dict[str, Any]]] = []
+        self.received_at: list[float] = []
         self.down = False
         self.silent_socket = 0
         self.auth_delay = 0.0
@@ -126,7 +129,7 @@ def _client(server: FakeServer, **overrides: Any) -> Runware:
     )
 
 
-async def _wait_for(condition: Callable[[], bool], within: float = 3.0) -> None:
+async def _wait_for(condition: Callable[[], bool], within: float = 10.0) -> None:
     deadline = asyncio.get_running_loop().time() + within
     while not condition():
         if asyncio.get_running_loop().time() > deadline:
@@ -219,6 +222,29 @@ class TestHoldAndResend:
 
         await _wait_for(lambda: len(frames) == 1)
         assert server.sent_on("imageInference") == [1, 2]
+        assert frames[0] == {"data": [{"taskType": "imageInference", "taskUUID": "t1"}]}
+        await transport.disconnect()
+
+    async def test_waits_a_second_after_the_original_before_resending_async(self) -> None:
+        server = FakeServer()
+        server.handler = lambda task, conn: None if conn.id == 1 else conn.deliver(
+            _conflict(task["taskUUID"]),
+        )
+        transport = _transport(server)
+        await transport.connect()
+
+        frames: list[Any] = []
+        transport.subscribe_to_task("t1", frames.append)
+        await transport.send_request(
+            {"taskType": "imageInference", "taskUUID": "t1", "deliveryMethod": "async"},
+        )
+        server.drop()
+
+        await _wait_for(lambda: len(server.sockets) == 2 and transport.is_connected)
+        assert server.sent_on("imageInference") == [1]
+
+        await _wait_for(lambda: len(frames) == 1)
+        assert server.received_at[1] - server.received_at[0] >= 1.0
         assert frames[0] == {"data": [{"taskType": "imageInference", "taskUUID": "t1"}]}
         await transport.disconnect()
 

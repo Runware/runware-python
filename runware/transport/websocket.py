@@ -29,7 +29,7 @@ import websockets
 from websockets.asyncio.client import ClientConnection
 from websockets.exceptions import ConnectionClosed
 
-from ..errors import create_runware_error
+from ..errors import RunwareError, create_runware_error
 from ..logger import Logger
 from ..types.sdk import LoosePayload, SDKConfig
 from ..types.transport import WireFrame
@@ -42,6 +42,7 @@ _HEARTBEAT_INTERVAL_SECONDS = 30.0
 _HEARTBEAT_INACTIVITY_THRESHOLD_MS = 100_000
 _RECONNECT_BACKOFF_CAP_MS = 30_000
 _RECONNECT_JITTER_MAX_MS = 1_000
+_ASYNC_RESEND_MIN_AGE_SECONDS = 1.0
 _READ_ONLY_TASK_TYPES = frozenset({"getResponse", "getTaskDetails", "modelSearch", "accountManagement"})
 
 
@@ -53,7 +54,9 @@ def _can_resend(task: LoosePayload) -> bool:
 class _InFlightRequest:
     task: LoosePayload
     sent: bool
+    sent_at: float
     resent: bool = False
+    resend_scheduled: bool = False
 
 
 class WebSocketTransport:
@@ -131,7 +134,9 @@ class WebSocketTransport:
         for task in payload:
             task_uuid = task.get("taskUUID")
             if isinstance(task_uuid, str):
-                self._in_flight[task_uuid] = _InFlightRequest(task=task, sent=self._connected)
+                self._in_flight[task_uuid] = _InFlightRequest(
+                    task=task, sent=self._connected, sent_at=time.monotonic(),
+                )
         if not self._connected:
             self._log.connection(
                 f"Reconnecting, holding {len(payload)} request(s) until the connection is back"
@@ -171,6 +176,19 @@ class WebSocketTransport:
                 self._connected = False
                 self._schedule_reconnect()
 
+    async def _resend_later(self, task_uuid: str, delay: float) -> None:
+        await asyncio.sleep(delay)
+        request = self._in_flight.get(task_uuid)
+        if request is None:
+            return
+        request.resend_scheduled = False
+        if not self._connected:
+            return
+        request.resent = True
+        request.sent_at = time.monotonic()
+        with contextlib.suppress(RunwareError):
+            await self._send([request.task])
+
     async def _send_in_flight(self) -> None:
         pending: list[LoosePayload] = []
         for task_uuid, request in list(self._in_flight.items()):
@@ -187,9 +205,22 @@ class WebSocketTransport:
                         "taskUUID": task_uuid,
                     }]})
                 continue
+            age = time.monotonic() - request.sent_at
+            if (
+                request.sent
+                and request.task.get("deliveryMethod") == "async"
+                and age < _ASYNC_RESEND_MIN_AGE_SECONDS
+            ):
+                if not request.resend_scheduled:
+                    request.resend_scheduled = True
+                    self._spawn_background(
+                        self._resend_later(task_uuid, _ASYNC_RESEND_MIN_AGE_SECONDS - age),
+                    )
+                continue
             if request.sent:
                 request.resent = True
             request.sent = True
+            request.sent_at = time.monotonic()
             pending.append(request.task)
         if not pending:
             return
