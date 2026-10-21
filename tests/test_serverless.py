@@ -678,3 +678,25 @@ async def test_the_client_passes_a_per_call_environment_through() -> None:
     assert [entry.url for entry in session.request_log] == [
         STAGING_ASYNC_URL, STAGING_TASK_URL,
     ]
+
+
+@pytest.mark.asyncio
+async def test_the_client_addresses_its_own_environment() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=200, payload=task()))
+    client = Runware(
+        api_key="test-key",
+        serverless_base_url=ORIGIN,
+        serverless_environment="staging",
+        transport="rest",
+        dependencies=RuntimeDependencies(
+            session=cast("aiohttp.ClientSession", session),
+        ),
+    )
+
+    try:
+        await client.invoke("my-app", "generate")
+    finally:
+        await client.close()
+
+    assert session.request_log[0].url == STAGING_ASYNC_URL
