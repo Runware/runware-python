@@ -6,7 +6,7 @@ import asyncio
 import contextlib
 import time
 import uuid
-from typing import Any, Self, cast, overload
+from typing import Any, Self, TypeVar, cast, overload
 
 import aiohttp
 
@@ -787,7 +787,7 @@ class Runware:
         try:
             await self._ws_transport.send_request(wire_task)
 
-            await self._wait_for_ack(ack_future, task_uuid, poll_timeout_seconds)
+            await self._wait_for_ack(ack_future, task_uuid, poll_timeout_seconds, cancel_event)
 
             _maybe_raise_item_errors(
                 collector,
@@ -829,8 +829,12 @@ class Runware:
                 # Wait briefly for poll response. If the server doesn't reply,
                 # we still want to bound the loop iteration so we re-check
                 # cancel / timeout regularly.
-                with contextlib.suppress(TimeoutError):
-                    await asyncio.wait_for(poll_wake.wait(), timeout=delay + 5.0)
+                wake_task = asyncio.create_task(poll_wake.wait())
+                try:
+                    _ = await _finished_within(wake_task, cancel_event, delay + 5.0)
+                finally:
+                    if not wake_task.done():
+                        _ = wake_task.cancel()
 
                 if terminal_error["err"] is not None:
                     raise terminal_error["err"]
@@ -853,6 +857,7 @@ class Runware:
         ack_future: asyncio.Future[None],
         task_uuid: str,
         poll_timeout_seconds: float,
+        cancel_event: asyncio.Event | None,
     ) -> None:
         """
         Wait for the ACK, counting only connected time against the ACK window.
@@ -865,27 +870,26 @@ class Runware:
         submitted_at = time.monotonic()
         window = _ACK_TIMEOUT_SECONDS
         while True:
-            try:
-                await asyncio.wait_for(asyncio.shield(ack_future), timeout=window)
+            if await _finished_within(ack_future, cancel_event, window):
+                ack_future.result()
                 return
-            except TimeoutError as exc:
-                connected_at = self._ws_transport.connected_at
-                connected_for = (
-                    time.monotonic() - connected_at
-                    if self._ws_transport.is_connected and connected_at is not None
-                    else 0.0
-                )
-                within_budget = time.monotonic() - submitted_at < poll_timeout_seconds
-                if connected_for < _ACK_TIMEOUT_SECONDS and within_budget:
-                    window = _ACK_TIMEOUT_SECONDS - connected_for
-                    continue
-                raise create_runware_error(
-                    "timeout",
-                    (
-                        f"ACK not received for task {task_uuid} after "
-                        f"{_ACK_TIMEOUT_SECONDS:.0f}s"
-                    ),
-                ) from exc
+            connected_at = self._ws_transport.connected_at
+            connected_for = (
+                time.monotonic() - connected_at
+                if self._ws_transport.is_connected and connected_at is not None
+                else 0.0
+            )
+            within_budget = time.monotonic() - submitted_at < poll_timeout_seconds
+            if connected_for < _ACK_TIMEOUT_SECONDS and within_budget:
+                window = _ACK_TIMEOUT_SECONDS - connected_for
+                continue
+            raise create_runware_error(
+                "timeout",
+                (
+                    f"ACK not received for task {task_uuid} after "
+                    f"{_ACK_TIMEOUT_SECONDS:.0f}s"
+                ),
+            )
 
     async def _ws_send_and_collect(
         self,
@@ -1217,6 +1221,33 @@ async def _interruptible_sleep(seconds: float, cancel_event: asyncio.Event | Non
         sleep_task.cancel()
         cancel_task.cancel()
         raise
+
+
+_T = TypeVar("_T")
+
+
+async def _finished_within(
+    future: asyncio.Future[_T],
+    cancel_event: asyncio.Event | None,
+    within: float,
+) -> bool:
+    """Whether `future` finished within `within` seconds. Raises `aborted` once `cancel_event` is set."""
+    cancel_task = asyncio.create_task(cancel_event.wait()) if cancel_event is not None else None
+    waiters: set[asyncio.Future[Any]] = {future}  # pyright: ignore[reportExplicitAny]
+    if cancel_task is not None:
+        waiters.add(cancel_task)
+    try:
+        done, _pending = await asyncio.wait(
+            waiters, timeout=within, return_when=asyncio.FIRST_COMPLETED,
+        )
+    finally:
+        if cancel_task is not None and not cancel_task.done():
+            _ = cancel_task.cancel()
+    if future in done:
+        return True
+    if cancel_task is not None and cancel_task in done:
+        raise create_runware_error("aborted", "Request aborted")
+    return False
 
 
 async def _await_with_cancel(

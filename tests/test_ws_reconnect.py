@@ -21,7 +21,7 @@ from websockets.exceptions import ConnectionClosed
 from runware import Runware, RunwareError
 from runware.errors import parse_api_error
 from runware.transport.websocket import WebSocketTransport
-from runware.types.sdk import RuntimeDependencies, SDKConfig
+from runware.types.sdk import RunOptions, RuntimeDependencies, SDKConfig
 
 Handler = Callable[[dict[str, Any], "FakeConnection"], None]
 
@@ -31,6 +31,7 @@ class FakeConnection:
         self.server = server
         self.id = socket_id
         self.dead = False
+        self.closed_by_client = False
         self.inbox: asyncio.Queue[str | None] = asyncio.Queue()
 
     async def send(self, data: str) -> None:
@@ -52,6 +53,13 @@ class FakeConnection:
             self.server.handler(task, self)
 
     def _auth_ok(self) -> None:
+        if self.server.reject_key:
+            self.server.log.append(f"s{self.id}:auth-rejected")
+            self.deliver({"errors": [
+                {"code": "invalidApiKey", "message": "Invalid API key", "taskUUID": "N/A"},
+            ]})
+            self.drop()
+            return
         self.server.log.append(f"s{self.id}:auth-ok")
         self.deliver({"data": [{"taskType": "authentication", "connectionSessionUUID": "s-1"}]})
 
@@ -78,6 +86,7 @@ class FakeConnection:
         return await self.recv()
 
     async def close(self) -> None:
+        self.closed_by_client = True
         self.drop()
 
 
@@ -90,6 +99,7 @@ class FakeServer:
         self.down = False
         self.silent_socket = 0
         self.auth_delay = 0.0
+        self.reject_key = False
         self.handler: Handler = lambda task, conn: None
 
     async def connect(self, url: str) -> FakeConnection:
@@ -328,6 +338,52 @@ class TestHoldAndResend:
             await transport.send_request({"taskType": "getResponse", "taskUUID": "t2"})
 
 
+class TestKeyRejectionAndClose:
+    async def test_a_rejected_api_key_fails_connect_as_auth_without_reconnecting(self) -> None:
+        server = FakeServer()
+        server.reject_key = True
+        transport = _transport(server)
+
+        with pytest.raises(RunwareError) as exc_info:
+            await transport.connect()
+        await asyncio.sleep(0.3)
+
+        assert exc_info.value.code == "auth"
+        assert "Invalid API key" in str(exc_info.value)
+        assert len(server.sockets) == 1
+        await transport.disconnect()
+
+    async def test_stops_reconnecting_when_the_key_is_rejected_on_a_reconnect(self) -> None:
+        server = FakeServer()
+        transport = _transport(server)
+        await transport.connect()
+
+        frames: list[Any] = []
+        transport.subscribe_to_task("t1", frames.append)
+        await transport.send_request({"taskType": "getResponse", "taskUUID": "t1"})
+        server.reject_key = True
+        server.drop()
+
+        await _wait_for(lambda: len(frames) == 1)
+        await asyncio.sleep(0.3)
+        assert len(server.sockets) == 2
+        assert parse_api_error(frames[0]["error"]).code == "auth"
+        assert not transport.is_connected
+        with pytest.raises(RunwareError, match="Not connected"):
+            await transport.send_request({"taskType": "getResponse", "taskUUID": "t2"})
+        await transport.disconnect()
+
+    async def test_close_closes_the_socket(self) -> None:
+        server = FakeServer()
+        client = _client(server)
+        await client.connect()
+
+        await client.close()
+
+        assert len(server.sockets) == 1
+        assert server.sockets[0].closed_by_client
+
+
 class TestConnectRaces:
     async def test_concurrent_connects_open_one_socket(self) -> None:
         server = FakeServer()
@@ -482,6 +538,43 @@ class TestRunOverADroppingConnection:
             if task["taskType"] == "imageInference" and task.get("deliveryMethod") == "sync"
         ]
         assert sync_sends == [1]
+        await client.close()
+
+    async def test_raises_as_soon_as_it_is_cancelled_while_waiting_for_the_ack(self) -> None:
+        server = FakeServer()
+        client = _client(server)
+        await client.connect()
+
+        cancel = asyncio.Event()
+        started = time.monotonic()
+        run = asyncio.create_task(client.run(IMAGE_PARAMS, RunOptions(cancel_event=cancel)))
+        await _wait_for(lambda: len(server.received) == 1)
+        cancel.set()
+
+        with pytest.raises(RunwareError) as exc_info:
+            await asyncio.wait_for(run, timeout=5)
+        assert exc_info.value.code == "aborted"
+        assert time.monotonic() - started < 1.0
+        await client.close()
+
+    async def test_raises_as_soon_as_it_is_cancelled_while_a_poll_reply_is_pending(self) -> None:
+        server = FakeServer()
+        server.handler = lambda task, conn: conn.deliver(
+            {"data": [{"taskType": "imageInference", "taskUUID": task["taskUUID"]}]},
+        ) if task["taskType"] == "imageInference" else None
+        client = _client(server)
+        await client.connect()
+
+        cancel = asyncio.Event()
+        run = asyncio.create_task(client.run(IMAGE_PARAMS, RunOptions(cancel_event=cancel)))
+        await _wait_for(lambda: len(server.sent_on("getResponse")) == 1)
+        cancelled_at = time.monotonic()
+        cancel.set()
+
+        with pytest.raises(RunwareError) as exc_info:
+            await asyncio.wait_for(run, timeout=10)
+        assert exc_info.value.code == "aborted"
+        assert time.monotonic() - cancelled_at < 0.3
         await client.close()
 
     async def test_keeps_waiting_for_the_ack_while_an_outage_outlasts_the_window(

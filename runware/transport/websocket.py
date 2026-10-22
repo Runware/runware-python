@@ -75,6 +75,7 @@ class WebSocketTransport:
         self._in_flight: dict[str, _InFlightRequest] = {}
         self._connected: bool = False
         self._connected_at: float | None = None
+        self._key_rejected: bool = False
         self._should_reconnect: bool = False
         self._is_reconnecting: bool = False
         self._reconnect_attempt: int = 0
@@ -104,6 +105,7 @@ class WebSocketTransport:
             # Reset the reconnect counter so a fresh connect() after a prior
             # give-up doesn't start already over the limit.
             self._reconnect_attempt = 0
+            self._key_rejected = False
             await self._open_once()
 
     async def ensure_connected(self) -> None:
@@ -122,7 +124,7 @@ class WebSocketTransport:
                 self._log.error(f"task callback raised during disconnect: {exc}")
         self._task_callbacks.clear()
         self._in_flight.clear()
-        await self._teardown_socket()
+        await self._teardown_socket(close_socket=True)
 
     async def send_request(
         self,
@@ -339,6 +341,7 @@ class WebSocketTransport:
                 first_err: LoosePayload = {}
                 if errs and isinstance(errs[0], dict):
                     first_err = cast(LoosePayload, errs[0])
+                self._key_rejected = True
                 raise create_runware_error(
                     "authFailed",
                     first_err.get("message")
@@ -393,6 +396,7 @@ class WebSocketTransport:
                 "Authentication successful but missing connectionSessionUUID",
             )
         self._session_uuid = session_uuid
+        self._key_rejected = False
 
     async def _receive_loop(self) -> None:
         ws = self._ws
@@ -577,6 +581,15 @@ class WebSocketTransport:
                         await self._open_once()
                     except Exception as exc:
                         self._log.error(f"Reconnect failed: {exc}")
+                        if self._key_rejected:
+                            self._log.error("The server rejected the API key on reconnect, giving up")
+                            for cb in list(self._task_callbacks.values()):
+                                self._safe_call(
+                                    cb, {"error": [{"code": "authFailed", "message": str(exc)}]},
+                                )
+                            self._task_callbacks.clear()
+                            self._in_flight.clear()
+                            return
                         continue
                 self._log.connection(
                     f"Reconnected with {len(self._task_callbacks)} pending task(s)"
