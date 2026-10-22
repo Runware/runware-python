@@ -423,6 +423,67 @@ class TestRunOverADroppingConnection:
         assert all(socket_id > 1 for socket_id in server.sent_on("getResponse"))
         await client.close()
 
+    async def test_settles_every_request_in_flight_when_the_connection_dropped(self) -> None:
+        server = FakeServer()
+        expected: dict[str, int] = {}
+        submissions = 0
+
+        def handler(task: dict[str, Any], conn: FakeConnection) -> None:
+            nonlocal submissions
+            task_uuid = task["taskUUID"]
+            if task["taskType"] == "imageInference" and task.get("deliveryMethod") == "async":
+                if conn.id > 1:
+                    conn.deliver(_conflict(task_uuid))
+                    return
+                expected[task_uuid] = int(task.get("numberResults") or 1)
+                submissions += 1
+                if submissions == 3:
+                    conn.drop()
+                    return
+                conn.deliver({"data": [{"taskType": "imageInference", "taskUUID": task_uuid}]})
+                return
+            if conn.id == 1:
+                return
+            if task["taskType"] == "modelSearch":
+                conn.deliver({"data": [{
+                    "taskType": "modelSearch", "taskUUID": task_uuid, "results": [], "totalResults": 0,
+                }]})
+                return
+            items = [
+                {**_success(task_uuid)["data"][0], "imageUUID": f"{task_uuid}-{index}"}
+                for index in range(expected.get(task_uuid, 1))
+            ]
+            conn.deliver({"data": items})
+
+        server.handler = handler
+        client = _client(server)
+        await client.connect()
+
+        sync = asyncio.create_task(client.run({**IMAGE_PARAMS, "deliveryMethod": "sync"}))
+        search = asyncio.create_task(client.model_search({"search": "flux"}))
+        single = asyncio.create_task(client.run(IMAGE_PARAMS))
+        double = asyncio.create_task(client.run({**IMAGE_PARAMS, "numberResults": 2}))
+        await _wait_for(lambda: len(server.received) == 4)
+        last = asyncio.create_task(client.run(IMAGE_PARAMS))
+
+        outcomes = await asyncio.wait_for(
+            asyncio.gather(sync, search, single, double, last, return_exceptions=True), timeout=15,
+        )
+        sync_outcome, search_outcome, single_outcome, double_outcome, last_outcome = outcomes
+        assert isinstance(sync_outcome, RunwareError)
+        assert sync_outcome.code == "connection"
+        assert not isinstance(search_outcome, BaseException)
+        assert not isinstance(single_outcome, BaseException) and len(single_outcome) == 1
+        assert not isinstance(double_outcome, BaseException) and len(double_outcome) == 2
+        assert not isinstance(last_outcome, BaseException) and len(last_outcome) == 1
+        assert server.sent_on("modelSearch") == [1, 2]
+        sync_sends = [
+            socket_id for socket_id, task in server.received
+            if task["taskType"] == "imageInference" and task.get("deliveryMethod") == "sync"
+        ]
+        assert sync_sends == [1]
+        await client.close()
+
     async def test_keeps_waiting_for_the_ack_while_an_outage_outlasts_the_window(
         self, monkeypatch: pytest.MonkeyPatch,
     ) -> None:
