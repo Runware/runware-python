@@ -166,6 +166,7 @@ def derive_code(raw: str) -> ErrorCode:
         or "Balance" in raw
         or raw == "quotaExceeded"
         or raw == "paymentRequired"
+        or raw == "environmentPaused"
     ):
         return "quota"
     if "RateLimit" in raw or raw == "rateLimitExceeded":

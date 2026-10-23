@@ -57,6 +57,10 @@ class SDKConfig:
     http_base_url: str = "https://api.runware.ai/v1"
     # Serverless API origin, without a version path. Used by invoke and get_task.
     serverless_base_url: str = "https://api.serverless.runware.ai"
+    # Serverless environment invoke and get_task address, such as "staging".
+    # An app id names one copy per environment. None sends no environment,
+    # which the platform reads as "production".
+    serverless_environment: str | None = None
 
     timeout: int = 1_200_000
     poll_timeout: int = 1_200_000

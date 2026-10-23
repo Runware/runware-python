@@ -19,6 +19,7 @@ import time
 import uuid
 from collections.abc import Awaitable, Callable
 from typing import Any, cast
+from urllib.parse import urlencode
 
 import aiohttp
 
@@ -36,6 +37,7 @@ SessionProvider = Callable[[], Awaitable[aiohttp.ClientSession]]
 
 _APP_ID_PATTERN = re.compile(r"^[a-z][a-z0-9-]{4,28}[a-z0-9]$")
 _ENDPOINT_PATH_PATTERN = re.compile(r"^[a-z]([a-z0-9-]{0,62}[a-z0-9])?$")
+_ENVIRONMENT_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._-]{0,62}$")
 _TASK_ID_PATTERN = re.compile(
     r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
 )
@@ -54,6 +56,10 @@ _TASK_NOT_FOUND_GRACE_S = 30.0
 _SYNC_MIN_TIMEOUT_MS = 300_000
 
 _TERMINAL = frozenset({"completed", "failed"})
+
+# The 429 an environment paused at its monthly budget answers invoke with. It
+# holds until the budget is raised or the UTC month turns, so it is not retried.
+_ENVIRONMENT_PAUSED_TYPE = "https://docs.runware.ai/serverless/errors#environment-paused"
 
 
 def is_terminal(status: str) -> bool:
@@ -119,6 +125,25 @@ def validate_endpoint_path(endpoint_path: object) -> str:
             parameter="endpoint_path",
         )
     return endpoint_path
+
+
+def validate_environment(
+    environment: object, parameter: str = "environment",
+) -> str | None:
+    """Check an environment name against the platform's own pattern."""
+    if environment is None:
+        return None
+    if not isinstance(environment, str) or not _ENVIRONMENT_PATTERN.fullmatch(
+        environment,
+    ):
+        raise create_runware_error(
+            "invalidParameter",
+            f'{parameter} "{environment}" is invalid: use 1 to 63 lowercase '
+            + "letters, digits, hyphens, underscores or periods, starting with "
+            + "a letter or digit",
+            parameter=parameter,
+        )
+    return environment
 
 
 def validate_task_id(task_id: object) -> str:
@@ -187,10 +212,12 @@ def _problem_to_error(
     if lines:
         message = message + "\n" + "\n".join(lines)
 
-    error = create_runware_error(
-        _raw_code_for_status(status), message, status_code=status,
-    )
     problem_type = problem.get("type")
+    raw_code = (
+        "environmentPaused" if problem_type == _ENVIRONMENT_PAUSED_TYPE
+        else _raw_code_for_status(status)
+    )
+    error = create_runware_error(raw_code, message, status_code=status)
     if isinstance(problem_type, str) and problem_type != "about:blank":
         error.problem_type = problem_type
     request_id = problem.get("requestId")
@@ -223,12 +250,28 @@ class ServerlessApi:
     def __init__(
         self, session_provider: SessionProvider, config: SDKConfig,
     ) -> None:
+        _ = validate_environment(
+            config.serverless_environment, "serverless_environment",
+        )
         self._session_provider: SessionProvider = session_provider
         self._config: SDKConfig = config
 
     @property
     def _origin(self) -> str:
         return self._config.serverless_base_url.rstrip("/")
+
+    def _environment(self, environment: str | None) -> str | None:
+        """The per-call environment, else the client's, else none."""
+        return validate_environment(
+            environment if environment is not None
+            else self._config.serverless_environment,
+        )
+
+    def _app_url(self, app: str, path: str, environment: str | None) -> str:
+        url = f"{self._origin}/v1/apps/{app}/{path}"
+        if environment is None:
+            return url
+        return f"{url}?{urlencode({'environment': environment})}"
 
     async def invoke(
         self,
@@ -237,6 +280,7 @@ class ServerlessApi:
         payload: dict[str, Any] | None = None,  # pyright: ignore[reportExplicitAny]
         *,
         task_id: str | None = None,
+        environment: str | None = None,
         options: InvokeOptions | None = None,
     ) -> ServerlessTask:
         """
@@ -247,6 +291,10 @@ class ServerlessApi:
                 "my-app", "generate", {"prompt": "a cat"},
             )
             print(task["output"])
+
+        ``environment`` selects which copy of the app to call, falling back to
+        ``config.serverless_environment`` and then to ``production``. Waiting
+        polls the task in that same environment.
 
         ``delivery_method`` decides how the wait happens, not whether you get
         a result: ``async`` (the default) takes an acknowledgement and polls,
@@ -266,6 +314,7 @@ class ServerlessApi:
         app = validate_app_id(app_id)
         endpoint = validate_endpoint_path(endpoint_path)
         resolved_task_id = _resolve_task_id(task_id)
+        resolved_environment = self._environment(environment)
         delivery_method = options.delivery_method if options.wait else "async"
         route = "invoke-sync" if delivery_method == "sync" else "invoke-async"
 
@@ -285,7 +334,7 @@ class ServerlessApi:
         started_at = time.monotonic()
         _status, response_body = await self._request(
             "POST",
-            f"{self._origin}/v1/apps/{app}/{route}/{endpoint}",
+            self._app_url(app, f"{route}/{endpoint}", resolved_environment),
             body,
             timeout_ms,
             options.cancel_event,
@@ -296,13 +345,17 @@ class ServerlessApi:
         if not options.wait or is_terminal(task["status"]):
             return task
 
-        return await self._wait_for_task(task, options, started_at)
+        return await self._wait_for_task(
+            task, resolved_environment, options, started_at,
+        )
 
     async def get_task(
         self,
         app_id: str,
         task_id: str,
         options: GetTaskOptions | None = None,
+        *,
+        environment: str | None = None,
     ) -> ServerlessTask:
         """
         Read one serverless task by id.
@@ -310,13 +363,17 @@ class ServerlessApi:
         ``invoke`` already waits for you, so reach for this when you want to
         poll yourself: after ``invoke`` with ``wait=False``, or from a
         different process than the one that submitted the task.
+
+        Pass the ``environment`` the task was invoked in. It falls back to
+        ``config.serverless_environment`` and then to ``production``.
         """
         options = options or GetTaskOptions()
         app = validate_app_id(app_id)
         resolved = validate_task_id(task_id)
+        resolved_environment = self._environment(environment)
         _status, body = await self._request(
             "GET",
-            f"{self._origin}/v1/apps/{app}/tasks/{resolved}",
+            self._app_url(app, f"tasks/{resolved}", resolved_environment),
             None,
             options.timeout or self._config.timeout,
             options.cancel_event,
@@ -326,12 +383,16 @@ class ServerlessApi:
     async def _wait_for_task(
         self,
         task: ServerlessTask,
+        environment: str | None,
         options: InvokeOptions,
         started_at: float,
     ) -> ServerlessTask:
         """
         Poll until the task reaches a terminal state. Never resubmits: the task
         is already running, and a second invocation would be a second charge.
+
+        Polls in the environment the task was invoked in. A task carries no
+        environment of its own, and a poll without one would read production.
         """
         interval = (
             options.poll_interval
@@ -344,13 +405,17 @@ class ServerlessApi:
 
         while not is_terminal(current["status"]):
             if time.monotonic() - started_at > budget_s:
+                environment_arg = (
+                    "" if environment is None
+                    else f', environment="{environment}"'
+                )
                 raise create_runware_error(
                     "timeout",
                     f'Task {current["id"]} is still running after '
                     + f"{options.poll_timeout or self._config.poll_timeout}ms. "
                     + "It was not cancelled: poll "
-                    + f'get_task("{current["appId"]}", "{current["id"]}") '
-                    + "to pick it up.",
+                    + f'get_task("{current["appId"]}", "{current["id"]}"'
+                    + f"{environment_arg}) to pick it up.",
                     task_uuid=current["id"],
                 )
 
@@ -364,6 +429,7 @@ class ServerlessApi:
                         timeout=options.timeout,
                         cancel_event=options.cancel_event,
                     ),
+                    environment=environment,
                 )
                 not_found_since = None
             except RunwareError as error:
@@ -428,7 +494,7 @@ class ServerlessApi:
     @staticmethod
     def _should_retry(error: BaseException) -> bool:
         if is_runware_error(error):
-            if error.code == "aborted":
+            if error.code in ("aborted", "quota"):
                 return False
             if error.code == "timeout":
                 return True

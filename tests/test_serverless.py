@@ -8,9 +8,10 @@ from typing import Any, cast
 import aiohttp
 import pytest
 
+from runware import Runware
 from runware.errors import RunwareError
 from runware.serverless import ServerlessApi
-from runware.types.sdk import SDKConfig
+from runware.types.sdk import RuntimeDependencies, SDKConfig
 from runware.types.serverless import GetTaskOptions, InvokeOptions
 
 from ._mocks import MockResponse, MockSession
@@ -527,3 +528,222 @@ async def test_get_task_honors_a_per_call_timeout_option() -> None:
     result = await api.get_task("my-app", TASK_ID, GetTaskOptions(timeout=1_000))
 
     assert result["id"] == TASK_ID
+
+
+# ---------------------------------------------------------------- environment
+
+
+STAGING_ASYNC_URL = f"{ASYNC_URL}?environment=staging"
+STAGING_TASK_URL = f"{TASK_URL}?environment=staging"
+
+
+@pytest.mark.asyncio
+async def test_sends_no_environment_when_none_is_set() -> None:
+    session = MockSession()
+    session.add("POST", ASYNC_URL, MockResponse(status=200, payload=task()))
+    session.add("GET", TASK_URL, MockResponse(status=200, payload=task()))
+    api = make_api(session)
+
+    await api.invoke("my-app", "generate")
+    await api.get_task("my-app", TASK_ID)
+
+    assert [entry.url for entry in session.request_log] == [ASYNC_URL, TASK_URL]
+
+
+@pytest.mark.asyncio
+async def test_addresses_the_client_environment() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=200, payload=task()))
+    session.add("GET", STAGING_TASK_URL, MockResponse(status=200, payload=task()))
+    api = make_api(session, serverless_environment="staging")
+
+    await api.invoke("my-app", "generate")
+    await api.get_task("my-app", TASK_ID)
+
+    assert [entry.url for entry in session.request_log] == [
+        STAGING_ASYNC_URL, STAGING_TASK_URL,
+    ]
+
+
+@pytest.mark.asyncio
+async def test_a_per_call_environment_overrides_the_client_one() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=200, payload=task()))
+    session.add("GET", STAGING_TASK_URL, MockResponse(status=200, payload=task()))
+    api = make_api(session, serverless_environment="production")
+
+    await api.invoke("my-app", "generate", environment="staging")
+    await api.get_task("my-app", TASK_ID, environment="staging")
+
+    assert [entry.url for entry in session.request_log] == [
+        STAGING_ASYNC_URL, STAGING_TASK_URL,
+    ]
+
+
+@pytest.mark.asyncio
+async def test_polls_in_the_environment_the_task_was_invoked_in() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=202, payload=pending()))
+    session.add("GET", STAGING_TASK_URL, MockResponse(status=200, payload=pending()))
+    session.add("GET", STAGING_TASK_URL, MockResponse(status=200, payload=task()))
+    api = make_api(session)
+
+    result = await api.invoke(
+        "my-app", "generate", environment="staging", options=no_wait(),
+    )
+
+    assert result["status"] == "completed"
+    assert session.count("GET", STAGING_TASK_URL) == 2
+    assert session.count("GET", TASK_URL) == 0
+
+
+@pytest.mark.asyncio
+async def test_names_the_environment_when_the_poll_budget_runs_out() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=202, payload=pending()))
+    api = make_api(session, poll_timeout=0)
+
+    with pytest.raises(RunwareError, match=r'environment="staging"\) to pick it up'):
+        _ = await api.invoke(
+            "my-app", "generate", environment="staging", options=no_wait(),
+        )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "environment", ["", "Staging", "-dev", ".dev", "_dev", "a/b", "staging\n", "a" * 64],
+)
+async def test_rejects_an_environment_that_cannot_exist(environment: str) -> None:
+    session = MockSession()
+    api = make_api(session)
+
+    with pytest.raises(RunwareError) as excinfo:
+        _ = await api.invoke("my-app", "generate", environment=environment)
+    assert excinfo.value.parameter == "environment"
+    assert session.request_log == []
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "environment", ["pr-12", "feature_x", "v1.2", "1st", "a" * 63],
+)
+async def test_accepts_every_name_the_platform_allows(environment: str) -> None:
+    url = f"{ASYNC_URL}?environment={environment}"
+    session = MockSession()
+    session.add("POST", url, MockResponse(status=200, payload=task()))
+    api = make_api(session)
+
+    await api.invoke("my-app", "generate", environment=environment)
+
+    assert session.request_log[0].url == url
+
+
+def test_rejects_an_invalid_client_environment_when_built() -> None:
+    with pytest.raises(RunwareError) as excinfo:
+        _ = make_api(MockSession(), serverless_environment="Staging")
+    assert excinfo.value.parameter == "serverless_environment"
+    assert 'serverless_environment "Staging" is invalid' in str(excinfo.value)
+
+
+@pytest.mark.asyncio
+async def test_names_no_environment_in_the_hint_when_none_is_set() -> None:
+    session = MockSession()
+    session.add("POST", ASYNC_URL, MockResponse(status=202, payload=pending()))
+    api = make_api(session, poll_timeout=0)
+
+    with pytest.raises(RunwareError, match=rf'get_task\("my-app", "{TASK_ID}"\) to pick it up'):
+        _ = await api.invoke("my-app", "generate", options=no_wait())
+
+
+@pytest.mark.asyncio
+async def test_the_client_passes_a_per_call_environment_through() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=200, payload=task()))
+    session.add("GET", STAGING_TASK_URL, MockResponse(status=200, payload=task()))
+    client = Runware(
+        api_key="test-key",
+        serverless_base_url=ORIGIN,
+        transport="rest",
+        dependencies=RuntimeDependencies(
+            session=cast("aiohttp.ClientSession", session),
+        ),
+    )
+
+    try:
+        await client.invoke("my-app", "generate", environment="staging")
+        await client.get_task("my-app", TASK_ID, environment="staging")
+    finally:
+        await client.close()
+
+    assert [entry.url for entry in session.request_log] == [
+        STAGING_ASYNC_URL, STAGING_TASK_URL,
+    ]
+
+
+@pytest.mark.asyncio
+async def test_the_client_addresses_its_own_environment() -> None:
+    session = MockSession()
+    session.add("POST", STAGING_ASYNC_URL, MockResponse(status=200, payload=task()))
+    client = Runware(
+        api_key="test-key",
+        serverless_base_url=ORIGIN,
+        serverless_environment="staging",
+        transport="rest",
+        dependencies=RuntimeDependencies(
+            session=cast("aiohttp.ClientSession", session),
+        ),
+    )
+
+    try:
+        await client.invoke("my-app", "generate")
+    finally:
+        await client.close()
+
+    assert session.request_log[0].url == STAGING_ASYNC_URL
+
+
+# ------------------------------------------------------------------- budget
+
+
+PAUSED_PROBLEM = {
+    "type": "https://docs.runware.ai/serverless/errors#environment-paused",
+    "title": "Too Many Requests",
+    "status": 429,
+    "detail": 'environment "staging" is paused at its monthly budget',
+}
+
+
+@pytest.mark.asyncio
+async def test_does_not_retry_an_environment_paused_at_its_budget() -> None:
+    session = MockSession()
+    session.add(
+        "POST",
+        STAGING_ASYNC_URL,
+        MockResponse(status=429, payload=PAUSED_PROBLEM, headers={"Retry-After": "0"}),
+    )
+    api = make_api(session, max_retries=3)
+
+    with pytest.raises(RunwareError, match="paused at its monthly budget") as excinfo:
+        _ = await api.invoke("my-app", "generate", environment="staging")
+
+    assert session.count("POST", STAGING_ASYNC_URL) == 1
+    assert excinfo.value.code == "quota"
+    assert excinfo.value.retryable is False
+    assert excinfo.value.status_code == 429
+
+
+@pytest.mark.asyncio
+async def test_still_retries_any_other_429() -> None:
+    session = MockSession()
+    session.add(
+        "POST",
+        ASYNC_URL,
+        MockResponse(status=429, payload={"status": 429}, headers={"Retry-After": "0"}),
+    )
+    session.add("POST", ASYNC_URL, MockResponse(status=200, payload=task()))
+    api = make_api(session, max_retries=2)
+
+    result = await api.invoke("my-app", "generate")
+
+    assert result["status"] == "completed"
+    assert session.count("POST", ASYNC_URL) == 2

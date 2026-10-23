@@ -32,6 +32,8 @@ pytestmark = pytest.mark.skipif(not API_KEY, reason="RUNWARE_API_KEY not set")
 SERVERLESS_BASE = os.environ.get("RUNWARE_SERVERLESS_BASE_URL")
 SERVERLESS_APP = os.environ.get("RUNWARE_SERVERLESS_TEST_APP")
 SERVERLESS_ENDPOINT = os.environ.get("RUNWARE_SERVERLESS_TEST_ENDPOINT")
+# Optional: the environment of the app copy to call. Unset means production.
+SERVERLESS_ENVIRONMENT = os.environ.get("RUNWARE_SERVERLESS_TEST_ENVIRONMENT") or None
 SERVERLESS_PAYLOAD: dict[str, object] = json.loads(
     os.environ.get("RUNWARE_SERVERLESS_TEST_PAYLOAD") or "{}",
 )
@@ -42,7 +44,11 @@ serverless = pytest.mark.skipif(
 
 
 def serverless_client() -> Runware:
-    return Runware(serverless_base_url=SERVERLESS_BASE or "", transport="rest")
+    return Runware(
+        serverless_base_url=SERVERLESS_BASE or "",
+        serverless_environment=SERVERLESS_ENVIRONMENT,
+        transport="rest",
+    )
 
 IMAGE_MODEL = "runware:400@2"  # Flux 2 Klein 9b — cheap and fast
 TEXT_MODEL = "google:gemma@4-31b"  # cheap and fast
