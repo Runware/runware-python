@@ -179,11 +179,32 @@ async def test_rejects_a_leading_slash_and_suggests_the_bare_path() -> None:
 
 
 @pytest.mark.asyncio
-async def test_rejects_an_endpoint_path_that_is_not_a_bare_segment() -> None:
+async def test_rejects_an_endpoint_path_that_is_not_a_lowercase_segment() -> None:
     api = make_api(MockSession())
 
-    with pytest.raises(RunwareError, match="lowercase segment"):
+    with pytest.raises(RunwareError, match="lowercase segments"):
         _ = await api.invoke("my-app", "Generate Image")
+
+
+@pytest.mark.asyncio
+async def test_sends_a_multi_segment_endpoint_path_with_its_slashes_unencoded() -> None:
+    url = "https://serverless.test.com/v1/apps/my-app/invoke-async/v1/chat/completions"
+    session = MockSession()
+    session.add("POST", url, MockResponse(status=200, payload=task()))
+    api = make_api(session)
+
+    _ = await api.invoke("my-app", "v1/chat/completions")
+
+    assert session.request_log[0].url == url
+
+
+@pytest.mark.asyncio
+async def test_rejects_an_endpoint_path_longer_than_the_platform_accepts() -> None:
+    api = make_api(MockSession())
+    too_long = "/".join(["a" * 60] * 5)
+
+    with pytest.raises(RunwareError, match="up to 255 characters"):
+        _ = await api.invoke("my-app", too_long)
 
 
 @pytest.mark.asyncio

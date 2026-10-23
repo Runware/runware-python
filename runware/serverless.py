@@ -36,7 +36,10 @@ from .utils.retry import calculate_retry_delay, interruptible_sleep
 SessionProvider = Callable[[], Awaitable[aiohttp.ClientSession]]
 
 _APP_ID_PATTERN = re.compile(r"^[a-z][a-z0-9-]{4,28}[a-z0-9]$")
-_ENDPOINT_PATH_PATTERN = re.compile(r"^[a-z]([a-z0-9-]{0,62}[a-z0-9])?$")
+_ENDPOINT_PATH_PATTERN = re.compile(
+    r"^[a-z]([a-z0-9-]{0,62}[a-z0-9])?(/[a-z]([a-z0-9-]{0,62}[a-z0-9])?)*$",
+)
+_ENDPOINT_PATH_MAX_LENGTH = 255
 _ENVIRONMENT_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._-]{0,62}$")
 _TASK_ID_PATTERN = re.compile(
     r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
@@ -103,7 +106,7 @@ def validate_app_id(app_id: object) -> str:
 
 
 def validate_endpoint_path(endpoint_path: object) -> str:
-    """Check an endpoint path against ADR-034: a bare lowercase segment."""
+    """Check an endpoint path: lowercase segments joined by slashes."""
     if not isinstance(endpoint_path, str) or not endpoint_path:
         raise create_runware_error(
             "missingParameter", "endpoint_path is required", parameter="endpoint_path",
@@ -117,11 +120,15 @@ def validate_endpoint_path(endpoint_path: object) -> str:
             + f"leading slash{hint}",
             parameter="endpoint_path",
         )
-    if not _ENDPOINT_PATH_PATTERN.match(endpoint_path):
+    if (
+        len(endpoint_path) > _ENDPOINT_PATH_MAX_LENGTH
+        or not _ENDPOINT_PATH_PATTERN.match(endpoint_path)
+    ):
         raise create_runware_error(
             "invalidParameter",
-            f'endpoint_path "{endpoint_path}" is invalid: use a lowercase segment '
-            + "of 1 to 64 characters (letters, digits, hyphens)",
+            f'endpoint_path "{endpoint_path}" is invalid: use lowercase segments '
+            + "of 1 to 64 characters (letters, digits, hyphens) joined by "
+            + f"slashes, up to {_ENDPOINT_PATH_MAX_LENGTH} characters",
             parameter="endpoint_path",
         )
     return endpoint_path
