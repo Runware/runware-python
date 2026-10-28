@@ -235,3 +235,49 @@ class TestRestSyncHandoff:
             await client.close()
         assert result == [PROCESSING_ROW]
         assert session.count("POST", URL) == 1
+
+
+def _retrying_client_with(session: MockSession) -> Runware:
+    return Runware(
+        api_key="sk-test",
+        transport="rest",
+        retry_delay=1,
+        dependencies=RuntimeDependencies(
+            session=cast(aiohttp.ClientSession, cast(object, session))
+        ),
+    )
+
+
+def _gateway_timeout(code: str) -> MockResponse:
+    return MockResponse(
+        status=504,
+        payload={"errors": [{"code": code, "message": f"{code} message"}]},
+    )
+
+
+class TestRestSyncGatewayTimeout:
+    @pytest.mark.asyncio
+    async def test_does_not_resend_a_task_the_server_stopped_waiting_for(self) -> None:
+        session = MockSession()
+        session.add("POST", URL, _gateway_timeout("failedTaskTimeout"))
+        client = _retrying_client_with(session)
+        try:
+            with pytest.raises(RunwareError) as exc_info:
+                await client.run(SAMPLE_PARAMS)
+        finally:
+            await client.close()
+        assert session.count("POST", URL) == 1
+        assert exc_info.value.status_code == 504
+        assert exc_info.value.retryable is False
+
+    @pytest.mark.asyncio
+    async def test_still_retries_any_other_504(self) -> None:
+        session = MockSession()
+        session.add("POST", URL, _gateway_timeout("timeoutProvider"))
+        client = _retrying_client_with(session)
+        try:
+            with pytest.raises(RunwareError):
+                await client.run(SAMPLE_PARAMS)
+        finally:
+            await client.close()
+        assert session.count("POST", URL) == 4

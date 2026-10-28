@@ -381,7 +381,7 @@ The constructor derives `code` and `documentation` URL from the raw code + model
 | `timeout` | `1_200_000` (ms) | per-HTTP-call (one POST, one `getResponse` poll) |
 | `poll_timeout` | `1_200_000` (ms) | end-to-end polling budget on either transport |
 | `auth_timeout` | `15_000` (ms) | WebSocket auth handshake |
-| `max_retries` | `3` | REST retries |
+| `max_retries` | `3` | REST retries. A sync task the server stopped waiting for (`failedTaskTimeout`) is never resent |
 | `retry_delay` | `1_000` (ms) | base backoff |
 | `retry_strategy` | `"exponential"` | or `"linear"` |
 | `max_reconnect_attempts` | `inf` | WebSocket reconnect cap |

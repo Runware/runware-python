@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import weakref
 from typing import Self, cast
 
 import aiohttp
@@ -23,9 +24,25 @@ from ..utils.retry import with_retry
 
 _RETRYABLE_STATUS = {408, 429}
 
+_STILL_RUNNING_CODE = "failedTaskTimeout"
+
+_still_running: weakref.WeakSet[BaseException] = weakref.WeakSet()
+
 
 def _is_retryable_status(status: int) -> bool:
     return status in _RETRYABLE_STATUS or 500 <= status < 600
+
+
+def _first_error_code(body: object) -> object:
+    if not isinstance(body, dict):
+        return None
+    errors = cast(dict[str, object], body).get("errors")
+    if not isinstance(errors, list) or not errors:
+        return None
+    first = cast(list[object], errors)[0]
+    if not isinstance(first, dict):
+        return None
+    return cast(dict[str, object], first).get("code")
 
 
 class RestTransport:
@@ -140,6 +157,9 @@ class RestTransport:
                             model=context_model,
                         )
                         err.status_code = response.status
+                        if _first_error_code(body) == _STILL_RUNNING_CODE:
+                            err.retryable = False
+                            _still_running.add(err)
                         raise err
 
                     if response.status == 401:
@@ -201,6 +221,8 @@ class RestTransport:
     @staticmethod
     def _should_retry(error: BaseException) -> bool:
         if is_runware_error(error) and error.code == "aborted":
+            return False
+        if error in _still_running:
             return False
         if isinstance(error, TimeoutError):
             return True
