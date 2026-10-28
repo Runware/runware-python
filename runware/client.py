@@ -603,6 +603,20 @@ class Runware:
 
         if delivery_method == "sync":
             items = _extract_items(response)
+            if any(
+                item.get("taskUUID") == task_uuid and item.get("status") == "processing"
+                for item in items
+            ):
+                self._config.log.request(
+                    f"Sync task {task_uuid} still processing after the server wait"
+                )
+                return await self._poll_rest(
+                    task_type=task_type,
+                    task_uuid=task_uuid,
+                    expected_count=expected_count,
+                    initial_response=None,
+                    options=options,
+                )
             # Use the collector so per-item errors fire callbacks and raise,
             # matching the async-polling and WS paths.
             collector = _AsyncCollector(
@@ -628,7 +642,7 @@ class Runware:
         task_type: str,
         task_uuid: str,
         expected_count: int,
-        initial_response: WireFrame,
+        initial_response: WireFrame | None,
         options: RunOptions | None,
     ) -> list[LoosePayload]:
         if self._rest_transport is None:
@@ -639,10 +653,11 @@ class Runware:
         ) / 1000.0
 
         collector = _AsyncCollector(expected_count, options)
-        collector.ingest(_extract_items(initial_response))
-        _maybe_raise_item_errors(collector, task_type=task_type, task_uuid=task_uuid)
-        if collector.done():
-            return collector.sorted_results()
+        if initial_response is not None:
+            collector.ingest(_extract_items(initial_response))
+            _maybe_raise_item_errors(collector, task_type=task_type, task_uuid=task_uuid)
+            if collector.done():
+                return collector.sorted_results()
 
         start = time.monotonic()
         delay = 1.0
