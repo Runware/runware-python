@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20261012233936 — do not edit manually.
+AUTO-GENERATED from runware schemas v20261028112401 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "20261012233936"
+SCHEMAS_VERSION = "20261028112401"
 
 TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "promptEnhance", "removeBackground", "textInference", "tools", "training", "upscale", "vectorize", "videoInference"]
 
@@ -1300,44 +1300,6 @@ class OpenaiGpt54Result(TypedDict, total=False):
     finishReason: Literal['stop', 'length', 'content_filter', 'unknown']
     usage: dict[str, object]
 
-class OpenaiGptImage1Params(TypedDict, total=False):
-    """Inference params for curated model `openai:1@1` (slug: openai-gpt-image-1)."""
-
-    model: Literal['openai:1@1']
-    inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
-    width: int
-    height: int
-    settings: NotRequired[dict[str, object]]
-    providerSettings: NotRequired[dict[str, object]]
-    taskType: Literal['imageInference']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    routing: NotRequired[dict[str, object]]
-    numberResults: NotRequired[int]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
-    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
-    outputQuality: NotRequired[int]
-    deliveryMethod: NotRequired[str]
-    safety: NotRequired[dict[str, object]]
-    advancedFeatures: NotRequired[dict[str, object]]
-
-class OpenaiGptImage1Result(TypedDict, total=False):
-    """Inference result for curated model `openai:1@1` (slug: openai-gpt-image-1)."""
-
-    taskType: Literal['imageInference']
-    taskUUID: str
-    cost: NotRequired[float]
-    imageUUID: str
-    imageURL: NotRequired[str]
-    imageBase64Data: NotRequired[str]
-    imageDataURI: NotRequired[str]
-    seed: NotRequired[int]
-    NSFWContent: NotRequired[bool]
-
 class OpenaiGptImage25FlareParams(TypedDict, total=False):
     """Inference params for curated model `openai:gpt-image@2.5-flare` (slug: openai-gpt-image-2-5-flare)."""
 
@@ -1609,18 +1571,15 @@ class BriaImageReplaceBackgroundResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
-class BriaFiboParams(TypedDict, total=False):
-    """Inference params for curated model `bria:20@1` (slug: bria-fibo)."""
+class BriaFibo20Params(TypedDict, total=False):
+    """Inference params for curated model `bria:20@1` (slug: bria-fibo-2-0)."""
 
     model: Literal['bria:20@1']
     inputs: NotRequired[dict[str, object]]
     positivePrompt: str
-    negativePrompt: NotRequired[str]
     width: int
     height: int
     seed: NotRequired[int]
-    steps: NotRequired[int]
-    CFGScale: NotRequired[Literal[3, 4, 5]]
     providerSettings: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
@@ -1637,8 +1596,8 @@ class BriaFiboParams(TypedDict, total=False):
     safety: NotRequired[dict[str, object]]
     advancedFeatures: NotRequired[dict[str, object]]
 
-class BriaFiboResult(TypedDict, total=False):
-    """Inference result for curated model `bria:20@1` (slug: bria-fibo)."""
+class BriaFibo20Result(TypedDict, total=False):
+    """Inference result for curated model `bria:20@1` (slug: bria-fibo-2-0)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -1825,16 +1784,15 @@ class BriaVideoBackgroundRemovalResult(TypedDict, total=False):
     videoBase64Data: NotRequired[str]
     videoDataURI: NotRequired[str]
 
-class BriaFiboEditParams(TypedDict, total=False):
-    """Inference params for curated model `bria:21@1` (slug: bria-fibo-edit)."""
+class BriaFibo20EditParams(TypedDict, total=False):
+    """Inference params for curated model `bria:21@1` (slug: bria-fibo-2-0-edit)."""
 
     model: Literal['bria:21@1']
     inputs: dict[str, object]
     positivePrompt: str
-    negativePrompt: NotRequired[str]
+    width: NotRequired[int]
+    height: NotRequired[int]
     seed: NotRequired[int]
-    steps: NotRequired[int]
-    CFGScale: NotRequired[Literal[3, 4, 5]]
     providerSettings: NotRequired[dict[str, object]]
     taskType: Literal['imageInference']
     taskUUID: str
@@ -1851,8 +1809,8 @@ class BriaFiboEditParams(TypedDict, total=False):
     safety: NotRequired[dict[str, object]]
     advancedFeatures: NotRequired[dict[str, object]]
 
-class BriaFiboEditResult(TypedDict, total=False):
-    """Inference result for curated model `bria:21@1` (slug: bria-fibo-edit)."""
+class BriaFibo20EditResult(TypedDict, total=False):
+    """Inference result for curated model `bria:21@1` (slug: bria-fibo-2-0-edit)."""
 
     taskType: Literal['imageInference']
     taskUUID: str
@@ -2168,6 +2126,7 @@ class MinimaxH3FastParams(TypedDict, total=False):
     positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
+    resolution: NotRequired[Literal['480p', '768p']]
     duration: NotRequired[int]
     seed: NotRequired[int]
     taskType: Literal['videoInference']
@@ -2813,6 +2772,43 @@ class PrunaaiPVideoEditResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
+class PrunaaiPVideo2ProAvatarParams(TypedDict, total=False):
+    """Inference params for curated model `prunaai:p-video@2-pro-avatar` (slug: prunaai-p-video-2-pro-avatar)."""
+
+    model: Literal['prunaai:p-video@2-pro-avatar']
+    inputs: dict[str, object]
+    positivePrompt: NotRequired[str]
+    resolution: NotRequired[Literal['480p', '768p', '1080p', '2k', '4k']]
+    seed: NotRequired[int]
+    speech: NotRequired[dict[str, object]]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class PrunaaiPVideo2ProAvatarResult(TypedDict, total=False):
+    """Inference result for curated model `prunaai:p-video@2-pro-avatar` (slug: prunaai-p-video-2-pro-avatar)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
 class PrunaaiPVideo2ProParams(TypedDict, total=False):
     """Inference params for curated model `prunaai:p-video@2-pro` (slug: prunaai-p-video-2-pro)."""
 
@@ -2968,11 +2964,11 @@ class LightricksLtx23Params(TypedDict, total=False):
 
     model: Literal['lightricks:ltx@2.3']
     inputs: NotRequired[dict[str, object]]
-    positivePrompt: str
+    positivePrompt: NotRequired[str]
     negativePrompt: NotRequired[str]
-    width: int
-    height: int
-    duration: float
+    width: NotRequired[int]
+    height: NotRequired[int]
+    duration: NotRequired[float]
     fps: NotRequired[int]
     seed: NotRequired[int]
     steps: NotRequired[int]
@@ -5771,6 +5767,43 @@ class KlingaiLipSyncResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
+class KlingaiVideo40Params(TypedDict, total=False):
+    """Inference params for curated model `klingai:kling-video@4.0` (slug: klingai-video-4-0)."""
+
+    model: Literal['klingai:kling-video@4.0']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: NotRequired[str]
+    width: NotRequired[int]
+    height: NotRequired[int]
+    resolution: NotRequired[Literal['720p', '1080p']]
+    duration: NotRequired[int]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
+class KlingaiVideo40Result(TypedDict, total=False):
+    """Inference result for curated model `klingai:kling-video@4.0` (slug: klingai-video-4-0)."""
+
+    taskType: Literal['videoInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
 class KlingaiImage30Params(TypedDict, total=False):
     """Inference params for curated model `klingai:kling-image@3` (slug: klingai-image-3-0)."""
 
@@ -8194,6 +8227,72 @@ class Hyper3dRodinGen2Result(TypedDict, total=False):
     outputs: dict[str, object]
     seed: NotRequired[int]
 
+class HeygenVoice10Params(TypedDict, total=False):
+    """Inference params for curated model `heygen:voice@1.0` (slug: heygen-voice-1-0)."""
+
+    model: Literal['heygen:voice@1.0']
+    inputs: NotRequired[dict[str, object]]
+    speech: dict[str, object]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['audioInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['MP3', 'WAV', 'FLAC', 'OGG']]
+    deliveryMethod: NotRequired[str]
+    audioSettings: NotRequired[dict[str, object]]
+
+class HeygenVoice10Result(TypedDict, total=False):
+    """Inference result for curated model `heygen:voice@1.0` (slug: heygen-voice-1-0)."""
+
+    taskType: Literal['audioInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    audioUUID: str
+    audioURL: NotRequired[str]
+    audioBase64Data: NotRequired[str]
+    audioDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    outputs: NotRequired[dict[str, object]]
+
+class HeygenVoice10TurboParams(TypedDict, total=False):
+    """Inference params for curated model `heygen:voice@1.0-turbo` (slug: heygen-voice-1-0-turbo)."""
+
+    model: Literal['heygen:voice@1.0-turbo']
+    inputs: NotRequired[dict[str, object]]
+    speech: dict[str, object]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['audioInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['MP3', 'WAV', 'FLAC', 'OGG']]
+    deliveryMethod: NotRequired[str]
+    audioSettings: NotRequired[dict[str, object]]
+
+class HeygenVoice10TurboResult(TypedDict, total=False):
+    """Inference result for curated model `heygen:voice@1.0-turbo` (slug: heygen-voice-1-0-turbo)."""
+
+    taskType: Literal['audioInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    audioUUID: str
+    audioURL: NotRequired[str]
+    audioBase64Data: NotRequired[str]
+    audioDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    outputs: NotRequired[dict[str, object]]
+
 class HeygenAvatarIvParams(TypedDict, total=False):
     """Inference params for curated model `heygen:avatar@4` (slug: heygen-avatar-iv)."""
 
@@ -8240,7 +8339,7 @@ class HeygenVideo10Params(TypedDict, total=False):
     positivePrompt: str
     width: NotRequired[int]
     height: NotRequired[int]
-    resolution: NotRequired[Literal['480p', '768p']]
+    resolution: NotRequired[Literal['480p', '768p', '1080p', '2k']]
     duration: NotRequired[int]
     seed: NotRequired[int]
     settings: NotRequired[dict[str, object]]
@@ -8307,6 +8406,39 @@ class HeygenAvatarVResult(TypedDict, total=False):
     videoDataURI: NotRequired[str]
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
+
+class HeygenVoice10TurboFreeParams(TypedDict, total=False):
+    """Inference params for curated model `heygen:voice@1.0-turbo-free` (slug: heygen-voice-1-0-turbo-free)."""
+
+    model: Literal['heygen:voice@1.0-turbo-free']
+    inputs: NotRequired[dict[str, object]]
+    speech: dict[str, object]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['audioInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['MP3', 'WAV', 'FLAC', 'OGG']]
+    deliveryMethod: NotRequired[str]
+    audioSettings: NotRequired[dict[str, object]]
+
+class HeygenVoice10TurboFreeResult(TypedDict, total=False):
+    """Inference result for curated model `heygen:voice@1.0-turbo-free` (slug: heygen-voice-1-0-turbo-free)."""
+
+    taskType: Literal['audioInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    audioUUID: str
+    audioURL: NotRequired[str]
+    audioBase64Data: NotRequired[str]
+    audioDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    outputs: NotRequired[dict[str, object]]
 
 class HeygenVideoAgentParams(TypedDict, total=False):
     """Inference params for curated model `heygen:video-agent@0` (slug: heygen-video-agent)."""
@@ -10704,6 +10836,48 @@ class MireloSfx15Result(TypedDict, total=False):
     audioDataURI: NotRequired[str]
     seed: NotRequired[int]
 
+class BflFlux3ImageKleinBaseParams(TypedDict, total=False):
+    """Inference params for curated model `bfl:flux@3-image-klein-base` (slug: bfl-flux-3-image-klein-base)."""
+
+    model: Literal['bfl:flux@3-image-klein-base']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    negativePrompt: NotRequired[str]
+    width: NotRequired[int]
+    height: NotRequired[int]
+    seed: NotRequired[int]
+    steps: NotRequired[int]
+    CFGScale: NotRequired[float]
+    acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+    advancedFeatures: NotRequired[dict[str, object]]
+
+class BflFlux3ImageKleinBaseResult(TypedDict, total=False):
+    """Inference result for curated model `bfl:flux@3-image-klein-base` (slug: bfl-flux-3-image-klein-base)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
 class BflFlux1KontextProParams(TypedDict, total=False):
     """Inference params for curated model `bfl:3@1` (slug: bfl-flux-1-kontext-pro)."""
 
@@ -10862,6 +11036,46 @@ class BflFlux2DevResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
 
+class BflFlux3ImageKleinParams(TypedDict, total=False):
+    """Inference params for curated model `bfl:flux@3-image-klein` (slug: bfl-flux-3-image-klein)."""
+
+    model: Literal['bfl:flux@3-image-klein']
+    inputs: NotRequired[dict[str, object]]
+    positivePrompt: str
+    width: NotRequired[int]
+    height: NotRequired[int]
+    seed: NotRequired[int]
+    steps: NotRequired[int]
+    acceleration: NotRequired[Literal['none', 'low', 'medium', 'high']]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+    advancedFeatures: NotRequired[dict[str, object]]
+
+class BflFlux3ImageKleinResult(TypedDict, total=False):
+    """Inference result for curated model `bfl:flux@3-image-klein` (slug: bfl-flux-3-image-klein)."""
+
+    taskType: Literal['imageInference']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
+    seed: NotRequired[int]
+    NSFWContent: NotRequired[bool]
+
 class BflFlux2FlexParams(TypedDict, total=False):
     """Inference params for curated model `bfl:6@1` (slug: bfl-flux-2-flex)."""
 
@@ -10989,6 +11203,37 @@ class BflFluxOutpaintingResult(TypedDict, total=False):
     imageDataURI: NotRequired[str]
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
+
+class BflFlux3UpscalerParams(TypedDict, total=False):
+    """Inference params for curated model `bfl:flux@video-upscale` (slug: bfl-flux-3-upscaler)."""
+
+    model: Literal['bfl:flux@video-upscale']
+    positivePrompt: NotRequired[str]
+    upscaleFactor: NotRequired[float]
+    settings: NotRequired[dict[str, object]]
+    taskType: Literal['upscale']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputQuality: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    deliveryMethod: NotRequired[str]
+    inputs: dict[str, object]
+
+class BflFlux3UpscalerResult(TypedDict, total=False):
+    """Inference result for curated model `bfl:flux@video-upscale` (slug: bfl-flux-3-upscaler)."""
+
+    taskType: Literal['upscale']
+    taskUUID: str
+    cost: NotRequired[float]
+    videoUUID: str
+    videoURL: NotRequired[str]
+    videoBase64Data: NotRequired[str]
+    videoDataURI: NotRequired[str]
 
 class BflFlux2Klein9bBaseParams(TypedDict, total=False):
     """Inference params for curated model `runware:400@3` (slug: bfl-flux-2-klein-9b-base)."""
@@ -11390,37 +11635,6 @@ class BflFlux3VideoResult(TypedDict, total=False):
     seed: NotRequired[int]
     NSFWContent: NotRequired[bool]
     outputs: NotRequired[dict[str, object]]
-
-class BflFluxVideoUpscaleParams(TypedDict, total=False):
-    """Inference params for curated model `bfl:flux@video-upscale` (slug: bfl-flux-video-upscale)."""
-
-    model: Literal['bfl:flux@video-upscale']
-    positivePrompt: NotRequired[str]
-    upscaleFactor: NotRequired[float]
-    settings: NotRequired[dict[str, object]]
-    taskType: Literal['upscale']
-    taskUUID: str
-    webhookURL: NotRequired[str]
-    includeCost: NotRequired[bool]
-    routing: NotRequired[dict[str, object]]
-    uploadEndpoint: NotRequired[str]
-    ttl: NotRequired[int]
-    outputQuality: NotRequired[int]
-    outputType: NotRequired[Literal['URL']]
-    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
-    deliveryMethod: NotRequired[str]
-    inputs: dict[str, object]
-
-class BflFluxVideoUpscaleResult(TypedDict, total=False):
-    """Inference result for curated model `bfl:flux@video-upscale` (slug: bfl-flux-video-upscale)."""
-
-    taskType: Literal['upscale']
-    taskUUID: str
-    cost: NotRequired[float]
-    videoUUID: str
-    videoURL: NotRequired[str]
-    videoBase64Data: NotRequired[str]
-    videoDataURI: NotRequired[str]
 
 class BflFlux1FillDevParams(TypedDict, total=False):
     """Inference params for curated model `runware:102@1` (slug: bfl-flux-1-fill-dev)."""
@@ -14169,19 +14383,21 @@ models: dict[str, ModelEntry] = {
     "bfl:6@1": ModelEntry(task_type="imageInference", id="bfl-flux-2-flex"),
     "bfl:7@1": ModelEntry(task_type="imageInference", id="bfl-flux-2-max"),
     "bfl:flux@3-image": ModelEntry(task_type="imageInference", id="bfl-flux-3-image"),
+    "bfl:flux@3-image-klein": ModelEntry(task_type="imageInference", id="bfl-flux-3-image-klein"),
+    "bfl:flux@3-image-klein-base": ModelEntry(task_type="imageInference", id="bfl-flux-3-image-klein-base"),
     "bfl:flux@3-video": ModelEntry(task_type="videoInference", id="bfl-flux-3-video"),
     "bfl:flux@erase": ModelEntry(task_type="imageInference", id="bfl-flux-erase"),
     "bfl:flux@outpainting": ModelEntry(task_type="imageInference", id="bfl-flux-outpainting"),
     "bfl:flux@video-edit-fast": ModelEntry(task_type="videoInference", id="bfl-flux-video-edit-fast"),
-    "bfl:flux@video-upscale": ModelEntry(task_type="upscale", id="bfl-flux-video-upscale"),
+    "bfl:flux@video-upscale": ModelEntry(task_type="upscale", id="bfl-flux-3-upscaler"),
     "bfl:flux@vto": ModelEntry(task_type="imageInference", id="bfl-flux-virtual-try-on"),
     "boogu:image@0.1-edit": ModelEntry(task_type="imageInference", id="boogu-image-0-1-edit"),
     "boogu:image@0.1-edit-turbo": ModelEntry(task_type="imageInference", id="boogu-image-0-1-edit-turbo"),
     "bria:10@1": ModelEntry(task_type="imageInference", id="bria-3-2"),
     "bria:11@1": ModelEntry(task_type="imageInference", id="bria-image-replace-background"),
-    "bria:20@1": ModelEntry(task_type="imageInference", id="bria-fibo"),
+    "bria:20@1": ModelEntry(task_type="imageInference", id="bria-fibo-2-0"),
     "bria:20@3": ModelEntry(task_type="imageInference", id="bria-fibo-lite"),
-    "bria:21@1": ModelEntry(task_type="imageInference", id="bria-fibo-edit"),
+    "bria:21@1": ModelEntry(task_type="imageInference", id="bria-fibo-2-0-edit"),
     "bria:21@2": ModelEntry(task_type="imageInference", id="bria-fibo-edit-tools"),
     "bria:2@1": ModelEntry(task_type="removeBackground", id="bria-rmbg-v2-0"),
     "bria:50@1": ModelEntry(task_type="upscale", id="bria-video-increase-resolution"),
@@ -14235,6 +14451,9 @@ models: dict[str, ModelEntry] = {
     "heygen:avatar@5": ModelEntry(task_type="videoInference", id="heygen-avatar-v"),
     "heygen:video-agent@0": ModelEntry(task_type="videoInference", id="heygen-video-agent"),
     "heygen:video@1.0": ModelEntry(task_type="videoInference", id="heygen-video-1-0"),
+    "heygen:voice@1.0": ModelEntry(task_type="audioInference", id="heygen-voice-1-0"),
+    "heygen:voice@1.0-turbo": ModelEntry(task_type="audioInference", id="heygen-voice-1-0-turbo"),
+    "heygen:voice@1.0-turbo-free": ModelEntry(task_type="audioInference", id="heygen-voice-1-0-turbo-free"),
     "hyper3d:rodin@gen-2": ModelEntry(task_type="3dInference", id="hyper3d-rodin-gen-2"),
     "ideogram:2@1": ModelEntry(task_type="imageInference", id="ideogram-2a"),
     "ideogram:2@2": ModelEntry(task_type="imageInference", id="ideogram-2a-remix"),
@@ -14273,6 +14492,7 @@ models: dict[str, ModelEntry] = {
     "klingai:kling-video@3-pro": ModelEntry(task_type="videoInference", id="klingai-video-3-0-pro"),
     "klingai:kling-video@3-standard": ModelEntry(task_type="videoInference", id="klingai-video-3-0-standard"),
     "klingai:kling-video@3.0-turbo": ModelEntry(task_type="videoInference", id="klingai-video-3-0-turbo"),
+    "klingai:kling-video@4.0": ModelEntry(task_type="videoInference", id="klingai-video-4-0"),
     "klingai:kling-video@o3-4k": ModelEntry(task_type="videoInference", id="klingai-video-3-0-omni-4k"),
     "klingai:kling-video@o3-pro": ModelEntry(task_type="videoInference", id="klingai-video-3-0-omni-pro"),
     "klingai:kling-video@o3-standard": ModelEntry(task_type="videoInference", id="klingai-video-3-0-omni-standard"),
@@ -14312,7 +14532,6 @@ models: dict[str, ModelEntry] = {
     "minimax:music@cover": ModelEntry(task_type="audioInference", id="minimax-music-cover"),
     "minimax:speech@2.8": ModelEntry(task_type="audioInference", id="minimax-speech-2-8"),
     "mirelo:1@1": ModelEntry(task_type="audioInference", id="mirelo-sfx-1-5"),
-    "openai:1@1": ModelEntry(task_type="imageInference", id="openai-gpt-image-1"),
     "openai:1@2": ModelEntry(task_type="imageInference", id="openai-gpt-image-1-mini"),
     "openai:4@1": ModelEntry(task_type="imageInference", id="openai-gpt-image-1-5"),
     "openai:gpt-image@2": ModelEntry(task_type="imageInference", id="openai-gpt-image-2"),
@@ -14344,6 +14563,7 @@ models: dict[str, ModelEntry] = {
     "prunaai:p-video@0": ModelEntry(task_type="videoInference", id="prunaai-p-video"),
     "prunaai:p-video@2": ModelEntry(task_type="videoInference", id="prunaai-p-video-2"),
     "prunaai:p-video@2-pro": ModelEntry(task_type="videoInference", id="prunaai-p-video-2-pro"),
+    "prunaai:p-video@2-pro-avatar": ModelEntry(task_type="videoInference", id="prunaai-p-video-2-pro-avatar"),
     "prunaai:p-video@animate": ModelEntry(task_type="videoInference", id="prunaai-p-video-animate"),
     "prunaai:p-video@avatar": ModelEntry(task_type="videoInference", id="prunaai-p-video-avatar"),
     "prunaai:p-video@edit": ModelEntry(task_type="videoInference", id="prunaai-p-video-edit"),
