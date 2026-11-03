@@ -1,5 +1,5 @@
 """
-AUTO-GENERATED from runware schemas v20261103162519 — do not edit manually.
+AUTO-GENERATED from runware schemas v20261103170224 — do not edit manually.
 
 Re-run `uv run python scripts/generate_types.py` after bumping
 `runware/_schemas_version.py` to refresh.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, NotRequired, TypedDict
 
-SCHEMAS_VERSION = "20261103162519"
+SCHEMAS_VERSION = "20261103170224"
 
 TaskType = Literal["3dInference", "audioInference", "caption", "controlNetPreprocess", "imageInference", "imageMasking", "promptEnhance", "removeBackground", "textInference", "tools", "training", "upscale", "vectorize", "videoInference"]
 
@@ -2369,6 +2369,35 @@ class TopazlabsStarlightPrecise25Result(TypedDict, total=False):
     videoURL: NotRequired[str]
     videoBase64Data: NotRequired[str]
     videoDataURI: NotRequired[str]
+
+class TopazlabsWonder4Params(TypedDict, total=False):
+    """Inference params for curated model `topazlabs:wonder@4` (slug: topazlabs-wonder-4)."""
+
+    model: Literal['topazlabs:wonder@4']
+    upscaleFactor: NotRequired[int]
+    taskType: Literal['upscale']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    routing: NotRequired[dict[str, object]]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputQuality: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    deliveryMethod: NotRequired[str]
+    inputs: dict[str, object]
+
+class TopazlabsWonder4Result(TypedDict, total=False):
+    """Inference result for curated model `topazlabs:wonder@4` (slug: topazlabs-wonder-4)."""
+
+    taskType: Literal['upscale']
+    taskUUID: str
+    cost: NotRequired[float]
+    imageUUID: str
+    imageURL: NotRequired[str]
+    imageBase64Data: NotRequired[str]
+    imageDataURI: NotRequired[str]
 
 class Imagineart15Params(TypedDict, total=False):
     """Inference params for curated model `imagineart:1@5` (slug: imagineart-1-5)."""
@@ -14799,6 +14828,7 @@ models: dict[str, ModelEntry] = {
     "topazlabs:proteus@4": ModelEntry(task_type="upscale", id="topazlabs-proteus-4"),
     "topazlabs:starlight-precise@2.5": ModelEntry(task_type="upscale", id="topazlabs-starlight-precise-2-5"),
     "topazlabs:wonder@3.5": ModelEntry(task_type="upscale", id="topazlabs-wonder-3-5"),
+    "topazlabs:wonder@4": ModelEntry(task_type="upscale", id="topazlabs-wonder-4"),
     "tripo:v3.1@0": ModelEntry(task_type="3dInference", id="tripo-v3-1"),
     "veed:fabric@1.0-hosted": ModelEntry(task_type="videoInference", id="veed-fabric-1-0-hosted"),
     "vidu:1@0": ModelEntry(task_type="videoInference", id="vidu-q1-classic"),
