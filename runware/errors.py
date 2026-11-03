@@ -100,6 +100,7 @@ _SERVER_ERROR_CODES: set[str] = {
     "internalServerError",
     "serviceUnavailable",
     "serverUnavailable",
+    "modelRouterUnavailable",
     "standardError",
     "unknownError",
     "undefinedError",
@@ -211,6 +212,10 @@ def derive_code(raw: str) -> ErrorCode:
         or raw == "modelAlreadyExists"
         or raw.startswith("max")
         or raw == "validationFailed"
+        # Every router rejection but `modelRouterUnavailable`, caught above as a server
+        # error, names something about the request only the caller can change.
+        or raw.startswith("modelRouter")
+        or raw == "noEligibleModel"
     ):
         return "validation"
 
