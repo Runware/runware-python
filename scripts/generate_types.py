@@ -292,6 +292,7 @@ def build(schema_map: dict[str, Any]) -> str:
     architectures: dict[str, Any] = schema_map.get("architectures") or {}
     modalities: dict[str, Any] = schema_map.get("modalities") or {}
     operations: dict[str, Any] = schema_map.get("operations") or {}
+    auto: dict[str, Any] = schema_map.get("auto") or {}
     utilities: list[dict[str, Any]] = schema_map.get("utilities") or []
 
     inference_entries: list[tuple[str, str, str]] = []
@@ -394,6 +395,18 @@ def build(schema_map: dict[str, Any]) -> str:
             to_class_name(op_key, "Params"),
             op_schema,
             f"Params for the `{op_key}` operation.",
+        )
+
+    for auto_key, auto_schema in sorted(auto.items()):
+        if not isinstance(auto_schema, dict):
+            continue
+        task_type = _extract_task_type(auto_schema)
+        if task_type is None:
+            continue
+        _ = add_typed_dict(
+            to_class_name("Routed", task_type, "Params"),
+            auto_schema,
+            f"Params for `{task_type}` with `model: \"auto\"` (slug: {auto_key}).",
         )
 
     # Utilities: Params + Result TypedDict per utility task.

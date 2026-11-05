@@ -13890,6 +13890,190 @@ class RemoveBackgroundParams(TypedDict, total=False):
     ttl: NotRequired[int]
     outputQuality: NotRequired[int]
 
+class RoutedThreeDInferenceParams(TypedDict, total=False):
+    """Params for `3dInference` with `model: "auto"` (slug: 3d)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['3dInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['GLB']]
+    deliveryMethod: NotRequired[str]
+
+class RoutedAudioInferenceParams(TypedDict, total=False):
+    """Params for `audioInference` with `model: "auto"` (slug: audio)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['audioInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['MP3', 'WAV', 'FLAC', 'OGG']]
+    deliveryMethod: NotRequired[str]
+    audioSettings: NotRequired[dict[str, object]]
+
+class RoutedCaptionParams(TypedDict, total=False):
+    """Params for `caption` with `model: "auto"` (slug: caption)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['caption']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+
+class RoutedControlNetPreprocessParams(TypedDict, total=False):
+    """Params for `controlNetPreprocess` with `model: "auto"` (slug: controlnet-preprocess)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['controlNetPreprocess']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    deliveryMethod: NotRequired[str]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    inputs: dict[str, object]
+
+class RoutedImageInferenceParams(TypedDict, total=False):
+    """Params for `imageInference` with `model: "auto"` (slug: image)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['imageInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+    advancedFeatures: NotRequired[dict[str, object]]
+
+class RoutedImageMaskingParams(TypedDict, total=False):
+    """Params for `imageMasking` with `model: "auto"` (slug: masking)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['imageMasking']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['JPG', 'PNG', 'WEBP']]
+    deliveryMethod: NotRequired[str]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    inputs: dict[str, object]
+    settings: NotRequired[dict[str, object]]
+
+class RoutedPromptEnhanceParams(TypedDict, total=False):
+    """Params for `promptEnhance` with `model: "auto"` (slug: prompt-enhance)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['promptEnhance']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    deliveryMethod: NotRequired[str]
+    includeCost: NotRequired[bool]
+    prompt: str
+    promptMaxLength: NotRequired[int]
+    promptVersions: NotRequired[int]
+
+class RoutedRemoveBackgroundParams(TypedDict, total=False):
+    """Params for `removeBackground` with `model: "auto"` (slug: remove-background)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['removeBackground']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputQuality: NotRequired[int]
+
+class RoutedTextInferenceParams(TypedDict, total=False):
+    """Params for `textInference` with `model: "auto"` (slug: text)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['textInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    messages: list[dict[str, object]]
+    outputFormat: NotRequired[Literal['TEXT']]
+    deliveryMethod: NotRequired[str]
+    numberResults: NotRequired[int]
+    settings: NotRequired[dict[str, object]]
+    includeUsage: NotRequired[bool]
+
+class RoutedUpscaleParams(TypedDict, total=False):
+    """Params for `upscale` with `model: "auto"` (slug: upscale)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['upscale']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputQuality: NotRequired[int]
+
+class RoutedVectorizeParams(TypedDict, total=False):
+    """Params for `vectorize` with `model: "auto"` (slug: vectorize)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['vectorize']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL', 'base64Data', 'dataURI']]
+    outputFormat: NotRequired[Literal['SVG']]
+    deliveryMethod: NotRequired[str]
+
+class RoutedVideoInferenceParams(TypedDict, total=False):
+    """Params for `videoInference` with `model: "auto"` (slug: video)."""
+
+    model: Literal['auto']
+    routing: NotRequired[dict[str, object]]
+    taskType: Literal['videoInference']
+    taskUUID: str
+    webhookURL: NotRequired[str]
+    includeCost: NotRequired[bool]
+    numberResults: NotRequired[int]
+    uploadEndpoint: NotRequired[str]
+    ttl: NotRequired[int]
+    outputType: NotRequired[Literal['URL']]
+    outputFormat: NotRequired[Literal['MP4', 'WEBM', 'MOV']]
+    outputQuality: NotRequired[int]
+    deliveryMethod: NotRequired[str]
+    safety: NotRequired[dict[str, object]]
+
 class ModelSearchParams(TypedDict, total=False):
     """Params for the `model-search` utility task."""
 

@@ -54,6 +54,18 @@ from .types.task_map import (
     RemoveBackgroundParams,
     RemoveBackgroundResult,
     RemoveBackgroundVideoParams,
+    RoutedAudioInferenceParams,
+    RoutedCaptionParams,
+    RoutedControlNetPreprocessParams,
+    RoutedImageInferenceParams,
+    RoutedImageMaskingParams,
+    RoutedPromptEnhanceParams,
+    RoutedRemoveBackgroundParams,
+    RoutedTextInferenceParams,
+    RoutedThreeDInferenceParams,
+    RoutedUpscaleParams,
+    RoutedVectorizeParams,
+    RoutedVideoInferenceParams,
     TextInferenceParams,
     TextInferenceResult,
     ThreeDInferenceParams,
@@ -187,36 +199,56 @@ class Runware:
     # Modalities (5)
     @overload
     async def run(
-        self, params: ImageInferenceParams, options: RunOptions | None = None,
+        self,
+        params: ImageInferenceParams | RoutedImageInferenceParams,
+        options: RunOptions | None = None,
     ) -> list[ImageInferenceResult]: ...
     @overload
     async def run(
-        self, params: VideoInferenceParams, options: RunOptions | None = None,
+        self,
+        params: VideoInferenceParams | RoutedVideoInferenceParams,
+        options: RunOptions | None = None,
     ) -> list[VideoInferenceResult]: ...
     @overload
     async def run(
-        self, params: AudioInferenceParams, options: RunOptions | None = None,
+        self,
+        params: AudioInferenceParams | RoutedAudioInferenceParams,
+        options: RunOptions | None = None,
     ) -> list[AudioInferenceResult]: ...
     @overload
     async def run(
-        self, params: TextInferenceParams, options: RunOptions | None = None,
+        self,
+        params: TextInferenceParams | RoutedTextInferenceParams,
+        options: RunOptions | None = None,
     ) -> list[TextInferenceResult]: ...
     @overload
     async def run(
-        self, params: ThreeDInferenceParams, options: RunOptions | None = None,
+        self,
+        params: ThreeDInferenceParams | RoutedThreeDInferenceParams,
+        options: RunOptions | None = None,
     ) -> list[ThreeDInferenceResult]: ...
 
     # Operations — slug variants collapse to one canonical Result per taskType.
     @overload
     async def run(
         self,
-        params: CaptionParams | CaptionImageParams | CaptionVideoParams,
+        params: (
+            CaptionParams
+            | CaptionImageParams
+            | CaptionVideoParams
+            | RoutedCaptionParams
+        ),
         options: RunOptions | None = None,
     ) -> list[CaptionResult]: ...
     @overload
     async def run(
         self,
-        params: UpscaleParams | UpscaleImageParams | UpscaleVideoParams,
+        params: (
+            UpscaleParams
+            | UpscaleImageParams
+            | UpscaleVideoParams
+            | RoutedUpscaleParams
+        ),
         options: RunOptions | None = None,
     ) -> list[UpscaleResult]: ...
     @overload
@@ -226,24 +258,33 @@ class Runware:
             RemoveBackgroundParams
             | RemoveBackgroundImageParams
             | RemoveBackgroundVideoParams
+            | RoutedRemoveBackgroundParams
         ),
         options: RunOptions | None = None,
     ) -> list[RemoveBackgroundResult]: ...
     @overload
     async def run(
-        self, params: MaskingParams, options: RunOptions | None = None,
+        self,
+        params: MaskingParams | RoutedImageMaskingParams,
+        options: RunOptions | None = None,
     ) -> list[ImageMaskingResult]: ...
     @overload
     async def run(
-        self, params: ControlnetPreprocessParams, options: RunOptions | None = None,
+        self,
+        params: ControlnetPreprocessParams | RoutedControlNetPreprocessParams,
+        options: RunOptions | None = None,
     ) -> list[ControlNetPreprocessResult]: ...
     @overload
     async def run(
-        self, params: PromptEnhanceParams, options: RunOptions | None = None,
+        self,
+        params: PromptEnhanceParams | RoutedPromptEnhanceParams,
+        options: RunOptions | None = None,
     ) -> list[PromptEnhanceResult]: ...
     @overload
     async def run(
-        self, params: VectorizeParams, options: RunOptions | None = None,
+        self,
+        params: VectorizeParams | RoutedVectorizeParams,
+        options: RunOptions | None = None,
     ) -> list[VectorizeResult]: ...
     @overload
     async def run(
