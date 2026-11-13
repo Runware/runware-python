@@ -22,7 +22,7 @@ async def main() -> None:
         try:
             text_stream = await client.stream(
                 {
-                    "model": "google:gemma@4-31b",
+                    "model": "openai:gpt@5.5",
                     "messages": [
                         {
                             "role": "user",

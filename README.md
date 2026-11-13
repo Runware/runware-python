@@ -69,7 +69,7 @@ videos = await client.run({
 
 # Text inference (LLM)
 responses = await client.run({
-    "model": "google:gemma@4-31b",
+    "model": "openai:gpt@5.5",
     "messages": [{"role": "user", "content": "Explain quantum computing"}],
 })
 
@@ -141,7 +141,7 @@ For text models, `.stream()` delivers tokens as they're generated:
 
 ```python
 stream = await client.stream({
-    "model": "google:gemma@4-31b",
+    "model": "openai:gpt@5.5",
     "messages": [{"role": "user", "content": "Tell me a story about a robot"}],
 })
 
@@ -153,7 +153,7 @@ async for word in stream.text_stream:
 
 ```python
 stream = await client.stream({
-    "model": "google:gemma@4-31b",
+    "model": "openai:gpt@5.5",
     "messages": [{"role": "user", "content": "Explain gravity"}],
 })
 
@@ -268,7 +268,7 @@ For streams, set the cancel event to end iteration:
 from runware import StreamOptions
 
 stream = await client.stream(
-    {"model": "google:gemma@4-31b", "messages": [{"role": "user", "content": "..."}]},
+    {"model": "openai:gpt@5.5", "messages": [{"role": "user", "content": "..."}]},
     StreamOptions(cancel_event=cancel),
 )
 async for word in stream.text_stream:
@@ -443,7 +443,7 @@ For fast tasks (text inference, fast image gen, captioning) you can skip the pol
 
 ```python
 responses = await client.run({
-    "model": "google:gemma@4-31b",
+    "model": "openai:gpt@5.5",
     "messages": [{"role": "user", "content": "Hello"}],
     "deliveryMethod": "sync",
 })

@@ -14,11 +14,14 @@ from __future__ import annotations
 
 import asyncio
 import json
+import math
 import os
+from typing import cast
 
 import pytest
 
 from runware import InvokeOptions, Runware, RunwareError, is_runware_error
+from runware.types.task_map import models
 
 API_KEY = os.environ.get("RUNWARE_API_KEY")
 pytestmark = pytest.mark.skipif(not API_KEY, reason="RUNWARE_API_KEY not set")
@@ -51,7 +54,6 @@ def serverless_client() -> Runware:
     )
 
 IMAGE_MODEL = "runware:400@2"  # Flux 2 Klein 9b — cheap and fast
-TEXT_MODEL = "google:gemma@4-31b"  # cheap and fast
 
 IMAGE_PARAMS: dict[str, object] = {
     "taskType": "imageInference",
@@ -63,7 +65,6 @@ IMAGE_PARAMS: dict[str, object] = {
 
 TEXT_PARAMS: dict[str, object] = {
     "taskType": "textInference",
-    "model": TEXT_MODEL,
     "messages": [{"role": "user", "content": "Reply with exactly: hello"}],
 }
 
@@ -128,10 +129,38 @@ async def test_ws_sync_one_image() -> None:
 
 # ----------------------------------------------------------- Stream
 
+async def cheapest_text_model(client: Runware) -> str | None:
+    """LLMs keep leaving the native API, and a fixed id broke this suite each
+    time one did, so the cheapest live one is picked when the test runs.
+    """
+    live = cast(
+        "list[dict[str, object]]",
+        await client.content.list_models({"status": "live", "category": "text"}),
+    )
+
+    def output_rate(model: dict[str, object]) -> float:
+        rates = [
+            cast("float", rate["amount"])
+            for rate in cast("list[dict[str, object]]", model.get("pricingRates") or [])
+            if rate.get("unit") == "outputToken"
+        ]
+        return max(rates) if rates else math.inf
+
+    text = [
+        model for model in live
+        if (entry := models.get(str(model["air"]))) and entry.task_type == "textInference"
+    ]
+    return str(min(text, key=output_rate)["air"]) if text else None
+
+
 @pytest.mark.asyncio
 async def test_stream_text() -> None:
     async with Runware(transport="rest") as client:
-        stream = await client.stream(TEXT_PARAMS)
+        model = await cheapest_text_model(client)
+        if model is None:
+            pytest.skip("No live textInference model is left on the native API. Remove this test.")
+
+        stream = await client.stream({**TEXT_PARAMS, "model": model})
 
         streamed = ""
         async for chunk in stream.text_stream:
