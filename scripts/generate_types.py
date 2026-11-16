@@ -294,6 +294,7 @@ def build(schema_map: dict[str, Any]) -> str:
     operations: dict[str, Any] = schema_map.get("operations") or {}
     auto: dict[str, Any] = schema_map.get("auto") or {}
     utilities: list[dict[str, Any]] = schema_map.get("utilities") or []
+    response_types: dict[str, Any] | None = schema_map.get("responseTypes")
 
     inference_entries: list[tuple[str, str, str]] = []
     seen_airs: set[str] = set()
@@ -442,6 +443,12 @@ def build(schema_map: dict[str, Any]) -> str:
     ):
         for entry in entries:
             response_schema = entry.get("responseSchema")
+            # A model's own response drops fields its shared type declares when
+            # the model never returns them (seed on a model that takes none), so
+            # the canonical result comes from the shared type it references.
+            if entries is inference and response_types is not None:
+                response_type = entry.get("responseType")
+                response_schema = response_types.get(response_type) if isinstance(response_type, str) else None
             if not isinstance(response_schema, dict):
                 continue
             result_task_type = _extract_task_type(response_schema) or _extract_task_type(entry.get("requestSchema") or {})
