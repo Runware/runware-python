@@ -9,4 +9,4 @@ Read at build time only — runtime schema validation hits the live
 ``/resolve/<model>`` endpoint and doesn't consult this constant.
 """
 
-SCHEMAS_VERSION = "20261105172523"
+SCHEMAS_VERSION = "20261116211641"
