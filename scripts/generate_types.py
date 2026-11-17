@@ -269,6 +269,23 @@ def _extract_task_type(schema: dict[str, Any]) -> str | None:
     return const if isinstance(const, str) else None
 
 
+# A task whose models return different shapes (upscale: image or video) gets one
+# type with every field, required only where every shape requires it.
+def _merge_shapes(shapes: list[dict[str, Any]]) -> dict[str, Any]:
+    if len(shapes) == 1:
+        return shapes[0]
+    properties: dict[str, Any] = {}
+    for shape in shapes:
+        for key, value in (shape.get("properties") or {}).items():
+            _ = properties.setdefault(key, value)
+    required = [
+        key
+        for key in shapes[0].get("required") or []
+        if all(key in (shape.get("required") or []) for shape in shapes)
+    ]
+    return {**shapes[0], "properties": properties, "required": required}
+
+
 def _variant_discriminator(variant: dict[str, Any]) -> str | None:
     """The const value that distinguishes a oneOf variant (e.g. operation
     `upload`/`delete`), used to name its TypedDict. Skips taskType/taskUUID,
@@ -436,34 +453,61 @@ def build(schema_map: dict[str, Any]) -> str:
     # generator). This is what lets a task type whose model slug differs from
     # the taskType — e.g. `training` (slug exactly-illustrative-training,
     # taskType training) — still get an importable canonical result.
-    seen_task_type_results: set[str] = set()
-    for entries, skip in (
-        (inference, {"authentication", "getResponse", "ping"}),
-        (utilities, {"authentication", "ping"}),
-    ):
-        for entry in entries:
+    #
+    # A model's own response drops fields its shared type declares when the
+    # model never returns them (seed on a model that takes none), so an
+    # inference task's result comes from the shared types its models reference,
+    # all of them merged. A bundle without responseTypes only has each model's
+    # own response, and the first one stands for the task.
+    inference_skip = {"authentication", "getResponse", "ping"}
+    result_shapes: dict[str, list[dict[str, Any]]] = {}
+    if response_types is not None:
+        slugs_by_task: dict[str, set[str]] = {}
+        for entry in inference:
+            slug = entry.get("responseType")
+            shape = response_types.get(slug) if isinstance(slug, str) else None
+            task_type = _extract_task_type(shape) if isinstance(shape, dict) else None
+            if not isinstance(slug, str) or task_type is None or task_type in inference_skip:
+                continue
+            slugs_by_task.setdefault(task_type, set()).add(slug)
+        for task_type, slugs in slugs_by_task.items():
+            result_shapes[task_type] = [response_types[slug] for slug in sorted(slugs)]
+    else:
+        for entry in inference:
             response_schema = entry.get("responseSchema")
-            # A model's own response drops fields its shared type declares when
-            # the model never returns them (seed on a model that takes none), so
-            # the canonical result comes from the shared type it references.
-            if entries is inference and response_types is not None:
-                response_type = entry.get("responseType")
-                response_schema = response_types.get(response_type) if isinstance(response_type, str) else None
             if not isinstance(response_schema, dict):
                 continue
-            result_task_type = _extract_task_type(response_schema) or _extract_task_type(entry.get("requestSchema") or {})
-            if (
-                not isinstance(result_task_type, str)
-                or result_task_type in seen_task_type_results
-                or result_task_type in skip
-            ):
+            task_type = _extract_task_type(response_schema)
+            if task_type is None or task_type in result_shapes or task_type in inference_skip:
                 continue
-            seen_task_type_results.add(result_task_type)
-            _ = add_typed_dict(
-                to_class_name(result_task_type, "Result"),
-                response_schema,
-                f"Canonical result shape for `{result_task_type}` tasks.",
-            )
+            result_shapes[task_type] = [response_schema]
+
+    seen_task_type_results: set[str] = set()
+    for task_type, shapes in sorted(result_shapes.items()):
+        seen_task_type_results.add(task_type)
+        _ = add_typed_dict(
+            to_class_name(task_type, "Result"),
+            _merge_shapes(shapes),
+            f"Canonical result shape for `{task_type}` tasks.",
+        )
+
+    for entry in utilities:
+        response_schema = entry.get("responseSchema")
+        if not isinstance(response_schema, dict):
+            continue
+        result_task_type = _extract_task_type(response_schema) or _extract_task_type(entry.get("requestSchema") or {})
+        if (
+            not isinstance(result_task_type, str)
+            or result_task_type in seen_task_type_results
+            or result_task_type in {"authentication", "ping"}
+        ):
+            continue
+        seen_task_type_results.add(result_task_type)
+        _ = add_typed_dict(
+            to_class_name(result_task_type, "Result"),
+            response_schema,
+            f"Canonical result shape for `{result_task_type}` tasks.",
+        )
 
     # ----- registry dictionaries -----
 
