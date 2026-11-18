@@ -215,6 +215,59 @@ class TestStreamCancellation:
         assert exc_info.value.code == "aborted"
 
 
+class TestMultiByteSplitAcrossReads:
+    """A network read can end in the middle of a multi-byte UTF-8 character;
+    the pump must reassemble it instead of emitting replacement characters."""
+
+    @pytest.mark.asyncio
+    async def test_character_split_across_two_reads(self) -> None:
+        from typing import cast
+
+        import aiohttp
+
+        from runware.stream import TextStream
+        from runware.types.sdk import SDKConfig
+
+        body = 'data: {"delta":{"text":"café 日本"}}\n\ndata: [DONE]\n\n'.encode()
+        cuts = [body.index("é".encode()) + 1, body.index("日".encode()) + 2]
+        reads = [body[: cuts[0]], body[cuts[0] : cuts[1]], body[cuts[1] :]]
+
+        class _Iter:
+            def __aiter__(self) -> _Iter:
+                return self
+
+            async def __anext__(self) -> bytes:
+                if not reads:
+                    raise StopAsyncIteration
+                return reads.pop(0)
+
+        class _Content:
+            def iter_any(self) -> _Iter:
+                return _Iter()
+
+        class _Resp:
+            ok = True
+            status = 200
+            content = _Content()
+
+            async def __aenter__(self) -> _Resp:
+                return self
+
+            async def __aexit__(self, *args: object) -> None:
+                pass
+
+        class _Session:
+            def post(self, *args: object, **kwargs: object) -> _Resp:
+                return _Resp()
+
+        stream = TextStream(
+            config=SDKConfig(api_key="sk-test", transport="rest"),
+            session=cast(aiohttp.ClientSession, cast(object, _Session())),
+            task={"taskUUID": "u", "taskType": "textInference"},
+        )
+        assert await stream.text() == "café 日本"
+
+
 class TestLazyPump:
     """A TextStream that's created but never consumed must not start the HTTP
     pump — same behavior as the TS SDK. Spinning the pump eagerly would charge

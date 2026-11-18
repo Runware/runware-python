@@ -10,6 +10,7 @@ iterators consume from the same internal queue, fan-out happens in
 from __future__ import annotations
 
 import asyncio
+import codecs
 import contextlib
 import json
 import uuid
@@ -241,6 +242,10 @@ class TextStream:
                     )
 
                 buffer = ""
+                # Network reads can end in the middle of a multi-byte UTF-8
+                # character, so decode incrementally (like the TS SDK's
+                # TextDecoder `{ stream: true }`) instead of per read.
+                decoder = codecs.getincrementaldecoder("utf-8")(errors="replace")
                 # Race each read against BOTH the user cancel and the owner-
                 # side shutdown so a blocked socket read (model emits nothing
                 # for tens of seconds) interrupts immediately when either
@@ -271,13 +276,14 @@ class TextStream:
                         except StopAsyncIteration:
                             break
 
-                        buffer += chunk_bytes.decode("utf-8", errors="replace")
+                        buffer += decoder.decode(chunk_bytes)
                         while "\n" in buffer:
                             line, buffer = buffer.split("\n", 1)
                             chunk = parse_sse_line(line)
                             if chunk is not None:
                                 config.log.receive(_dump_chunk(chunk))
                                 self._ingest(chunk)
+                    buffer += decoder.decode(b"", final=True)
                     if buffer:
                         chunk = parse_sse_line(buffer)
                         if chunk is not None:
